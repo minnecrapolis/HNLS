@@ -1,0 +1,10 @@
+{
+  "advance_music.py": "74622d2c4e8f609cac44b5b052f528304d36d5d2d89c087266547495089daee5",
+  "api_additions.py": "14d3733a96a8240c28329399d7ec36a0e7bc12ce275782143c395c63bb12ed9f",
+  "install_music_intelligence.py": "e217671ea17109f537022d258e3f41ca6f3cb814fb7c59dee89243412174beab",
+  "panel.html": "663dc19043418ebb6398d2ddf82b6c897fd2e0164b6d4e995c37d2e20180fb60",
+  "files/server/libs/song_analysis.py": "6836fabda970903a96575b6441ede203d067cc7822b8dd47a50ee4629afa1245",
+  "files/server/libs/hnls_playlist.py": "4a39754dd70731875382c887b6bd0caf07472b84c3c52f7efba108fd9024d9fb",
+  "files/server/libs/effects/effect_song_show.py": "bbd954aa208eba97ef794bfa7e846fe48d0fbbbcb36c54b2c66d1a970fd0eedc",
+  "files/server/libs/app/static/assets/js/hnls_playlist.js": "81655dc935bac07d1cfaa4f551ea5bdf275201010d0190b016f840d24f0f7ea5"
+}

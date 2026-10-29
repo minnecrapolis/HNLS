@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+{% block title %}Show desk{% endblock %}
+{% block stylesheets %}{% endblock %}
+{% block content %}
+<div class="pcoded-content"><div class="pcoded-inner-content"><div class="main-body"><div class="page-wrapper" id="dashboard-item-list">
+{% include 'includes/toasts.html' %}
+{% include 'includes/hournerd_start.html' %}
+<section class="hn-live-controls" aria-labelledby="hn-quick-title"><div class="hn-section-heading"><div><p class="hn-section-kicker">OUTPUT / LIVE</p><h2 id="hn-quick-title">Live light controls</h2></div><a href="/effects/effect_song_show">Automatic show settings ↗</a></div>
+{% include 'includes/devices.html' %}
+<div class="hn-quick-actions"><button type="button" id="effect_song_show" class="dashboard_effect hn-show-button"><span aria-hidden="true">✦</span><span><strong>Follow the music</strong><small>Activate the automatic Song Show on your selected lights.</small></span></button><button type="button" id="effect_off" class="dashboard_effect hn-off-button"><span aria-hidden="true">◯</span><span><strong>Lights off</strong><small>Turn off the selected lights. Music keeps playing.</small></span></button></div>
+</section>
+<details class="hn-effect-drawer"><summary><span><strong>Explore the effect workshop</strong><small>Ambient looks, music effects, and automatic cycling.</small></span><span aria-hidden="true">+</span></summary><div class="hn-drawer-content"><h3>Choose for me</h3><div class="hn-effect-grid"><div class="hn-effect-tile"><button type="button" id="effect_random_cycle" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Random Cycle</span></button></div><div class="hn-effect-tile"><button type="button" id="effect_random_non_music" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Random Non Music</span></button></div><div class="hn-effect-tile"><button type="button" id="effect_random_music" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Random Music</span></button></div></div><h3>Ambient &amp; atmosphere</h3><div id="dashboard-list-none-music" class="hn-effect-grid"><div class="hn-effect-tile"><button type="button" id="effect_single" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Single</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_gradient" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Gradient</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_fade" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Fade</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_sync_fade" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Sync Fade</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_slide" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Slide</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_bubble" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Bubble</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_twinkle" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Twinkle</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_pendulum" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Pendulum</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_rods" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Rods</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_segment_color" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Segment Color</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_fireplace" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Fireplace</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_strobe" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Strobe</span></button></div></div><h3>Music effects</h3><div id="dashboard-list-music" class="hn-effect-grid"><div class="hn-effect-tile"><button type="button" id="effect_scroll" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Scroll</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_advanced_scroll" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Advanced Scroll</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_energy" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Energy</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_wavelength" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Wavelength</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_bars" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Bars</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_power" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Power</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_beat" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Beat</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_beat_twinkle" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Beat Twinkle</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_beat_slide" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Beat Slide</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_wave" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Wave</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_wiggle" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Wiggle</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_vu_meter" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>VU Meter</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_spectrum_analyzer" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Spectrum Analyzer</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_direction_changer" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Direction Changer</span></button></div>
+<div class="hn-effect-tile"><button type="button" id="effect_border" class="dashboard_effect hn-effect-button"><span class="hn-effect-spark" aria-hidden="true">✦</span><span>Border</span></button></div></div></div></details>
+</div></div></div></div>
+{% endblock %}
+{% block javascripts %}<script src="{{ url_for('static', filename='assets/js/dashboard.js') }}" type="module"></script>{% endblock %}

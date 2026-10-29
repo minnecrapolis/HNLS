@@ -1,0 +1,12 @@
+{
+  "master/files/server/libs/remote_protocol.py": "5944abca36e1e912797c07c19222b01bd76e794551272a74624d25ec9a82399d",
+  "master/files/server/libs/gpio_outputs.py": "d967cd19a7fd11beffaf4b7e36d3f6c2b1a73beee16c9b25e0ecddc5c815a8ce",
+  "master/files/server/libs/remote_pixels.py": "9318239101643d677fa495a2d072f8aa6d707e707f8c340eb61f4e03c8b44f12",
+  "master/files/server/libs/outputs/output_udp.py": "c777f576bde177cf6a5f54f4f0b261accf54547b921a897ab4f6de73eeb55030",
+  "master/files/server/libs/app/static/assets/js/remote_pis.js": "d36d64d7d90d53edcf84b7bd511ac66a039e4403dfecd376f95b5d7050c885e5",
+  "master/files/server/libs/app/templates/home/settings/device_settings.html": "82775bff8e5ce63b3cff1d09133e341f013baae5de8856cfea8e847a3d65180f",
+  "master/files/server/libs/webserver/blueprints/device_api.py": "dcaa2a0397a070fbfcb37ac8ee74f89298d1bbc7bc65034fb23b4bd242c6b73f",
+  "master/files/server/libs/webserver/blueprints/device_executer.py": "c62a3226c404fee69f88cbf4e01ca878e7cd2288c292662832c4ffeee27dc4b7",
+  "receiver/remote_protocol.py": "5944abca36e1e912797c07c19222b01bd76e794551272a74624d25ec9a82399d",
+  "receiver/receiver.py": "37a6c6de185ce88cf4fc5d9babe729966b2ed04c18d53caf1460260ee44f32e2"
+}

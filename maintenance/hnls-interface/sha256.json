@@ -1,0 +1,16 @@
+{
+  "server/libs/app/static/assets/css/hnls-desk.css": "e9d212160a99f4153506515af6fa1212a4011cf28c8ec34908ba793337c1efed",
+  "server/libs/app/static/assets/js/hnls-navigation.js": "1261d55400d133e61bddb4584e098bfef6290632163ef6b9f012b2d7d8b464f7",
+  "server/libs/app/static/assets/js/hnls-tools.js": "63f85905417d9f540ac8b615f6f1e00e7f5efe6fbd283398ad1ae82aae1a9d35",
+  "server/libs/app/templates/home/dashboard.html": "3ff34c4495289d6cc1e42456da2d0fc24d7a51bf4e0b4036b67100bb2ae2a4e0",
+  "server/libs/app/templates/home/login.html": "a2a3b8ffb654d9ee545532afebacc7b93bf251075230b0199813c1576ba06615",
+  "server/libs/app/templates/home/music.html": "d3320ade69226ef72be860b8e2086fdedb2435a97c0eee92c02c8f5026726660",
+  "server/libs/app/templates/home/song_designer.html": "baaac5d555f560308a023c1552fef7125129e7c890fc83cf73306a34665837bd",
+  "server/libs/app/templates/includes/hournerd_footer.html": "bc3425dce8b8ecbb115401151760f618220141cd19fece5da2e56b9411db5172",
+  "server/libs/app/templates/includes/hournerd_start.html": "ed8c2797b5eefb984b78cef18b7ca1a7dc025205a0de40697e422642aefbd361",
+  "server/libs/app/templates/includes/navigation.html": "da80f675eafdfde3aa37936620750538206f5923c363384244b11aa8f4dfcb85",
+  "server/libs/app/templates/includes/sidebar.html": "8728eeb27b2c260083306918602a3eadb862112260589d9343eeee12b90b5bd1",
+  "server/libs/app/templates/includes/song_moments.html": "21c00f3ff9467738a0d0d22143c517b57770b7af0321efb65c1af2079840e4e8",
+  "server/libs/app/templates/layouts/base-fullscreen.html": "4243c01044d19ce1a968e9476412714ec5ce072be676d1e06e233cda346341cd",
+  "server/libs/app/templates/layouts/base.html": "2e78edab56f8f26966af6b474c05cee07becbeb27f59bdd8cd91da2940f3a33d"
+}

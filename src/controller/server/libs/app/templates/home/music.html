@@ -1,0 +1,56 @@
+{% extends "layouts/base.html" %}{% block title %}Music{% endblock %}{% block content %}
+<header class="hnls-page-heading"><p class="hnls-kicker">02 / THE SOUNDTRACK</p><h1>Music, meet light.</h1><p>Your songs are the starting point. The show follows from here.</p></header>
+<!-- HNLS SONG INTELLIGENCE START --><section class="hnls-preparation" aria-labelledby="hnls-preparation-title">
+<div><p class="hnls-kicker">SONG INTELLIGENCE</p><h2 id="hnls-preparation-title">Let HNLS learn your soundtrack.</h2><p class="text-muted">Background analysis maps each song’s dynamics, attacks and estimated tempo. Saved moments still take priority.</p></div>
+<div class="hnls-playlist-options"><label><input type="checkbox" id="hnlsShuffle"> Shuffle playlist</label><p class="small text-muted">Play every available song before reshuffling. Previous retraces playback history. Your current song keeps playing.</p><p id="hnlsShuffleStatus" role="status" aria-live="polite"></p><button type="button" id="hnlsPrepare" class="btn btn-outline-primary">Analyze playlist</button></div>
+<div class="hnls-analysis-progress"><p id="hnlsPreparationStatus" role="status" aria-live="polite">Checking song analysis…</p><details><summary>Song analysis details</summary><div class="table-responsive"><table class="table"><thead><tr><th>Song</th><th>Analysis</th><th>Tempo estimate</th></tr></thead><tbody id="hnlsAnalysisList"></tbody></table></div></details></div>
+</section>
+<style>.hnls-preparation{display:grid;grid-template-columns:1.3fr 1fr;gap:20px 35px;border-block:1px solid var(--hnls-line,#343d47);padding:28px 0;margin-bottom:30px}.hnls-playlist-options label{font-size:17px;font-weight:600;display:flex;gap:12px;align-items:center}.hnls-playlist-options input{width:22px;height:22px}.hnls-analysis-progress{grid-column:1/-1}.hnls-analysis-progress summary{cursor:pointer}.hnls-analysis-progress td{overflow-wrap:anywhere}@media(max-width:800px){.hnls-preparation{grid-template-columns:1fr}.hnls-playlist-options{padding-top:15px;border-top:1px solid var(--hnls-line,#343d47)}}</style>
+<!-- HNLS SONG INTELLIGENCE END --><div class="hnls-music-workspace"><section class="hnls-library"><div class="hnls-section-title"><h2>Your playlist</h2><a href="/song-designer">Design a song ↗</a></div>                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead><tr><th>Song</th><th>Size</th><th></th></tr></thead>
+                                        <tbody id="musicList"><tr><td colspan="3">Loading...</td></tr></tbody>
+                                    </table>
+                                </div>
+                                <small class="text-muted">Deleted songs leave the playlist and are moved to a recoverable trash folder. Stopping playback returns HourNerd LightShow to the configured microphone.</small></section><aside class="hnls-transport"><p class="hnls-kicker">PLAYBACK / LIVE</p><h2>On the deck</h2>                                <div class="alert alert-secondary" id="musicStatus">Loading music status...</div>
+
+                                <div class="d-flex flex-wrap mb-3">
+                                    <button class="btn btn-outline-primary mr-2 mb-2" id="previousBtn">Previous song</button>
+                                    <button class="btn btn-outline-primary mr-2 mb-2" id="rewindBtn">Back 10 seconds</button>
+                                    <button class="btn btn-outline-primary mr-2 mb-2" id="replayBtn">Replay song</button>
+                                    <button class="btn btn-outline-primary mr-2 mb-2" id="forwardBtn">Forward 10 seconds</button>
+                                    <button class="btn btn-primary mr-2 mb-2" id="nextBtn">Next song</button>
+                                    <button class="btn btn-warning mr-2 mb-2" id="pauseBtn"><i class="feather icon-pause"></i> Pause</button>
+                                    <button class="btn btn-success mr-2 mb-2" id="resumeBtn"><i class="feather icon-play"></i> Resume</button>
+                                    <button class="btn btn-danger mb-2" id="stopBtn"><i class="feather icon-square"></i> Stop / Use Microphone</button>
+                                </div>
+
+                                <label for="musicSeek" class="d-block">Song position <span id="musicTime">0:00 / --:--</span></label>
+                                <input id="musicSeek" type="range" min="0" max="1" step="0.1" value="0" class="w-100 mb-3" disabled aria-label="Seek within the current song">
+                                <p class="text-muted small">Next/previous use the two-second lights-off transition. Replay starts the current song over. Seeking resets the lighting analysis at the new position.</p>
+<details class="hnls-fold"><summary>Speaker &amp; Bluetooth</summary><div>                                <section class="hn-audio-settings" aria-label="Audio output">
+                                    
+                                    <label for="audioOutputMode">Send music to</label>
+                                    <select id="audioOutputMode" class="form-control mb-2"><option value="headphones">3.5 mm headphone jack</option><option value="bluetooth">Bluetooth speaker / headphones</option></select>
+                                    <label for="bluetoothDevice">Bluetooth device</label>
+                                    <select id="bluetoothDevice" class="form-control mb-2"><option value="">Select a device after scanning</option></select>
+                                    <div class="d-flex flex-wrap">
+                                        <button id="enableBluetooth" class="btn btn-outline-secondary mr-2 mb-2">Enable Bluetooth support</button>
+                                        <button id="scanBluetooth" class="btn btn-outline-primary mr-2 mb-2">Scan for speakers</button>
+                                        <button id="pairBluetooth" class="btn btn-outline-primary mr-2 mb-2">Pair &amp; connect</button>
+                                        <button id="connectBluetooth" class="btn btn-outline-primary mr-2 mb-2">Connect</button>
+                                        <button id="disconnectBluetooth" class="btn btn-outline-secondary mr-2 mb-2">Disconnect</button>
+                                        <button id="saveAudioOutput" class="btn btn-success mb-2">Use selected output</button>
+                                    </div>
+                                    <p id="bluetoothStatus" class="small mt-2" role="status" aria-live="polite">Loading audio outputs…</p>
+                                    <p class="text-muted small mb-0">Put the speaker in pairing mode before scanning. Switching outputs restarts playback at approximately the current song position. Bluetooth can add audible delay relative to the lights. For the lowest latency, use the 3.5 mm jack.</p>
+                                </section></div></details><details class="hnls-fold"><summary>Add music to your collection</summary><div>                                <div class="music-drop mb-4">
+                                    <p class="mb-2"><strong>Add music</strong></p>
+                                    <p class="text-muted mb-3">MP3, WAV, FLAC, OGG, M4A, AAC and Opus are supported.</p>
+                                    <input type="file" id="musicFile" accept="audio/*" class="form-control-file mb-3">
+                                    <button class="btn btn-primary" id="uploadBtn"><i class="feather icon-upload"></i> Upload</button>
+                                    <div class="progress mt-3 d-none" id="uploadProgress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%">Uploading...</div></div>
+                                </div>
+
+</div></details></aside></div>
+{% endblock %}{% block javascripts %}<script src="{{ url_for('static',filename='assets/js/hnls_playlist.js') }}?v=1"></script><script src="{{ url_for('static',filename='assets/js/music.js') }}?v=3"></script>{% endblock %}
