@@ -13,7 +13,7 @@ The --check command verifies release file hashes without changing the machine; i
 
 The controller uses /share/music_led_strip_control, /share/.venv, /share/.mlsc and /share/music. These legacy paths preserve compatibility. Open `http://<Pi-LAN-address>:8080`; find the address with `hostname -I`.
 
-Clean defaults contain no output entries, and the default effect is Off. Add/configure a line in Device Settings: actual count, color order, backend/pin and conservative brightness. Keep the hardware powered appropriately. Select Song Show and upload music through Music. Enabling the service at boot does not automatically start playlist playback.
+Clean defaults contain no output entries, and the default effect is Off. Add/configure a line in Device Settings: actual count, color order, backend/pin and conservative brightness. Keep the hardware powered appropriately. Select Song Show and upload music through Music. Enabling the service at boot starts the server. An enabled saved schedule also starts the playlist when the Pi boots during its show window.
 
 ## Fresh receiver
 
@@ -48,7 +48,7 @@ sudo systemctl enable --now mlsc-receiver
 systemctl is-enabled mlsc-receiver
 ```
 
-No cron entry is needed. These commands start the server/receiver; they do not implement automatic playlist playback.
+No cron entry is needed. These commands start the server/receiver; an enabled show schedule controls automatic playlist playback.
 
 ## Stop, start and restart
 
@@ -60,3 +60,7 @@ Receiver: substitute `mlsc-receiver`.
 Before service installation, dependency or validation failures remove newly staged application code and newly created virtual environments. If a later service step fails, the installer stops/disables its new unit, removes that unit and new application files, and removes any pairing key it created. It retains OS packages and generated runtime data; it does not undo apt transactions. This is fresh-install cleanup, not an upgrade rollback system. Do not delete preexisting data to bypass the fresh-install guard.
 
 A successful systemctl start is not a sustained health or hardware test. Verify logs, UI access, reboot behavior, low-brightness RGB/GRB, audio, cues and remote recovery on a spare Pi before public stable release.
+
+## Scoped show-hours update on the current main Pi
+
+Use the supplied hnls-show-hours-update.zip for the captured working build or rc.2. Copy it to /home/pi on the main Pi, extract and run its installer with /share/.venv/bin/python3. See updates/show-hours/README.txt for exact commands. All eight modified files are validated/backed up before restart. Unrecognized file hashes are refused before changes. Driver/audio files, settings and pairing are preserved. Rollback restores code; saved show_schedule.json is retained and is ignored by older code. No receiver installation is required.

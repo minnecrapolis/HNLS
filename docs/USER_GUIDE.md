@@ -21,3 +21,15 @@ Cue start is inclusive and end exclusive. Later saved overlapping rows win on ov
 ## Mobile and multiple monitors
 
 Use the mobile Menu for navigation. The multiple-monitor button opens a compact toolbar; move it to the second display. Dashboard and other navigation buttons target the original large window. Keep that main window open. Permit popups for the local HNLS address if the toolbar is blocked.
+
+## Automatic show hours
+
+Open Music > Automatic Show Hours. Enable the schedule, choose the days, start/stop times and IANA time zone, then Save show hours. The default zone is America/Chicago; check the displayed show clock. The selected weekdays refer to the start day when a window crosses midnight. Equal start and stop times are rejected.
+
+At opening, HNLS selects a random first song, enables playlist shuffle and selects the main Song Show on every configured output. Saved song moments still overlay the show. At closing, all outputs switch Off and playback stops. Pis remain running for the next window. Schedule checks occur roughly every two seconds plus normal command-queue/OS latency.
+
+The main Pi owns the schedule; receivers follow its output and watchdog. No browser or cron job is needed. Settings persist across reboots. A restart during the window starts a show; a restart outside enabled hours forces outputs/music off once. Empty playlists are retried without blocking the UI.
+
+Enabling during active hours starts immediately. Disabling stops an owned scheduled show. Manual controls work: a manual pause/stop is not undone every poll, and manual playback is allowed outside hours; the next schedule boundary takes control again. Shuffle remains enabled after a scheduled start until you change its checkbox. The schedule changes no LED counts, colors or brightness.
+
+Both Your Playlist and Song Analysis Details have clickable song titles. Tab to a title and press Enter/Space for keyboard playback. Polling preserves unchanged song rows and unsaved schedule edits.

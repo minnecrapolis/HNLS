@@ -34,3 +34,10 @@ class Executer:
             config_lock, notification_queue_in, notification_queue_out, effects_queue, py_audio)
 
         Executer.instance = self
+        from libs.show_schedule import ShowSchedule, ScheduleActions
+        actions = ScheduleActions(self)
+        self.show_schedule = ShowSchedule(actions.start, actions.stop)
+        self.music_library_executer.scheduler.add_job(
+            self.show_schedule.tick, 'interval', seconds=2, id='hnls-show-schedule',
+            replace_existing=True, max_instances=1, coalesce=True)
+        self.show_schedule.tick()

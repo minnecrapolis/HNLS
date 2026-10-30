@@ -14,6 +14,13 @@ def build():
             info=zipfile.ZipInfo('HNLS/'+rel.as_posix(),(2026,10,30,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED;info.external_attr=0o100644<<16
             z.writestr(info,p.read_bytes())
     digest=hashlib.sha256(target.read_bytes()).hexdigest()
-    (dist/'SHA256SUMS.txt').write_text(digest+'  '+target.name+'\n')
+    update=dist/'hnls-show-hours-update.zip'
+    with zipfile.ZipFile(update,'w',compression=zipfile.ZIP_DEFLATED) as z:
+        folder=ROOT/'updates/show-hours'
+        for p in sorted(folder.rglob('*')):
+            if not p.is_file() or '__pycache__' in p.parts or p.suffix=='.pyc':continue
+            info=zipfile.ZipInfo('hnls-show-hours-update/'+p.relative_to(folder).as_posix(),(2026,10,30,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED;info.external_attr=0o100644<<16
+            z.writestr(info,p.read_bytes())
+    (dist/'SHA256SUMS.txt').write_text(digest+'  '+target.name+'\n'+hashlib.sha256(update.read_bytes()).hexdigest()+'  '+update.name+'\n')
     print(target)
 if __name__=='__main__':build()

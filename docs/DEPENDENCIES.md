@@ -12,3 +12,5 @@
 The installer performs dependency resolution, runtime imports and real Draft 2020-12 default-configuration validation before starting the controller. Package download, wheel availability, native compilation and runtime startup still require a physical fresh-Pi test. No packaged Python wheels, OS image, arbitrary-architecture support or Pi 5 native-output support is claimed.
 
 Bluetooth support is in the application. Select it through the web audio controls; BlueZ/BlueALSA availability is checked there. The fresh installer does not replace your system ALSA configuration or claim Bluetooth pairing works without the appropriate adapter/backend. Analog audio requires supported Pi hardware and its OS audio driver.
+
+The show schedule uses standard-library zoneinfo and the existing APScheduler job service. IANA zone data must be available on the OS; it is present on the captured Pis. No new Python distribution is required for this update.

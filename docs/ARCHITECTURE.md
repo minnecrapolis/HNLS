@@ -9,3 +9,5 @@ The native output layer packs logical RGB; rpi_ws281x applies physical wire orde
 The web layout is server-rendered templates with JavaScript controls. The small tools window uses same-origin messaging to navigate the main window; both talk to the same backend. The optional private ChatGPT bridge is deliberately excluded from this product distribution.
 
 Source layout: src/controller/server, src/receiver, maintenance for scoped updates, tools for packaging/export, docs for operator/developer guidance. Existing legacy identifiers are compatibility details rather than product branding.
+
+ShowSchedule runs in the webserver process as a single APScheduler interval job (about two seconds). It persists independent settings under /share/.mlsc/show_schedule.json. It evaluates aware local time with zoneinfo and a date/time-zone window key, avoiding duplicate starts in the repeated DST hour. ScheduleActions uses existing effect/play queues; the receiver has no separate clock job.

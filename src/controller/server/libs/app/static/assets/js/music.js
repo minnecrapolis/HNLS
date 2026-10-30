@@ -8,7 +8,7 @@
     if (typeof module !== 'undefined') module.exports = {clock};
     if (typeof document === 'undefined') return;
     const $ = id => document.getElementById(id);
-    let loading = false, seeking = false, status = {};
+    let loading = false, seeking = false, status = {}, librarySignature = null;
     const controls = ['previousBtn', 'rewindBtn', 'replayBtn', 'forwardBtn', 'nextBtn', 'pauseBtn', 'resumeBtn'];
     function message(text, error = false) {
         $('musicStatus').textContent = text;
@@ -56,10 +56,15 @@
         loading = true;
         try {
             const result = await request('/api/music/library');
-            const body = $('musicList'); body.replaceChildren();
+            const body = $('musicList');
+            const signature = JSON.stringify((result.files || []).map(f => [f.name, f.size, f.modified]));
+            if (signature !== librarySignature) {
+            body.replaceChildren();
             (result.files || []).forEach(file => {
-                const row = document.createElement('tr'); row.className = 'music-row' + (result.status?.file === file.name ? ' active' : '');
-                const name = document.createElement('td'); name.className = 'music-name'; name.textContent = file.name;
+                const row = document.createElement('tr'); row.className = 'music-row'; row.dataset.file = file.name;
+                const name = document.createElement('td'); name.className = 'music-name';
+                const playName = button(file.name, () => command('/api/music/play', {file: file.name}), 'btn-link text-left hnls-song-link');
+                playName.setAttribute('aria-label', 'Play ' + file.name); name.append(playName);
                 const size = document.createElement('td'); size.textContent = (file.size / 1048576).toFixed(2) + ' MB';
                 const actions = document.createElement('td'); actions.className = 'text-right';
                 actions.append(button('Play', () => command('/api/music/play', {file: file.name})),
@@ -73,6 +78,9 @@
                 const row = document.createElement('tr'), cell = document.createElement('td'); cell.colSpan = 3;
                 cell.textContent = 'No music files yet. Upload one above.'; row.append(cell); body.append(row);
             }
+            librarySignature = signature;
+            }
+            for (const row of body.children) row.classList.toggle('active', row.dataset.file === result.status?.file);
             updateStatus(result.status);
         } catch (error) { message(error.message, true); }
         finally { loading = false; }

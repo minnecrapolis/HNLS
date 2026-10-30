@@ -1,4 +1,4 @@
-# Release status — 0.1.0-rc.2
+# Release status — 0.1.0-rc.3
 
 The source reconciliation is complete against the supplied working controller/receiver capture and original upstream archive. The complete source, static assets, clean defaults, direct dependencies, service generation, documentation and release workflows are assembled here.
 
@@ -14,8 +14,10 @@ The local build environment cannot install the additional Flask/Jinja/jsonschema
 
 ## Deliberate scope
 
-No SD-card image, existing-install migration, boot playlist autoplay, second receiver GPIO, web electrical-current budget, FPP MultiSync compatibility or unlimited output capacity is promised. Controller fresh installation currently targets the captured 64-bit Pi 4 baseline. The source contains inherited advanced studio/FSEQ functionality; those paths need renewed end-to-end hardware/UI acceptance as part of this prerelease.
+No SD-card image, arbitrary-version install migration, unconditional boot playlist autoplay, second receiver GPIO, web electrical-current budget, FPP MultiSync compatibility or unlimited output capacity is promised. Controller fresh installation currently targets the captured 64-bit Pi 4 baseline. The source contains inherited advanced studio/FSEQ functionality; those paths need renewed end-to-end hardware/UI acceptance as part of this prerelease.
 
 ## Attribution
 
 Original MIT license and copyright notice were recovered and retained. Embedded vendor notices were preserved and an asset inventory is included. Third-party assets retain separate terms; this is not a claim that every bundled dependency or font is covered solely by the root MIT license.
+
+rc.3 adds server-side weekly show hours, scheduled boot recovery, automatic shuffle/main-show startup and closing blackout, plus clickable song titles. The scoped updater supports known captured/rc.2 files, with offline install/rollback tests. Real scheduled playback and cutoff still require a check on the working Pi.

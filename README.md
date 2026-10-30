@@ -4,11 +4,12 @@
 
 A Raspberry Pi music and holiday-lighting system with a responsive web interface, automatic song analysis and visual, per-song LED cues.
 
-**0.1.0-rc.2 — reconciled source prerelease.** Controller and receiver code were reconciled with captures from the working installation on October 29, 2026. The new fresh-install script is automated and tested with simulated failures, but has not yet been installed on a clean physical Pi. See [release status](docs/RELEASE_STATUS.md) and [verification results](docs/VERIFICATION.md).
+**0.1.0-rc.3 — reconciled source prerelease.** Controller and receiver code were reconciled with captures from the working installation on October 29, 2026. The new fresh-install script is automated and tested with simulated failures, but has not yet been installed on a clean physical Pi. See [release status](docs/RELEASE_STATUS.md) and [verification results](docs/VERIFICATION.md).
 
 ## Features
 
-- Upload music, loop the playlist, shuffle, pause, seek, skip and replay.
+- Click any song title to play; loop, shuffle, pause, seek, skip and replay.
+- Set weekly show hours: shuffled main show starts automatically, then music and lights stop at closing time—even with the browser closed.
 - Prepare songs in the background for section/tempo/onset-aware automatic lighting.
 - Assign colors to bass, midrange, treble, beat accents and POWER beats.
 - Synchronize sections, pair opposite sections or make custom groups.
@@ -40,7 +41,11 @@ sudo bash install.sh --role receiver
 
 Pair from the controller's web interface using the receiver's LAN address and locally generated pairing key. The current receiver drives BCM GPIO21 / physical pin40. See [installation](docs/INSTALLATION.md).
 
-**Existing working installation?** Do not run the fresh installer there. It refuses existing code, environments, configuration and service units. Continue using your working system until the prerelease is tested on a spare Pi; no live upgrade/migration is claimed.
+**Existing working installation?** Do not run the fresh installer there. It refuses existing code, environments, configuration and service units. The scoped [show-hours update](updates/show-hours/README.txt) supports the captured working build and rc.2. Other upgrades are not claimed.
+
+## Update the working controller
+
+The small update package changes only the scheduler and Music UI files. Copy hnls-show-hours-update.zip to /home/pi on the main Pi, then follow [these instructions](updates/show-hours/README.txt). It verifies known source versions, backs up files and briefly restarts HNLS. No receiver update is needed.
 
 ## Documentation
 

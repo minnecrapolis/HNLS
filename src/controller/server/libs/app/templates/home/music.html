@@ -1,5 +1,13 @@
 {% extends "layouts/base.html" %}{% block title %}Music{% endblock %}{% block content %}
 <header class="hnls-page-heading"><p class="hnls-kicker">02 / THE SOUNDTRACK</p><h1>Music, meet light.</h1><p>Your songs are the starting point. The show follows from here.</p></header>
+<section class="hnls-schedule" aria-labelledby="hnlsScheduleTitle">
+<p class="hnls-kicker">AUTOMATIC SHOW HOURS</p><h2 id="hnlsScheduleTitle">Set the hours. Let the show run.</h2>
+<form id="hnlsScheduleForm">
+<label class="hnls-schedule-toggle"><input type="checkbox" id="hnlsScheduleEnabled"> Enable automatic show schedule</label>
+<fieldset class="hnls-schedule-days"><legend>Days the show starts</legend><label><input type="checkbox" id="hnlsScheduleDay0"> Mon</label><label><input type="checkbox" id="hnlsScheduleDay1"> Tue</label><label><input type="checkbox" id="hnlsScheduleDay2"> Wed</label><label><input type="checkbox" id="hnlsScheduleDay3"> Thu</label><label><input type="checkbox" id="hnlsScheduleDay4"> Fri</label><label><input type="checkbox" id="hnlsScheduleDay5"> Sat</label><label><input type="checkbox" id="hnlsScheduleDay6"> Sun</label></fieldset><div class="hnls-schedule-times"><label>Start time<input type="time" id="hnlsScheduleStart" required></label><label>Stop time<input type="time" id="hnlsScheduleEnd" required></label><label>Time zone<input id="hnlsScheduleTimezone" list="hnlsTimezones" placeholder="America/Chicago" required><datalist id="hnlsTimezones"><option value="America/Chicago"><option value="America/New_York"><option value="America/Denver"><option value="America/Los_Angeles"><option value="UTC"></datalist></label></div>
+<p class="small text-muted">At the start: shuffled playlist and the main Song Show on all configured outputs. At the stop: music stops and lights turn off. The Pis stay on for the next show. For overnight hours, days refer to the start day.</p>
+<p class="small text-muted">Saved schedules run with the browser closed. Enabling during show hours starts immediately. Disabling stops a scheduled show. Manual controls remain available; the next schedule boundary takes control again.</p>
+<button type="submit" id="hnlsScheduleSave" class="btn btn-primary" disabled>Save show hours</button><p id="hnlsScheduleClock" class="small"></p><p id="hnlsScheduleStatus" role="status" aria-live="polite">Loading show hours…</p></form></section>
 <!-- HNLS SONG INTELLIGENCE START --><section class="hnls-preparation" aria-labelledby="hnls-preparation-title">
 <div><p class="hnls-kicker">SONG INTELLIGENCE</p><h2 id="hnls-preparation-title">Let HNLS learn your soundtrack.</h2><p class="text-muted">Background analysis maps each song’s dynamics, attacks and estimated tempo. Saved moments still take priority.</p></div>
 <div class="hnls-playlist-options"><label><input type="checkbox" id="hnlsShuffle"> Shuffle playlist</label><p class="small text-muted">Play every available song before reshuffling. Previous retraces playback history. Your current song keeps playing.</p><p id="hnlsShuffleStatus" role="status" aria-live="polite"></p><button type="button" id="hnlsPrepare" class="btn btn-outline-primary">Analyze playlist</button></div>
@@ -53,4 +61,4 @@
                                 </div>
 
 </div></details></aside></div>
-{% endblock %}{% block javascripts %}<script src="{{ url_for('static',filename='assets/js/hnls_playlist.js') }}?v=1"></script><script src="{{ url_for('static',filename='assets/js/music.js') }}?v=3"></script>{% endblock %}
+{% endblock %}{% block javascripts %}<script src="{{ url_for('static',filename='assets/js/show_schedule.js') }}?v=1"></script><script src="{{ url_for('static',filename='assets/js/hnls_playlist.js') }}?v=2"></script><script src="{{ url_for('static',filename='assets/js/music.js') }}?v=4"></script>{% endblock %}

@@ -1,0 +1,50 @@
+{
+  "server/libs/app/static/assets/js/hnls_playlist.js": {
+    "sha256": "5ed347a638a8714f59a74d99c53972719d4620b185997c69e889e0a1163b448f",
+    "supported": [
+      "81655dc935bac07d1cfaa4f551ea5bdf275201010d0190b016f840d24f0f7ea5"
+    ]
+  },
+  "server/libs/app/static/assets/css/hnls-desk.css": {
+    "sha256": "d0b6cef9350ae16008c22967ceefdf2c658ea0a75fa1f9003c09be72167b3901",
+    "supported": [
+      "e9d212160a99f4153506515af6fa1212a4011cf28c8ec34908ba793337c1efed"
+    ]
+  },
+  "server/libs/webserver/executer.py": {
+    "sha256": "7c3208779d18ddf4119c0612800236298052aeeb6bbda72a0de391478bb65c91",
+    "supported": [
+      "8b184409778146eef6560769d2a383799f6ce9a5c3a9f5fc8ae1506c786040e3"
+    ]
+  },
+  "server/libs/app/static/assets/js/show_schedule.js": {
+    "sha256": "1ef06bb44f6f5991468b7adbd9e45790ab61fd4b72304fd10b5ca5907fa0c419",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/app/templates/home/music.html": {
+    "sha256": "d0df86234034111a0f985e640f1518f493d4cc9359ff2f12c2700eb4ade149da",
+    "supported": [
+      "9b56a2375532ae4ccf8702b5bb37736fba48ec51f12f73297aa68b5ff3cac402"
+    ]
+  },
+  "server/libs/app/static/assets/js/music.js": {
+    "sha256": "389bbf2045c7128292afa008b98013dce57d2d3fee63c4817c72764bd0d19b2a",
+    "supported": [
+      "45cd35421e6f07fc937195b0a6ef8c86960d0978e86f8c08abc71f42e186bf11"
+    ]
+  },
+  "server/libs/webserver/blueprints/music_library_api.py": {
+    "sha256": "2447228c709b6af89cd0010f082ba5a4fb1d415d228c67366d83f1c234f8d9d7",
+    "supported": [
+      "fae7fbef24feb8d933b4f7722f750249736716044dd0191dfcb67576db201900"
+    ]
+  },
+  "server/libs/show_schedule.py": {
+    "sha256": "d5c099507468bb77142fd6699b0d6b5ed8de73ea8d7d93d74b8c158b3b17da48",
+    "supported": [
+      null
+    ]
+  }
+}

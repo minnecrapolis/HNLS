@@ -6,8 +6,8 @@
 2. Open GitHub Desktop and select File > Add local repository. Choose HNLS. If it is not a Git repository, select the option to create one in that folder. Do not overwrite the included README, license or gitignore.
 3. Review Changes, commit the source with a summary such as Reconcile HNLS release candidate, and Publish repository under your own account. Private visibility is useful while completing spare-Pi acceptance.
 4. Check that README renders and .github/workflows is present. dist is intentionally ignored by Git; it holds downloadable release files rather than tracked source.
-5. Open the GitHub repository > Releases > Draft a new release. Create tag v0.1.0-rc.2 targeting the committed main branch. Title it HNLS 0.1.0-rc.2. Copy the rc.2 notes from CHANGELOG.md and mark it as a pre-release.
-6. Attach dist/HNLS-0.1.0-rc.2-source.zip and dist/SHA256SUMS.txt. Publish the prerelease when ready. GitHub also generates source archives from the tag automatically.
+5. Open the GitHub repository > Releases > Draft a new release. Create tag v0.1.0-rc.3 targeting the committed main branch. Title it HNLS 0.1.0-rc.3. Copy the rc.3 notes from CHANGELOG.md and mark it as a pre-release.
+6. Attach dist/HNLS-0.1.0-rc.3-source.zip and dist/SHA256SUMS.txt. Publish the prerelease when ready. GitHub also generates source archives from the tag automatically.
 
 No repository was created or release published by preparing this package. Public stable release should follow the physical acceptance listed in RELEASE_STATUS.md.
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-rc.3 — 2026-10-30
+
+- Added persistent weekly show hours, IANA time zone, overnight windows and reboot recovery.
+- Automatically starts a random song, shuffle and main Song Show; closing stops music and sets all outputs Off.
+- Added playable titles in both Music lists and preserved row focus during polling.
+- Added a scoped eight-file updater with known-version checks, backups and rollback.
+- Added schedule, UI and update regression coverage; fresh-hardware acceptance remains pending.
+
 ## 0.1.0-rc.2 — 2026-10-30
 
 - Reconciled 259 controller and two receiver files against the actual working Pis.

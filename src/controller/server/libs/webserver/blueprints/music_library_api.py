@@ -221,3 +221,18 @@ def hnls_playlist_settings():
         return jsonify(save_settings(request.get_json(silent=True)))
     except (ValueError,TypeError) as exc:
         return jsonify({'error':str(exc)}),400
+
+
+@music_library_api.get('/api/music/show-schedule')
+@login_required
+def show_schedule_get():
+    return jsonify(Executer.instance.show_schedule.view())
+
+
+@music_library_api.post('/api/music/show-schedule')
+@login_required
+def show_schedule_save():
+    try:
+        return jsonify(Executer.instance.show_schedule.save(request.get_json(silent=True)))
+    except (ValueError, OSError) as exc:
+        return jsonify(error=str(exc)), 400

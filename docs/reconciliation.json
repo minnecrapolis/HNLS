@@ -739,5 +739,14 @@
     "Clean schema-compatible defaults with no active outputs",
     "Temporary per-frame diagnostic logging opt-in",
     "Explicit runtime manifest adds flask-openapi imported by live code"
-  ]
+  ],
+  "subsequent_release_changes": {
+    "0.1.0-rc.3": [
+      "show_schedule module and server job",
+      "authenticated schedule read/save API",
+      "weekly show-hours Music UI",
+      "clickable titles and stable row rendering",
+      "scoped supported-build update installer"
+    ]
+  }
 }
