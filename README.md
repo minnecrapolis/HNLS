@@ -1,48 +1,75 @@
 # HNLS — HourNerd LightShow
 
-Music-driven, individually addressable holiday lighting, controlled from a mobile-friendly web interface.
+**Your music. Your lights. Your show.**
 
-**Version 0.1.0-rc.1 · source consolidation candidate · not a validated standalone installer.**
+A Raspberry Pi music and holiday-lighting system with a responsive web interface, automatic song analysis and visual, per-song LED cues.
 
-HNLS builds on Music LED Strip Control by TobKra96 and contributors. HNLS is the product name; existing installations retain `mlsc` service names and legacy filesystem paths for compatibility.
+**0.1.0-rc.2 — reconciled source prerelease.** Controller and receiver code were reconciled with captures from the working installation on October 29, 2026. The new fresh-install script is automated and tested with simulated failures, but has not yet been installed on a clean physical Pi. See [release status](docs/RELEASE_STATUS.md) and [verification results](docs/VERIFICATION.md).
 
-## What is included
+## Features
 
-- Controller Python source and a new responsive lighting-desk interface.
-- MP3 playback, looping playlist, shuffle, song preparation and music-reactive effects.
-- Bass/mid/treble/beat palettes, section synchronization and pixel density controls.
-- Per-song timecoded cues for selected output and LED ranges, plus named light groups.
-- Song boundaries with LEDs off and a two-second gap.
-- Local GPIO outputs, authenticated network receiver source and pairing tools.
-- A second-monitor toolbar that controls the main browser window.
-- Source validation, reproducible release packaging, checksums, documentation and GitHub workflows.
+- Upload music, loop the playlist, shuffle, pause, seek, skip and replay.
+- Prepare songs in the background for section/tempo/onset-aware automatic lighting.
+- Assign colors to bass, midrange, treble, beat accents and POWER beats.
+- Synchronize sections, pair opposite sections or make custom groups.
+- Mark song intervals and apply flash, solid, blackout or color-scroll cues to selected inclusive LED ranges.
+- Add local data outputs and pair a remote Pi through the web interface.
+- Use mobile navigation or a static second-monitor toolbar that controls the main window.
+- Turn lights off and reset show state between songs, with a two-second gap.
 
-No music, live configuration, pairing keys, SSH keys or private ChatGPT bridge is included.
+No fixed 1,200-LED layout is assumed. Each output has real timing, backend and power constraints. An LED density setting is not an electrical current limiter.
 
-## Start here
+## Fresh controller installation
 
-| Goal | Guide |
-| --- | --- |
-| Understand release readiness | [Release status](docs/RELEASE_STATUS.md) |
-| Install or maintain | [Installation](docs/INSTALLATION.md) |
-| Operate the lights | [User guide](docs/USER_GUIDE.md) |
-| Wire and expand | [Hardware](docs/HARDWARE.md) |
-| Understand internals | [Architecture](docs/ARCHITECTURE.md) |
-| Diagnose a problem | [Troubleshooting](docs/TROUBLESHOOTING.md) |
-| Publish a GitHub release | [Release guide](docs/RELEASING.md) |
-| Review attribution | [Third-party notices](THIRD_PARTY.md) |
-
-## Validate and build
-
-Requires Python 3.9 or newer for repository tools:
+Use a spare **Pi 4 with 64-bit Raspberry Pi OS Bookworm / Python 3.11+**, internet access and appropriately powered LEDs. Download/extract the release, open the HNLS directory and run:
 
 ```sh
+python3 install.py --check
+sudo bash install.sh --role controller
+```
+
+Open `http://<your-Pi-LAN-address>:8080`. The installer enables boot startup. Clean defaults have **no configured outputs** and the default effect is Off. Configure the first line in the web interface before playing a show.
+
+## Fresh remote receiver
+
+On a separate Pi (the captured reference is Pi 3 A+, Bullseye / Python 3.9):
+
+```sh
+sudo bash install.sh --role receiver
+```
+
+Pair from the controller's web interface using the receiver's LAN address and locally generated pairing key. The current receiver drives BCM GPIO21 / physical pin40. See [installation](docs/INSTALLATION.md).
+
+**Existing working installation?** Do not run the fresh installer there. It refuses existing code, environments, configuration and service units. Continue using your working system until the prerelease is tested on a spare Pi; no live upgrade/migration is claimed.
+
+## Documentation
+
+| Topic | Guide |
+| --- | --- |
+| Install, boot, service management, recovery | [Installation](docs/INSTALLATION.md) |
+| Playlist, colors, grouping and song moments | [User guide](docs/USER_GUIDE.md) |
+| Wiring, output pins, power and remote network | [Hardware](docs/HARDWARE.md) |
+| Runtime design | [Architecture](docs/ARCHITECTURE.md) |
+| Troubleshooting | [Troubleshooting](docs/TROUBLESHOOTING.md) |
+| Reconciled files and exact origins | [Reconciliation](docs/RECONCILIATION.md) |
+| Dependencies and reference systems | [Dependencies](docs/DEPENDENCIES.md) |
+| GitHub publishing and release assets | [Publishing](docs/RELEASING.md) |
+| Limitations and hardware acceptance | [Release status](docs/RELEASE_STATUS.md) |
+
+## Development and release builds
+
+```sh
+python3 -m pip install -r requirements/test.txt
+python3 -m unittest discover -s tests -v
 python3 tools/validate.py
+python3 tools/check_defaults.py
 python3 tools/build_release.py
 ```
 
-This checks source syntax and release structure, not GPIO, browser rendering or audible playback. See release status before deploying to a working show.
+Release ZIPs and SHA256SUMS.txt are written to `dist/`. CI runs the same checks; the tag workflow uploads release assets to Actions for review rather than publishing automatically.
 
-## Licensing status
+## Credits and license
 
-The inherited project identifies MIT licensing. Exact upstream copyright notices, matching revision and bundled web-asset licenses still require reconciliation. No blanket replacement license is asserted here. Public distribution is gated on that review; see THIRD_PARTY.md.
+HNLS builds on Music LED Strip Control by TobKra96 and contributors. The original MIT license and copyright notice are retained unchanged in [LICENSE](LICENSE). Vendor assets retain their respective terms and embedded notices; see [THIRD_PARTY.md](THIRD_PARTY.md). Legacy service names and paths remain compatibility details.
+
+No music, personal show configuration, live PIN, pairing key or private ChatGPT bridge is included.

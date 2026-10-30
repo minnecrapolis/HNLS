@@ -178,14 +178,6 @@ class DeviceManager:
                 self._config, self._config["device_configs"][device_id], self._color_service_global)
         logger.debug("Leaving init_devices()")
 
-    def _sync_gpio_devices(self):
-        """Start newly added normal outputs without interrupting working lines."""
-        for key, config in self._config['device_configs'].items():
-            if key not in self._devices:
-                device=Device(self._config,config,self._color_service_global)
-                self._devices[key]=device
-                device.start_device()
-
     def reinit_devices(self):
         logger.debug("Entering reinit_devices()")
         for key in self._devices:
@@ -221,3 +213,12 @@ class DeviceManager:
         logger.debug(f"Stopping {device_id}")
         self._devices[device_id].stop_device()
         logger.debug(f"Stopped {device_id}")
+
+    def _sync_gpio_devices(self):
+        """Start newly added normal outputs without interrupting working lines."""
+        for key, config in self._config['device_configs'].items():
+            if key not in self._devices:
+                device=Device(self._config,config,self._color_service_global)
+                self._devices[key]=device
+                device.start_device()
+

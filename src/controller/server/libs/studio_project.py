@@ -99,9 +99,7 @@ def validate_project(data):
             'gpio': pin, 'count': count, 'first_pixel': number(out.get('first_pixel', 1), 1, 10_000_000, 'First pixel', True),
             'fps': fps, 'offset_ms': number(out.get('offset_ms', 0), -10000, 10000, 'Line offset'),
             'brightness': number(out.get('brightness', 40), 0, 100, 'Brightness'), 'order': order,
-            'max_lit': number(out.get('max_lit', 0), 0, count, 'Maximum lit LEDs', True), 'enabled': enabled,
-            'layout_x': number(out.get('layout_x', 5), 0, 95, 'Layout X'),
-            'layout_y': number(out.get('layout_y', 5 + index % 10 * 9), 0, 95, 'Layout Y')})
+            'max_lit': number(out.get('max_lit', 0), 0, count, 'Maximum lit LEDs', True), 'enabled': enabled})
     for node in {o['node'] for o in p['outputs']}:
         pwm = [o for o in p['outputs'] if o['enabled'] and o['node'] == node and PINS[o['gpio']][0] == 'pwm']
         if pwm:
@@ -120,7 +118,7 @@ def validate_project(data):
             ranges(target)
         color = str(c.get('color', '#ff0000'))
         effect = c.get('effect', 'solid')
-        if not COLORS.fullmatch(color) or effect not in ('solid', 'fade', 'pulse', 'flash', 'chase', 'sparkle', 'blackout'):
+        if not COLORS.fullmatch(color) or effect not in ('solid', 'fade', 'pulse', 'chase', 'sparkle', 'blackout'):
             raise ValueError('Invalid cue color or effect')
         start = number(c.get('start_ms', 0), 0, p['duration_ms'], 'Cue start', True)
         duration = number(c.get('duration_ms', 1000), 1, p['duration_ms'], 'Cue duration', True)
@@ -226,8 +224,6 @@ class ProjectRenderer:
                     amplitude *= elapsed/cue['duration_ms']
                 elif cue['effect'] == 'pulse':
                     amplitude *= .5-.5*np.cos(2*np.pi*elapsed/cue['period_ms'])
-                elif cue['effect'] == 'flash':
-                    amplitude *= (elapsed % cue['period_ms']) < cue['period_ms']/2
                 elif cue['effect'] == 'chase':
                     phase = ((x-low)/max(1, high-low+1)-elapsed/cue['period_ms']) % 1
                     amplitude *= np.maximum(0, 1-phase/.15)

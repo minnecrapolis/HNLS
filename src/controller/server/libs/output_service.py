@@ -1,3 +1,4 @@
+import os
 import sys
 import signal
 from time import time
@@ -123,6 +124,19 @@ class OutputService:
         if fresh or applied or getattr(self, '_song_moment_applied', False):
             self._current_output.show(output)
         self._song_moment_applied = applied
+
+        # HNLS temporary frame diagnostics.
+        if os.environ.get('HNLS_FRAME_DIAGNOSTICS') == '1' and time() - getattr(self, '_hnls_diag_at', 0) >= 2:
+            self._hnls_diag_at = time()
+            def describe_frame(array):
+                lit = np.flatnonzero(np.any(array > 0, axis=0))
+                span = f"{int(lit[0])+1}-{int(lit[-1])+1}" if lit.size else "none"
+                return f"{lit.size}/{array.shape[1]} lit, span {span}"
+            logger.info(
+                "HNLS FRAME | {} | position={:.2f} | cue={} | automatic={} | sent={}",
+                self._device.device_config["device_name"],
+                self._device.song_moment_position.value,
+                applied, describe_frame(base), describe_frame(output))
 
         self.end_time = time()
 

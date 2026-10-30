@@ -1,0 +1,14 @@
+[Unit]
+Description=HourNerd LightShow controller
+Wants=network-online.target
+After=network-online.target
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/share/music_led_strip_control/server
+ExecStart=/share/.venv/bin/python3 main.py
+Restart=on-failure
+RestartSec=5
+UMask=0077
+[Install]
+WantedBy=multi-user.target

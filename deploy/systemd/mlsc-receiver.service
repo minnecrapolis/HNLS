@@ -1,0 +1,14 @@
+[Unit]
+Description=HourNerd LightShow receiver
+Wants=network-online.target
+After=network-online.target
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/mlsc-receiver
+ExecStart=/opt/mlsc-receiver/venv/bin/python3 /opt/mlsc-receiver/receiver.py
+Restart=on-failure
+RestartSec=5
+UMask=0077
+[Install]
+WantedBy=multi-user.target

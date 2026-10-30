@@ -1,30 +1,40 @@
-# Installation and recovery
+# Installation, startup and recovery
 
-## Existing working HNLS installations
+## Fresh controller: prerelease hardware test
 
-Do not copy src/controller over a working Pi. This source consolidation needs comparison against the live install first. Legacy paths remain `/share/music_led_strip_control`, `/share/.mlsc`, `/share/.venv`; music is normally `/share/music`.
-
-The maintenance folders retain previously supplied scoped update installers and their checksums. Read each included README before using it. The interface update requires the existing song designer and branding assets; music intelligence requires that interface. These updates are not a full installer and are not needed just because this archive exists. They can briefly interrupt playback and print backup/rollback instructions.
-
-## Capture the current build
-
-Copy tools/export_installation.py to /home/pi on the controller. Run:
+Use a spare Pi 4 with 64-bit Raspberry Pi OS Bookworm, Python 3.11+ and internet access. Extract the release, change into HNLS and run:
 
 ```sh
-sudo python3 /home/pi/export_installation.py --role controller --output /home/pi/capture-controller.zip
+python3 install.py --check
+sudo bash install.sh --role controller
 ```
 
-On the receiver, use the same tool:
+The --check command verifies release file hashes without changing the machine; it does not test hardware. Installation refuses existing application code, /share/.venv, /share/.mlsc or an installed mlsc service unit. It installs OS dependencies, copies the complete bundled application, creates its venv, installs direct runtime requirements and validates imports/defaults before installing the boot service. It does not clone or run an external upstream setup script.
+
+The controller uses /share/music_led_strip_control, /share/.venv, /share/.mlsc and /share/music. These legacy paths preserve compatibility. Open `http://<Pi-LAN-address>:8080`; find the address with `hostname -I`.
+
+Clean defaults contain no output entries, and the default effect is Off. Add/configure a line in Device Settings: actual count, color order, backend/pin and conservative brightness. Keep the hardware powered appropriately. Select Song Show and upload music through Music. Enabling the service at boot does not automatically start playlist playback.
+
+## Fresh receiver
+
+Use a separate Pi with Python 3.9+; the captured baseline is Pi 3 Model A+ on Bullseye. Run:
 
 ```sh
-sudo python3 /home/pi/export_installation.py --role receiver --output /home/pi/capture-receiver.zip
+sudo bash install.sh --role receiver
+sudo cat /etc/mlsc-receiver/key
 ```
 
-The collector reads approved application code/assets, dependency versions and the service unit. It excludes configuration, music, private keys and runtime state. Review the ZIP privately: code comments or custom service directives can still contain local information. It does not change services or files on either Pi. It reports skipped files.
+The key is created locally with private file permissions. Paste it only into the controller's Add remote Pi pairing form, with the receiver LAN address, actual pixel count and physical color order. The receiver uses BCM21 / physical40. It stays dark until configured/paired frames arrive. Do not publish the key.
 
-## Start automatically at boot
+The existing scoped receiver installer under maintenance is retained for historical reference. Prefer the root fresh installer for a new HNLS installation. None of the maintenance installers constitutes a complete upgrade path for the reconciled release.
 
-On the controller:
+## Existing installations
+
+Do not copy this source over a working Pi. The fresh installer deliberately refuses it. Your uploaded capture was read-only and no running device has been changed. To trial rc.2, use a spare Pi or a separate OS card. Keep a private backup of the old application, configuration, service unit and exact dependency state. Configuration recovery and historical scoped patches are under tools/maintenance; read their own options before use.
+
+## Boot startup
+
+The installer enables the appropriate service. To verify or enable manually on the controller:
 
 ```sh
 sudo systemctl enable --now mlsc
@@ -38,17 +48,15 @@ sudo systemctl enable --now mlsc-receiver
 systemctl is-enabled mlsc-receiver
 ```
 
-No cron job is needed. Enabling services starts the application/receiver at boot; it does not add playlist autoplay.
+No cron entry is needed. These commands start the server/receiver; they do not implement automatic playlist playback.
 
-## Stop and restart
+## Stop, start and restart
 
-Controller: `sudo systemctl stop mlsc`, `sudo systemctl start mlsc`, or `sudo systemctl restart mlsc`.
+Controller: `sudo systemctl stop mlsc`, `sudo systemctl start mlsc`, `sudo systemctl restart mlsc`.
 Receiver: substitute `mlsc-receiver`.
 
-## Backup and rollback
+## Installation failure and rollback
 
-Before upgrades, privately back up the application, virtual environment dependency list, service unit and `/share/.mlsc`. Protect the backup because it contains access and pairing settings. Use the exact rollback command printed by the scoped installer. Do not restore old native output drivers blindly: older versions swapped red/green twice. A complete automated repository-level upgrade/rollback installer remains a release blocker.
+Before service installation, dependency or validation failures remove newly staged application code and newly created virtual environments. If a later service step fails, the installer stops/disables its new unit, removes that unit and new application files, and removes any pairing key it created. It retains OS packages and generated runtime data; it does not undo apt transactions. This is fresh-install cleanup, not an upgrade rollback system. Do not delete preexisting data to bypass the fresh-install guard.
 
-## Fresh Raspberry Pi
-
-No validated fresh-Pi installation command is supplied. Restore dependencies and assets from the working system, test on a spare Pi and record supported OS/Python/backend versions before publishing one. Do not run the inherited project installer and assume it installs HNLS.
+A successful systemctl start is not a sustained health or hardware test. Verify logs, UI access, reboot behavior, low-brightness RGB/GRB, audio, cues and remote recovery on a spare Pi before public stable release.

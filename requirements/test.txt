@@ -1,0 +1,5 @@
+numpy
+scipy
+jsonschema
+Jinja2
+loguru

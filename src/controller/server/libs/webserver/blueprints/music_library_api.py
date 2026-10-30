@@ -139,6 +139,7 @@ def song_moments_get():
         return jsonify(error=str(exc)),400
 
 
+
 @music_library_api.post('/api/music/song-moments')
 @login_required
 def song_moment_save():
@@ -148,6 +149,7 @@ def song_moment_save():
         return jsonify(ok=True,cue=cue)
     except (ValueError,OSError,TypeError) as exc:
         return jsonify(error=str(exc)),400
+
 
 
 @music_library_api.delete('/api/music/song-moments')
@@ -162,11 +164,13 @@ def song_moment_delete():
         return jsonify(error=str(exc)),400
 
 
+
 @music_library_api.get('/api/music/song-moments/playhead')
 @login_required
 def song_moment_playhead():
     from libs.music_library import read_status
     return jsonify(read_status())
+
 
 
 @music_library_api.post('/api/music/song-regions')
@@ -177,6 +181,7 @@ def song_region_save():
         return jsonify(ok=True,region=save_region(request.get_json(silent=True),Executer.instance.music_library_executer._config))
     except (ValueError,OSError,TypeError) as exc:
         return jsonify(error=str(exc)),400
+
 
 
 @music_library_api.delete('/api/music/song-regions')

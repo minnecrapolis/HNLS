@@ -80,3 +80,4 @@ def get_segment() -> str:
 @login_required
 def route_song_designer():
     return render_template('home/song_designer.html', segment='song_designer')
+

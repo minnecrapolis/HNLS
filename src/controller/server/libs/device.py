@@ -1,4 +1,5 @@
-from multiprocessing import Process, Queue, Value
+from multiprocessing import Value
+from multiprocessing import Process, Queue
 
 from loguru import logger
 

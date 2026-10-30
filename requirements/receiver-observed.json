@@ -1,0 +1,23 @@
+{
+  "platform": "Linux-6.1.21-v7+-armv7l-with-glibc2.31",
+  "python": "3.9.2 (default, Mar 12 2021, 04:06:34) \n[GCC 10.2.1 20210110]",
+  "os_release": "PRETTY_NAME=\"Raspbian GNU/Linux 11 (bullseye)\"\nNAME=\"Raspbian GNU/Linux\"\nVERSION_ID=\"11\"\nVERSION=\"11 (bullseye)\"\nVERSION_CODENAME=bullseye\nID=raspbian\nID_LIKE=debian\nHOME_URL=\"http://www.raspbian.org/\"\nSUPPORT_URL=\"http://www.raspbian.org/RaspbianForums\"\nBUG_REPORT_URL=\"http://www.raspbian.org/RaspbianBugs\"\n",
+  "packages": [
+    {
+      "name": "pip",
+      "version": "20.3.4"
+    },
+    {
+      "name": "pkg-resources",
+      "version": "0.0.0"
+    },
+    {
+      "name": "rpi-ws281x",
+      "version": "5.0.0"
+    },
+    {
+      "name": "setuptools",
+      "version": "44.1.1"
+    }
+  ]
+}

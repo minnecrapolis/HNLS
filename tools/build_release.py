@@ -11,7 +11,7 @@ def build():
         for p in sorted(ROOT.rglob('*')):
             rel=p.relative_to(ROOT)
             if not p.is_file() or any(s in {'dist','.git','__pycache__','.venv'} for s in rel.parts) or p.suffix=='.pyc':continue
-            info=zipfile.ZipInfo('HNLS/'+rel.as_posix(),(2026,10,29,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED;info.external_attr=0o100644<<16
+            info=zipfile.ZipInfo('HNLS/'+rel.as_posix(),(2026,10,30,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED;info.external_attr=0o100644<<16
             z.writestr(info,p.read_bytes())
     digest=hashlib.sha256(target.read_bytes()).hexdigest()
     (dist/'SHA256SUMS.txt').write_text(digest+'  '+target.name+'\n')

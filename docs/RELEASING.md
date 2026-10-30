@@ -1,14 +1,30 @@
-# Publishing HNLS
+# GitHub repository and releases
 
-1. Resolve every blocker in RELEASE_STATUS.md. Preserve applicable licenses and attribution.
-2. Create an empty GitHub repository named HNLS or hournerd-lightshow. Extract this archive and open a terminal inside HNLS.
-3. Run `python3 tools/validate.py` and review source and assets for private information.
-4. Run `git init`, `git add .`, and `git commit -m "Prepare HNLS source release candidate"`.
-5. Use GitHub's displayed remote URL for your own repository; push the main branch using your normal authenticated Git client. No repository/account has been created by this package.
-6. Run `python3 tools/build_release.py`. Review generated files in dist. The archive excludes live settings, media, caches and the optional private bridge.
-7. Create a GitHub prerelease tagged v0.1.0-rc.1. Use CHANGELOG.md as the description and attach the generated ZIP and SHA256SUMS.txt. The included tag workflow builds those assets as a downloadable Actions artifact; it intentionally does not publish automatically.
-8. After spare-Pi installation/rollback and hardware checks pass, update release status/version and make a stable tag. Never label this candidate a tested SD image or blank-Pi installer.
+## Windows / GitHub Desktop
 
-## Hardware acceptance record
+1. Extract the delivery ZIP. Use the HNLS folder containing README.md, LICENSE, install.py, src, docs, tools and .github as the repository root.
+2. Open GitHub Desktop and select File > Add local repository. Choose HNLS. If it is not a Git repository, select the option to create one in that folder. Do not overwrite the included README, license or gitignore.
+3. Review Changes, commit the source with a summary such as Reconcile HNLS release candidate, and Publish repository under your own account. Private visibility is useful while completing spare-Pi acceptance.
+4. Check that README renders and .github/workflows is present. dist is intentionally ignored by Git; it holds downloadable release files rather than tracked source.
+5. Open the GitHub repository > Releases > Draft a new release. Create tag v0.1.0-rc.2 targeting the committed main branch. Title it HNLS 0.1.0-rc.2. Copy the rc.2 notes from CHANGELOG.md and mark it as a pre-release.
+6. Attach dist/HNLS-0.1.0-rc.2-source.zip and dist/SHA256SUMS.txt. Publish the prerelease when ready. GitHub also generates source archives from the tag automatically.
 
-Record OS image, Pi model, Python and dependency versions; cold boot; audio destinations; primary RGB colors; short and long strips; cue entry/exit/overlap/reserve; seek/replay/skip; song gap; shuffle; remote packet loss/reconnection/watchdog; mobile navigation; toolbar; install/rollback and power behavior. Keep results with the release.
+No repository was created or release published by preparing this package. Public stable release should follow the physical acceptance listed in RELEASE_STATUS.md.
+
+## Building again
+
+```sh
+python3 -m pip install -r requirements/test.txt
+python3 -m unittest discover -s tests -v
+python3 tools/validate.py
+python3 tools/check_defaults.py
+python3 tools/build_release.py
+```
+
+The release builder validates source and release-manifest checksums, produces a deterministic source ZIP, and creates SHA256SUMS.txt. Update VERSION and CHANGELOG before making a new release. If source/requirements change, explicitly regenerate release-manifest.json using tools/update_manifest.py and review the diff before committing; ordinary builds never silently replace the expected hashes.
+
+GitHub CI runs tests, source validation, default schema validation and Jinja template parsing. Pushing a v-prefixed tag builds the ZIP and uploads an Actions artifact for review. It does not automatically publish a GitHub release. Attach the reviewed assets through Releases.
+
+## Hardware acceptance
+
+Record clean OS/card, Pi model, Python/dependencies, install logs, reboot, audio destination, RGB/GRB order, actual strip count/FPS, cue end restoration, overlap/reserve, seek/replay/skip, song gap, shuffle, remote watchdog/reconnection, mobile controls and toolbar. Keep music and pairing keys out of issues and releases.

@@ -1,17 +1,21 @@
-# Release status
+# Release status — 0.1.0-rc.2
 
-This is a source consolidation, not a capture of the running Pis. The controller snapshot was merged with the song-cue, HNLS interface and music-intelligence updates. Logical RGB packing was corrected in the consolidated source; an existing Pi driver is not overwritten by these repository tools.
+The source reconciliation is complete against the supplied working controller/receiver capture and original upstream archive. The complete source, static assets, clean defaults, direct dependencies, service generation, documentation and release workflows are assembled here.
 
-## Public release blockers
+## Verified locally
 
-1. Capture the working controller application tree, dependency versions, original manifests and service unit using tools/export_installation.py. Review the resulting archive privately before sharing.
-2. Reconcile the export against src/controller; preserve newer working fixes. Recover original runtime dependency manifests and missing vendor/static assets. The supplied snapshot lacks a complete standalone bootstrap environment.
-3. Obtain the exact applicable upstream license, copyright notices, revision and web-asset licenses. Do not invent copyright text.
-4. Validate install, rollback, cold boot, RGB/GRB, audio and cue exit on spare hardware.
-5. Only then mark a release stable or advertise blank-Pi plug-and-play installation.
+Captured file hashes; original upstream revision/archive hash; preservation of the eight working controller differences and unchanged receiver code; corrected native RGB packing; parsed Python sources; automated core music/cue/grouping/remote regression tests; packaging/exclusion checks; fresh-installer failure cleanup simulations; deterministic source ZIP generation. See the release verification record for exact results.
 
-## Validation distinction
+## Remaining physical acceptance
 
-Repository checks compile Python and inspect package exclusions. They do not establish that Flask dependencies are complete, real LEDs work or a fresh OS can boot the show. The user has confirmed the separate updates work on their installation; that is not a clean installation test of this consolidation.
+The new installer has not been run on a clean Pi. Confirm package availability/native builds, sustained service startup, default first-run behavior, boot startup, analog/Bluetooth audio, pure RGB and GRB colors, cue entry/exit/reserve/overlap, shuffle/seek/replay, remote loss/reconnection/watchdog, mobile navigation and second-monitor controls. Record OS/model/counts/FPS and results. Existing working-install behavior does not substitute for this test.
 
-Not implemented by this package: a fresh-OS installer, prebuilt SD image, automatic boot-time playlist playback, multiple outputs on the receiver, web power-supply budgeting, or an unlimited-output guarantee. Legacy advanced studio/FSEQ modules are retained in the snapshot but require renewed integration tests with the current interface.
+The local build environment cannot install the additional Flask/Jinja/jsonschema test dependencies from its configured package index. Offline tests run; formal Draft 2020-12 validation and template parsing are also wired into CI/installer for an environment with those dependencies. The local schema-constraint inspection passes, but is not described as a full installed-jsonschema run.
+
+## Deliberate scope
+
+No SD-card image, existing-install migration, boot playlist autoplay, second receiver GPIO, web electrical-current budget, FPP MultiSync compatibility or unlimited output capacity is promised. Controller fresh installation currently targets the captured 64-bit Pi 4 baseline. The source contains inherited advanced studio/FSEQ functionality; those paths need renewed end-to-end hardware/UI acceptance as part of this prerelease.
+
+## Attribution
+
+Original MIT license and copyright notice were recovered and retained. Embedded vendor notices were preserved and an asset inventory is included. Third-party assets retain separate terms; this is not a claim that every bundled dependency or font is covered solely by the root MIT license.
