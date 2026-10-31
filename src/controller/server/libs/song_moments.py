@@ -13,7 +13,7 @@ import numpy as np
 
 LOCK = threading.RLock()
 _CACHE = {'checked': -1., 'stamp': None, 'cues': []}
-EFFECTS = ('solid', 'flash', 'color_scroll', 'blackout')
+EFFECTS = ('solid', 'flash', 'color_scroll', 'color_blocks', 'chase', 'comet', 'bounce', 'pulse', 'twinkle', 'rainbow', 'wipe', 'blackout')
 
 
 def store_path():
@@ -93,13 +93,121 @@ def validate(data, config):
     cue_id = data.get('id') or uuid.uuid4().hex
     if not isinstance(cue_id, str) or not re.fullmatch('[0-9a-f]{32}', cue_id):
         raise ValueError('Invalid moment identifier')
-    return {'id': cue_id, 'region': region_id or None, 'file': filename, 'start': start, 'end': end,
+    extra = motion_settings(data)
+    return {**extra, 'id': cue_id, 'region': region_id or None, 'file': filename, 'start': start, 'end': end,
             'effect': effect, 'targets': targets, 'first': first, 'last': last,
             'color': colors[0].lower(), 'color2': colors[1].lower(),
             'speed': number(data.get('speed', 1), .1, 5, 'Effect speed'),
             'brightness': number(data.get('brightness', 100), 0, 100, 'Moment brightness'),
             'reserve': data.get('reserve', False)}
 
+
+
+def motion_settings(data):
+    extra = {}
+    if 'use_color2' in data:
+        if type(data['use_color2']) is not bool:
+            raise ValueError('Use second color must be on or off')
+        extra['use_color2'] = data['use_color2']
+    if 'cycle_seconds' in data:
+        extra['cycle_seconds'] = number(data['cycle_seconds'], .1, 600, 'Seconds per cycle')
+    if 'band_width' in data:
+        width = data['band_width']
+        if type(width) is not int or not 1 <= width <= 5000:
+            raise ValueError('Band / trail width must be 1–5000 LEDs')
+        extra['band_width'] = width
+    if 'direction' in data:
+        if data['direction'] not in ('forward', 'reverse'):
+            raise ValueError('Choose forward or reverse')
+        extra['direction'] = data['direction']
+    return extra
+
+
+def safe_runtime_cue(raw):
+    """Defensive loading: a damaged saved row must not kill an output worker."""
+    if not isinstance(raw, dict):raise ValueError('Invalid saved moment')
+    cue=dict(raw)
+    if not isinstance(cue.get('file'), str):raise ValueError('Invalid song')
+    if cue.get('effect') not in EFFECTS:raise ValueError('Invalid effect')
+    targets=cue.get('targets')
+    if not isinstance(targets,list) or not targets or any(not isinstance(x,str) for x in targets):raise ValueError('Invalid targets')
+    if type(cue.get('first')) is not int or not 1<=cue['first']<=5000:raise ValueError('Invalid range')
+    if cue.get('last') is not None and (type(cue['last']) is not int or not cue['first']<=cue['last']<=5000):raise ValueError('Invalid range')
+    cue['start']=number(cue.get('start'),0,86400,'Start');cue['end']=number(cue.get('end'),0,86400,'End')
+    if cue['end']<=cue['start']:raise ValueError('Invalid duration')
+    for key,default in [('color','#ffffff'),('color2','#ff8000')]:
+        value=cue.get(key,default)
+        if not isinstance(value,str) or not re.fullmatch('#[0-9a-fA-F]{6}',value):raise ValueError('Invalid color')
+        cue[key]=value
+    cue['speed']=number(cue.get('speed',1),.1,5,'Speed')
+    cue['brightness']=number(cue.get('brightness',100),0,100,'Brightness')
+    if type(cue.get('reserve',False)) is not bool:raise ValueError('Invalid reservation')
+    cue['reserve']=cue.get('reserve',False);cue.update(motion_settings(cue));cue['_token']=song_token(cue['file'])
+    return cue
+
+
+def render_cue(cue, count, elapsed):
+    """Return a complete RGB range; the background is explicit, never automatic."""
+    rgb=np.array([int(cue['color'][n:n+2],16) for n in (1,3,5)],dtype=float)[:,None]
+    second=np.array([int(cue['color2'][n:n+2],16) for n in (1,3,5)],dtype=float)[:,None]
+    effect=cue['effect'];speed=cue['speed'];period=cue.get('cycle_seconds')
+    two=cue.get('use_color2',effect in ('color_scroll','color_blocks','twinkle'))
+    background=second if two else np.zeros((3,1))
+    # Legacy saved scroll and flash timing remains intact until the cue is edited.
+    if period is None:period=.5/speed if effect=='flash' else 1./speed if effect=='color_scroll' else 6./speed
+    phase=(elapsed/period)%1.;width=max(1,min(count,cue.get('band_width',8)))
+    x=np.arange(count,dtype=float);result=np.zeros((3,count),dtype=float)
+    if effect=='solid':result[:]=rgb
+    elif effect=='flash':result[:]=rgb if phase<.5 else background
+    elif effect=='color_scroll':
+        wavelength=32. if 'cycle_seconds' not in cue and 'band_width' not in cue else 2.*width
+        blend=(1-np.cos(2*np.pi*((x/wavelength-phase)%1.)))[None,:]/2.
+        result=rgb*(1-blend)+background*blend
+    elif effect=='color_blocks':result=np.where(((x/(2.*width)-phase)%1.)[None,:]<.5,rgb,background)
+    elif effect=='chase':
+        weight=(((x-phase*count)%count)<width)[None,:]
+        result=rgb*weight+background*(1-weight)
+    elif effect=='comet':
+        weight=np.maximum(0,1-((phase*count-x)%count)/width)[None,:]**2
+        result=rgb*weight+background*(1-weight)
+    elif effect=='bounce':
+        head=(1-abs(2*phase-1))*(count-1)
+        weight=np.maximum(0,1-np.abs(x-head)/width)[None,:]
+        result=rgb*weight+background*(1-weight)
+    elif effect=='pulse':
+        weight=(1-np.cos(2*np.pi*phase))/2.
+        result[:]=rgb*weight+background*(1-weight)
+    elif effect=='twinkle':
+        step=math.floor(elapsed/period);noise=np.sin((x+1)*12.9898+step*78.233)*43758.5453;noise-=np.floor(noise)
+        result=np.where((noise>.1)[None,:],rgb,second if two else rgb)*(noise<.2)[None,:]*(1-phase)
+    elif effect=='rainbow':
+        hue=(x/(2.*width)-phase)%1.
+        if two:
+            blend=(1-np.cos(2*np.pi*hue))[None,:]/2.
+            result=rgb*(1-blend)+second*blend
+        else:
+            k=np.array([0.,4.,2.])[:,None]
+            result=255*np.clip(np.abs((hue[None,:]*6+k)%6-3)-1,0,1)
+    elif effect=='wipe':
+        weight=(x<math.ceil(phase*count))[None,:]
+        result=rgb*weight+background*(1-weight)
+    # Blackout intentionally remains zero.
+    if cue.get('direction')=='reverse':result=result[:,::-1]
+    return (result*(cue['brightness']/100.)).clip(0,255)
+
+
+def clock_snapshot(device, now):
+    clock=getattr(device,'song_moment_clock',None)
+    if clock is None:return None
+    lock=clock.get_lock()
+    if lock.acquire(False):
+        try:
+            snapshot=(clock.value,device.song_moment_token.value,device.song_moment_position.value,
+                      bool(getattr(getattr(device,'song_moment_paused',None),'value',False)))
+            device._moment_clock_snapshot=snapshot
+        finally:lock.release()
+    else:snapshot=getattr(device,'_moment_clock_snapshot',None)
+    return snapshot
 
 def save_moment(data, config):
     cue = validate(data, config)
@@ -138,60 +246,45 @@ def cached_cues(now):
         try:
             stamp = (path.stat().st_mtime_ns, path.stat().st_size) if path.is_file() else None
             if stamp != _CACHE['stamp']:
-                cues = read()['cues'] if stamp else []
+                rows = read()['cues'] if stamp else []
+                cues=[]
+                for raw in rows:
+                    try:cues.append(safe_runtime_cue(raw))
+                    except (ValueError,TypeError,KeyError,OverflowError):continue
                 _CACHE.update(stamp=stamp, cues=cues)
         except (OSError, ValueError, KeyError):
-            _CACHE.update(stamp=None, cues=[])
+            pass  # Retain the last good snapshot if a read fails; retry next poll.
     return _CACHE['cues']
 
 
 def overlay(frame, device, now=None):
-    """Return (frame, applied): half-open times, RGB logic, last saved row wins."""
-    now = time.monotonic() if now is None else now
-    if getattr(getattr(device, 'song_moment_off', None), 'value', False):
-        return frame, False
-    clock = getattr(device, 'song_moment_clock', None)
-    if clock is None:
-        return frame, False
-    with clock.get_lock():
-        age = now-clock.value
-        token = device.song_moment_token.value
-        position = device.song_moment_position.value+age
-    if not token or age < 0:
-        return frame, False
-    fresh = age <= .18
-    key = next((k for k, d in device.config['device_configs'].items() if d is device.device_config or d == device.device_config), None)
-    matching = [c for c in cached_cues(now) if song_token(c['file']) == token and ('*' in c['targets'] or key in c['targets'])]
-    active = [c for c in matching if fresh and c['start'] <= position < c['end']]
-    reserved = [c for c in matching if c['reserve']]
-    if not active and not reserved:
-        return frame, False
-    result = np.array(frame, copy=True)
-    count = result.shape[1]
-    def bounds(c):
-        return max(0, min(count, c['first']-1)), max(0, min(count, c['last'] if c['last'] is not None else count))
+    """Exclusive, half-open cue overlays; no blocking clock or rendering state mutation."""
+    now=time.monotonic() if now is None else now
+    if getattr(getattr(device,'song_moment_off',None),'value',False):return frame,False
+    snapshot=clock_snapshot(device,now)
+    if snapshot is None:
+        # A busy/orphaned clock must never block output or flash a fallback full frame.
+        if getattr(device,'song_moment_clock',None) is not None:return np.zeros_like(frame),True
+        return frame,False
+    stamp,token,position,paused=snapshot;age=now-stamp
+    if not token or age<0:return frame,False
+    stale=age>.75
+    if not paused and not stale:position+=age
+    key=next((k for k,d in device.config['device_configs'].items() if d is device.device_config or d==device.device_config),None)
+    matching=[c for c in cached_cues(now) if c['_token']==token and ('*' in c['targets'] or key in c['targets'])]
+    active=[c for c in matching if not stale and c['start']<=position<c['end']]
+    reserved=matching if stale else [c for c in matching if c['reserve']]
+    if not active and not reserved:return frame,False
+    result=np.array(frame,copy=True);count=result.shape[1]
+    def bounds(c):return max(0,min(count,c['first']-1)),max(0,min(count,c['last'] if c['last'] is not None else count))
     for cue in reserved:
-        lo, hi = bounds(cue)
-        result[:, lo:hi] = 0
+        lo,hi=bounds(cue);result[:,lo:hi]=0
     for cue in active:
-        lo, hi = bounds(cue)
-        if hi <= lo:
-            continue
-        elapsed = position-cue['start']
-        color = np.array([int(cue['color'][n:n+2], 16) for n in (1, 3, 5)])[:, None].astype(float)
-        factor = cue['brightness']/100.
-        effect = cue['effect']
-        if effect == 'blackout' or (effect == 'flash' and (elapsed*2*cue['speed']) % 1 >= .5):
-            color = np.zeros((3, 1))
-        elif effect == 'color_scroll':
-            second = np.array([int(cue['color2'][n:n+2], 16) for n in (1, 3, 5)])[:, None]
-            phase = (np.arange(hi-lo)/32. - elapsed*cue['speed']) % 1.
-            blend = (1-np.cos(2*np.pi*phase))[None, :]/2.
-            color = color*(1-blend)+second*blend
-        result[:3, lo:hi] = (color*factor).clip(0, 255).astype(result.dtype)
-        if result.shape[0] > 3:
-            result[3:, lo:hi] = 0
-    return result, True
+        lo,hi=bounds(cue)
+        if hi<=lo:continue
+        result[:,lo:hi]=0
+        result[:3,lo:hi]=render_cue(cue,hi-lo,position-cue['start']).astype(result.dtype)
+    return result,True
 
 
 

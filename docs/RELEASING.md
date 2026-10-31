@@ -6,8 +6,8 @@
 2. Open GitHub Desktop and select File > Add local repository. Choose HNLS. If it is not a Git repository, select the option to create one in that folder. Do not overwrite the included README, license or gitignore.
 3. Review Changes, commit the source with a summary such as Reconcile HNLS release candidate, and Publish repository under your own account. Private visibility is useful while completing spare-Pi acceptance.
 4. Check that README renders and .github/workflows is present. dist is intentionally ignored by Git; it holds downloadable release files rather than tracked source.
-5. Open the GitHub repository > Releases > Draft a new release. Create tag v0.1.0-rc.3 targeting the committed main branch. Title it HNLS 0.1.0-rc.3. Copy the rc.3 notes from CHANGELOG.md and mark it as a pre-release.
-6. Attach dist/HNLS-0.1.0-rc.3-source.zip and dist/SHA256SUMS.txt. Publish the prerelease when ready. GitHub also generates source archives from the tag automatically.
+5. Open the GitHub repository > Releases > Draft a new release. Create tag v0.1.0-rc.6 targeting the committed main branch. Title it HNLS 0.1.0-rc.6. Copy the rc.6 notes from CHANGELOG.md and mark it as a pre-release.
+6. Attach dist/HNLS-0.1.0-rc.6-source.zip and dist/SHA256SUMS.txt. Publish the prerelease when ready. GitHub also generates source archives from the tag automatically.
 
 No repository was created or release published by preparing this package. Public stable release should follow the physical acceptance listed in RELEASE_STATUS.md.
 
@@ -28,3 +28,9 @@ GitHub CI runs tests, source validation, default schema validation and Jinja tem
 ## Hardware acceptance
 
 Record clean OS/card, Pi model, Python/dependencies, install logs, reboot, audio destination, RGB/GRB order, actual strip count/FPS, cue end restoration, overlap/reserve, seek/replay/skip, song gap, shuffle, remote watchdog/reconnection, mobile controls and toolbar. Keep music and pairing keys out of issues and releases.
+
+Existing installations use dist/hnls-designer-effects-update.zip for the Song Designer changes; this is separate from the complete source asset. Its exact install commands and supported versions are in updates/designer-effects/README.txt.
+
+The rc.5 assets also include hnls-two-color-update.zip, intended for rc.4 systems already running the designer-effects update. The complete designer-effects package supports the earlier known captured/release builds.
+
+For the current rc.5 installation, hnls-moment-edit-update.zip is the small saved-moment editing fix. It is also included in the refreshed complete designer/two-color update payloads.

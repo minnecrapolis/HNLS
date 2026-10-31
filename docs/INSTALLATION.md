@@ -64,3 +64,17 @@ A successful systemctl start is not a sustained health or hardware test. Verify 
 ## Scoped show-hours update on the current main Pi
 
 Use the supplied hnls-show-hours-update.zip for the captured working build or rc.2. Copy it to /home/pi on the main Pi, extract and run its installer with /share/.venv/bin/python3. See updates/show-hours/README.txt for exact commands. All eight modified files are validated/backed up before restart. Unrecognized file hashes are refused before changes. Driver/audio files, settings and pairing are preserved. Rollback restores code; saved show_schedule.json is retained and is ignored by older code. No receiver installation is required.
+
+## Song Designer update on the working main Pi
+
+Copy dist/hnls-designer-effects-update.zip to /home/pi on LED03. Extract it and run its install_update.py using sudo /share/.venv/bin/python3, as shown in updates/designer-effects/README.txt. It verifies and backs up ten known-version files before briefly restarting HNLS. No receiver update is required. Counts, brightness, GPIO assignments, colors, saved moments, schedules and pairing files are retained. Native output/audio-routing drivers are not replaced; the audio-process change adds playback clock metadata and paused heartbeats.
+
+If rolling back after creating new effect moments, first change or delete those moments in the web UI: older renderers do not support the new effect names. Code rollback deliberately does not overwrite saved song data.
+
+## Second-color update after the designer-effects update
+
+Use dist/hnls-two-color-update.zip on the existing main Pi. It checks four known rc.4 files, backs them up, validates Python/Jinja and briefly restarts HNLS. Follow updates/two-color/README.txt. No slave or driver update is required. The complete designer-effects updater also contains the new color support for earlier supported builds. Rollback retains saved cues; the prior renderer ignores the new use_color2 option and resumes its prior color behavior.
+
+## Saved-moment Edit UI update
+
+Use dist/hnls-moment-edit-update.zip on a current rc.5 main Pi. It validates and backs up the JavaScript, designer page and included moment controls, then briefly restarts the service. Follow updates/moment-edit/README.txt. Refresh with Ctrl+F5 afterwards. No renderer, audio, worker, cue data or receiver changes are made. Older supported installations can use the refreshed full designer-effects update instead.

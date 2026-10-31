@@ -4,7 +4,7 @@
 
 A Raspberry Pi music and holiday-lighting system with a responsive web interface, automatic song analysis and visual, per-song LED cues.
 
-**0.1.0-rc.3 — reconciled source prerelease.** Controller and receiver code were reconciled with captures from the working installation on October 29, 2026. The new fresh-install script is automated and tested with simulated failures, but has not yet been installed on a clean physical Pi. See [release status](docs/RELEASE_STATUS.md) and [verification results](docs/VERIFICATION.md).
+**0.1.0-rc.6 — reconciled source prerelease.** Controller and receiver code were reconciled with captures from the working installation on October 29, 2026. The new fresh-install script is automated and tested with simulated failures, but has not yet been installed on a clean physical Pi. See [release status](docs/RELEASE_STATUS.md) and [verification results](docs/VERIFICATION.md).
 
 ## Features
 
@@ -13,7 +13,8 @@ A Raspberry Pi music and holiday-lighting system with a responsive web interface
 - Prepare songs in the background for section/tempo/onset-aware automatic lighting.
 - Assign colors to bass, midrange, treble, beat accents and POWER beats.
 - Synchronize sections, pair opposite sections or make custom groups.
-- Mark song intervals and apply flash, solid, blackout or color-scroll cues to selected inclusive LED ranges.
+- Mark song intervals and apply 12 effects to inclusive LED ranges: solid, flash, smooth/bold scroll, chase, comet, bounce, pulse, twinkle, rainbow, wipe and blackout.
+- Set seconds per cycle, band/trail width and direction, with overlap warnings and song-specific pixel reservation.
 - Add local data outputs and pair a remote Pi through the web interface.
 - Use mobile navigation or a static second-monitor toolbar that controls the main window.
 - Turn lights off and reset show state between songs, with a two-second gap.
@@ -46,6 +47,18 @@ Pair from the controller's web interface using the receiver's LAN address and lo
 ## Update the working controller
 
 The small update package changes only the scheduler and Music UI files. Copy hnls-show-hours-update.zip to /home/pi on the main Pi, then follow [these instructions](updates/show-hours/README.txt). It verifies known source versions, backs up files and briefly restarts HNLS. No receiver update is needed.
+
+## Song Designer effects update
+
+For the captured working build or rc.2/rc.3, use dist/hnls-designer-effects-update.zip on the main Pi. It updates only the cue/worker and designer files, preserves saved settings and provides rollback. See [update instructions](updates/designer-effects/README.txt). No receiver change is required.
+
+## Two-color update for existing rc.4 systems
+
+Use dist/hnls-two-color-update.zip to enable second-color choices for Bounce, Flash, Comet, Chase, Pulse, Wipe and Rainbow/palette scroll. It changes four designer files on the main Pi and retains saved moments/settings. See [instructions](updates/two-color/README.txt). Picking a second color enables it; black or an unchecked switch preserves dark backgrounds. Existing cues keep their prior look until saved with the option.
+
+## Saved-moment Edit update
+
+On the current rc.5 build use dist/hnls-moment-edit-update.zip. Edit now loads the chosen moment, opens Fine-tune, scrolls/focuses the editing controls and shows a selected-row/banner state. This changes only three UI files. See [instructions](updates/moment-edit/README.txt).
 
 ## Documentation
 

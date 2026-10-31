@@ -158,10 +158,15 @@ class DeviceManager:
         for value in self._devices.values():
             if playback is not None:
                 if hasattr(value, 'song_moment_clock'):
-                    with value.song_moment_clock.get_lock():
-                        value.song_moment_token.value = song_token(playback.get('file')) if not playback['blackout'] else 0
-                        value.song_moment_position.value = playback.get('position', 0.)
-                        value.song_moment_clock.value = stamp
+                    clock_lock = value.song_moment_clock.get_lock()
+                    if clock_lock.acquire(False):
+                        try:
+                            value.song_moment_token.value = song_token(playback.get('file')) if not playback['blackout'] else 0
+                            value.song_moment_position.value = playback.get('position', 0.)
+                            value.song_moment_paused.value = bool(playback.get('paused', False))
+                            value.song_moment_clock.value = stamp
+                        finally:
+                            clock_lock.release()
                 value.playback_epoch.value = playback['epoch']
                 value.playback_blackout.value = playback['blackout']
             if 'mel' in audio_data:

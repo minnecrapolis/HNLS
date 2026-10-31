@@ -1,4 +1,4 @@
-# Release status — 0.1.0-rc.3
+# Release status — 0.1.0-rc.6
 
 The source reconciliation is complete against the supplied working controller/receiver capture and original upstream archive. The complete source, static assets, clean defaults, direct dependencies, service generation, documentation and release workflows are assembled here.
 
@@ -21,3 +21,9 @@ No SD-card image, arbitrary-version install migration, unconditional boot playli
 Original MIT license and copyright notice were recovered and retained. Embedded vendor notices were preserved and an asset inventory is included. Third-party assets retain separate terms; this is not a claim that every bundled dependency or font is covered solely by the root MIT license.
 
 rc.3 adds server-side weekly show hours, scheduled boot recovery, automatic shuffle/main-show startup and closing blackout, plus clickable song titles. The scoped updater supports known captured/rc.2 files, with offline install/rollback tests. Real scheduled playback and cutoff still require a check on the working Pi.
+
+rc.4 adds range-exclusive designer effects and worker hardening. Tests reproduce nonblocking queue competition and an abandoned multiprocessing clock lock, as well as reserved range behavior and cache restoration. They do not establish that the reservation checkbox was the sole cause of the reported physical all-on/cycling symptom. Retest on the working Pi and inspect service/power logs if that symptom persists.
+
+rc.5 extends second-color rendering and adds a four-file rc.4 updater. Local tests and UI simulations pass; physical playback of the new color combinations is pending a user check.
+
+rc.6 improves explicit saved-moment editing. The previous handler only populated a form above the table without opening or scrolling it into view. This can explain an apparently inactive Edit button; it is not a claim that all browser-side failures share that cause. Errors now appear on the page. Actual browser acceptance on the Pi is pending.

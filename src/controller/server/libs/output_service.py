@@ -73,8 +73,7 @@ class OutputService:
         self._fps_limiter.fps_limiter()
 
         # Check the notification queue.
-        if not self._device_notification_queue_in.empty():
-            self._current_notification_in = self._device_notification_queue_in.get_blocking()
+        self._current_notification_in = self._device_notification_queue_in.get_available()
 
         if hasattr(self, "_current_notification_in"):
             if self._current_notification_in is NotificationEnum.config_refresh:
@@ -91,17 +90,14 @@ class OutputService:
 
         # Skip the output sequence, for example to "pause" the process.
         if self._skip_output:
-            if not self._output_queue.empty():
-                skip_output_queue = self._output_queue.get_blocking()
-                del skip_output_queue
+            self._output_queue.get_available()
             return
 
         # Force darkness across every effect during the inter-song gap. Keep
         # stale effect frames from relighting the strip while workers reset.
         if (self._device.playback_blackout.value or
                 self._device.playback_ready_epoch.value != self._device.playback_epoch.value):
-            while not self._output_queue.empty():
-                self._output_queue.get_blocking()
+            self._output_queue.discard_available()
             channels = 4 if 'sk6812' in self._led_strip else 3
             self._song_moment_base = None
             self._current_output.show(np.zeros((channels, self._device.device_config['led_count']), dtype=np.uint8))
@@ -109,8 +105,8 @@ class OutputService:
 
         # Keep the automatic frame separate so cue pixels never enter its trail state.
         fresh = False
-        if not self._output_queue.empty():
-            current_output_array = self._output_queue.get_blocking()
+        current_output_array = self._output_queue.get_available()
+        if current_output_array is not None:
             if "sk6812" in self._led_strip and len(current_output_array) == 3:
                 current_output_array = np.vstack((current_output_array, np.zeros(self._device.device_config["led_count"])))
             self._song_moment_base = current_output_array

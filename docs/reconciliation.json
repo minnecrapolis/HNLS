@@ -747,6 +747,25 @@
       "weekly show-hours Music UI",
       "clickable titles and stable row rendering",
       "scoped supported-build update installer"
+    ],
+    "0.1.0-rc.4": [
+      "12 exclusive-range designer effects and motion controls",
+      "nonblocking bounded realtime queues",
+      "recreated/raw shared playback fields and nonblocking clock snapshots",
+      "paused playback clock heartbeats",
+      "defensive cue cache and jitter/stale behavior",
+      "main-Pi update installer"
+    ],
+    "0.1.0-rc.5": [
+      "optional persisted use_color2 flag with backward-compatible rendering",
+      "two-color backgrounds, alternating flash, palette/rainbow choice",
+      "enabled picker and explanatory switch",
+      "four-file updater and tests"
+    ],
+    "0.1.0-rc.6": [
+      "explicit saved-row Edit behavior, focus/scroll and selected state",
+      "visible edit errors",
+      "three-file UI update and regression checks"
     ]
   }
 }

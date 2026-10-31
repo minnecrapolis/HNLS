@@ -115,8 +115,8 @@ class EffectService:
         self._fps_limiter.fps_limiter()
 
         # Check the notification queue.
-        if not self._device.device_notification_queue_in.empty():
-            self._current_notification_in = self._device.device_notification_queue_in.get_blocking()
+        self._current_notification_in = self._device.device_notification_queue_in.get_available()
+        if self._current_notification_in is not None:
             logger.debug(f'Effects Service has a new notification in. Notification: {self._current_notification_in} | Device: {self._device.device_config["device_name"]}')
 
         if hasattr(self, "_current_notification_in"):
@@ -140,17 +140,15 @@ class EffectService:
         if getattr(self, '_playback_epoch', None) != epoch:
             self._playback_epoch = epoch
             self._initialized_effects = {}
-            while not self._device.output_queue.empty():
-                self._device.output_queue.get_blocking()
+            self._device.output_queue.discard_available()
             # Discard queued audio from the previous song during the blackout.
         if self._device.playback_blackout.value:
-            while not self._device.audio_queue.empty():
-                self._device.audio_queue.get_blocking()
+            self._device.audio_queue.discard_available()
             return
 
         # Check if the effect changed.
-        if not self._device.effect_queue.empty():
-            new_effect_item = self._device.effect_queue.get_blocking()
+        new_effect_item = self._device.effect_queue.get_available()
+        if new_effect_item is not None:
             self._current_effect = new_effect_item.effect_enum
             logger.debug(f"New effect found: {new_effect_item.effect_enum}")
 

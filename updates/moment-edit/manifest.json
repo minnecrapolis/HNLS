@@ -1,0 +1,20 @@
+{
+  "server/libs/app/templates/home/song_designer.html": {
+    "sha256": "4ad607b09a4957b2f4b57f3ffe9e70386219eda0bc3ddbe9e869ef668f7106ae",
+    "supported": [
+      "890fba0eeee30e4e4a0d1bd24a61eb0c572ded054c82befaafcddf0d33cfbdff"
+    ]
+  },
+  "server/libs/app/templates/includes/song_moments.html": {
+    "sha256": "26f959f820c13cf3337b7bb2191a7e413125ea58ff9d17f65cf8279cd3ab7917",
+    "supported": [
+      "c37ac45c044ddb581c0368802533a2a69c1c0a2014ea6163cd37bda268c0e3b7"
+    ]
+  },
+  "server/libs/app/static/assets/js/song_moments.js": {
+    "sha256": "8b236e0f9dfbdb1587862a588bad804973284960646f60e7e27f95bcb9aefbd7",
+    "supported": [
+      "f8ad25ab0f9b560fbd7fa9b3de885a8b1e2e997694fb63b23b3d8bfa23f6ef75"
+    ]
+  }
+}

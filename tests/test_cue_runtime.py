@@ -41,13 +41,14 @@ class MomentTests(unittest.TestCase):
         a,_=moments.overlay(base,self.device(position=0),10.);b,_=moments.overlay(base,self.device(position=.125),10.)
         np.testing.assert_array_equal(a[:,0],[255,0,0]);np.testing.assert_array_equal(a[:,16],[0,0,255]);self.assertFalse(np.array_equal(a[:,:32],b[:,:32]))
         np.testing.assert_array_equal(a[:,32:100],np.tile([[255],[0],[0]],(1,68)))
-    def test_reservation_stays_off_outside_window_and_stale_active_flash_expires(self):
+    def test_reservation_stays_off_and_jitter_never_leaks_automatic_frame(self):
         self.cue(first=112,last=214,targets=['device_1'],reserve=True)
         base=np.ones((3,425),dtype=np.uint8)*77
         out,active=moments.overlay(base,self.device('device_1',position=183.),10.);self.assertTrue(active);np.testing.assert_array_equal(out[:,111:214],0)
         out,active=moments.overlay(base,self.device('device_1',position=184.),11.);np.testing.assert_array_equal(out[:,111:214],0)
         moments.write({'version':1,'cues':[]});self.cue()
-        out,active=moments.overlay(base,self.device('device_1',position=184.),10.19);self.assertFalse(active);np.testing.assert_array_equal(out,base)
+        out,active=moments.overlay(base,self.device('device_1',position=184.),10.19);self.assertTrue(active);np.testing.assert_array_equal(out,255)
+        out,active=moments.overlay(base,self.device('device_1',position=184.),11.);self.assertTrue(active);np.testing.assert_array_equal(out,0)
     def test_update_delete_file_identity_and_invalid_payloads_preserve_prior_data(self):
         cue=self.cue();cue['color']='#ff0000';moments.save_moment(cue,self.config);self.assertEqual(len(moments.read()['cues']),1)
         before=moments.read()

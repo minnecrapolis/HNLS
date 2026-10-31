@@ -15,6 +15,19 @@ class QueueWrapper:
             self.__delete_last_element()
         self.queue.put(element, block=True, timeout=0.033)
 
+    def get_available(self):
+        """Race-safe read for realtime consumers; None means no item is ready."""
+        try:
+            return self.queue.get_nowait()
+        except queue.Empty:
+            return None
+
+    def discard_available(self):
+        # Queues here are bounded; do not wait for a producer or another consumer.
+        for _ in range(16):
+            if self.get_available() is None:
+                break
+
     def get_blocking(self):
         return self.queue.get(block=True)
 

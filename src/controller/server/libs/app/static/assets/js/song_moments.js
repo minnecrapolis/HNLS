@@ -19,10 +19,25 @@ function draw(){
  if(playback.file===loadedFile&&Number.isFinite(playback.position)){ctx.strokeStyle='#ff9c64';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x(playback.position),25);ctx.lineTo(x(playback.position),canvas.height);ctx.stroke();ctx.lineWidth=1;}
 }
 function form(c){selected=c?.id||null;$('momentRegion').value=c?.region||'';editingRegion=c?.region||null;$('momentRegionDelete').disabled=!editingRegion;const region=regions.find(r=>r.id===editingRegion);$('momentRegionName').value=region?.name||'';$('momentDelete').disabled=!selected;
- if(c){$('momentStart').value=time(c.start);$('momentEnd').value=time(c.end);$('momentEffect').value=c.effect;$('momentBrightness').value=c.brightness;$('momentColor').value=c.color;$('momentColor2').value=c.color2;$('momentSpeed').value=c.speed;$('momentAll').checked=c.targets.includes('*');$('momentFirst').value=c.first;$('momentLast').value=c.last??'';$('momentReserve').checked=c.reserve;$('momentTargets').querySelectorAll('input').forEach(x=>x.checked=c.targets.includes(x.value));}
- $('momentSave').textContent=selected?'Update moment':'Save moment';syncDuration();choices();draw();}
+ if(c){$('momentStart').value=time(c.start);$('momentEnd').value=time(c.end);$('momentEffect').value=c.effect;$('momentBrightness').value=c.brightness;$('momentColor').value=c.color;$('momentColor2').value=c.color2;$('momentUseColor2').checked=c.use_color2??['color_scroll','color_blocks','twinkle'].includes(c.effect);$('momentSpeed').value=c.speed;$('momentCycle').value=c.cycle_seconds??defaultPeriod(c.effect);$('momentWidth').value=c.band_width??8;$('momentDirection').value=c.direction??'forward';$('momentAll').checked=c.targets.includes('*');$('momentFirst').value=c.first;$('momentLast').value=c.last??'';$('momentReserve').checked=c.reserve;$('momentTargets').querySelectorAll('input').forEach(x=>x.checked=c.targets.includes(x.value));}
+ $('momentSave').textContent=selected?'Update moment':'Save moment';syncDuration();choices();draw();effectHelp();conflicts();editorState(c);}
+function editorState(c){
+ $('momentEditorHeading').textContent=c?'Edit this moment':'Build the effect';
+ $('momentEditingInfo').textContent=c?'Editing '+time(c.start)+'–'+time(c.end)+' · '+c.effect.replace(/_/g,' ')+' · LEDs '+c.first+'–'+(c.last??'end')+'. Change the controls, then click Update moment.':'New moment — select its time, LEDs and effect.';
+ for(const row of $('momentList').children){const active=row.dataset.momentId===selected;row.classList.toggle('table-active',active);row.setAttribute('aria-selected',String(active));}
+}
+function editMoment(c){
+ try{
+  if(!c||!c.id)throw Error('This moment could not be found. Refresh songs & moments, then try again.');
+  form(c);$('momentFineTune').open=true;
+  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  $('momentEditor').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+  $('momentEffect').focus({preventScroll:true});
+  message('Moment opened for editing. Change its controls, then click Update moment.');
+ }catch(e){message('Could not open this moment: '+e.message+' Try Ctrl+F5 to reload the editor.',true);}
+}
 function list(){
- $('momentList').replaceChildren();cues.forEach(c=>{const row=document.createElement('tr');for(const value of [time(c.start)+'–'+time(c.end),c.effect.replace('_',' '),(c.targets.includes('*')?'All strings':c.targets.map(id=>outputs.find(o=>o.id===id)?.name||id).join(', '))+' · LEDs '+c.first+'–'+(c.last??'end')]){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}const cell=document.createElement('td'),button=document.createElement('button');button.type='button';button.className='btn btn-sm btn-outline-primary';button.textContent='Edit';button.onclick=()=>form(c);cell.append(button);row.append(cell);$('momentList').append(row);});
+ $('momentList').replaceChildren();cues.forEach(c=>{const row=document.createElement('tr');row.dataset.momentId=c.id;for(const value of [time(c.start)+'–'+time(c.end),c.effect.replace('_',' '),(c.targets.includes('*')?'All strings':c.targets.map(id=>outputs.find(o=>o.id===id)?.name||id).join(', '))+' · LEDs '+c.first+'–'+(c.last??'end')]){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}const cell=document.createElement('td'),button=document.createElement('button');button.type='button';button.className='btn btn-sm btn-outline-primary';button.textContent='Edit';button.setAttribute('aria-label','Edit moment '+time(c.start)+' to '+time(c.end));button.addEventListener('click',()=>editMoment(c));cell.append(button);row.append(cell);$('momentList').append(row);});
 }
 async function load(){
  $('momentSave').disabled=true;
@@ -33,14 +48,39 @@ async function load(){
  }catch(e){message(e.message,true);}
 }
 function at(event){const rect=canvas.getBoundingClientRect();return {time:Math.max(0,Math.min(duration,((event.clientX-rect.left)/rect.width*canvas.width-30)/(canvas.width-60)*duration)),y:(event.clientY-rect.top)/rect.height*canvas.height};}
-canvas.addEventListener('pointerdown',e=>{const point=at(e),row=Math.floor((point.y-46)/29),cue=cues[row];if(point.y>=46&&cue&&point.time>=cue.start-.5&&point.time<=cue.end+.5){form(cue);return;}drag=point.time;selected=null;$('momentDelete').disabled=true;$('momentSave').textContent='Save moment';canvas.setPointerCapture(e.pointerId);$('momentStart').value=time(drag);$('momentEnd').value=time(Math.min(duration,drag+1));syncDuration();draw();});
+canvas.addEventListener('pointerdown',e=>{const point=at(e),row=Math.floor((point.y-46)/29),cue=cues[row];if(point.y>=46&&cue&&point.time>=cue.start-.5&&point.time<=cue.end+.5){editMoment(cue);return;}drag=point.time;selected=null;$('momentDelete').disabled=true;$('momentSave').textContent='Save moment';editorState(null);canvas.setPointerCapture(e.pointerId);$('momentStart').value=time(drag);$('momentEnd').value=time(Math.min(duration,drag+1));syncDuration();draw();});
 canvas.addEventListener('pointermove',e=>{if(drag===null)return;const t=at(e).time;const a=Math.round(Math.min(t,drag)*10)/10,b=Math.round(Math.max(t,drag)*10)/10;$('momentStart').value=time(a);$('momentEnd').value=time(Math.min(duration,Math.max(a+.1,b)));syncDuration();draw();});
 canvas.addEventListener('pointerup',()=>{drag=null;});canvas.addEventListener('pointercancel',()=>{drag=null;});
 $('momentSong').addEventListener('change',()=>{selected=null;load();});$('momentReload').onclick=load;$('momentAll').onchange=()=>{$('momentRegion').value='';choices();};
 $('momentLength').onchange=()=>{const n=Number($('momentLength').value);if(Number.isFinite(n)&&n>0&&n<=86400){duration=n;draw();}};
 ['momentStart','momentEnd'].forEach(id=>$(id).addEventListener('change',()=>{try{bounds();syncDuration();draw();}catch(e){message(e.message,true);}}));
+function defaultPeriod(effect){return {flash:.5,color_scroll:8,color_blocks:8,chase:8,comet:8,bounce:8,pulse:4,twinkle:1.2,rainbow:12,wipe:8}[effect]??6;}
+function effectHelp(){
+ const effect=$('momentEffect').value,two=$('momentUseColor2').checked,moving=['color_scroll','color_blocks','chase','comet','bounce','rainbow','wipe'].includes(effect);
+ $('momentColor').disabled=effect==='blackout'||(effect==='rainbow'&&!two);$('momentColor2').disabled=['solid','blackout'].includes(effect);$('momentUseColor2').disabled=['solid','blackout'].includes(effect);
+ $('momentCycle').disabled=['solid','blackout'].includes(effect);$('momentWidth').disabled=!['color_scroll','color_blocks','chase','comet','bounce','rainbow'].includes(effect);$('momentDirection').disabled=!moving;
+ const details={color_scroll:'Smooth two-color blend. Increase the cycle time to slow it down.',color_blocks:'Sharp two-color bands for a more prominent scroll. Start with 8 seconds and a width of 8 LEDs.',chase:'A moving block of Color 1; the rest of the range uses the chosen background.',comet:'A moving Color 1 head fades into the chosen background.',bounce:'A light travels to the end of the selected range and back.',pulse:'One gradual fade up and down per cycle.',twinkle:'Deterministic colored sparkles on black, synchronized to the song position.',rainbow:'A saturated rainbow moves along the selected range.',wipe:'Your color fills the selected range, then the cycle starts again.',flash:'One on/off flash per cycle. Larger numbers flash more slowly.',solid:'Your selected LEDs remain this color for the whole moment.',blackout:'Your selected LEDs remain off for the whole moment.'};
+ const colorHelp={flash:'With two colors: alternate Color 1 and Color 2. Use black for on/off flashes.',bounce:'Color 1 bounces over Color 2. Black keeps the background dark.',comet:'Color 1 fades into a Color 2 background. Black gives a dark trail.',chase:'Color 1 moves over Color 2. Black keeps gaps dark.',pulse:'Fade between Color 2 and Color 1. Black gives a brightness pulse.',wipe:'Color 1 fills a Color 2 background, then repeats.',rainbow:'Checked: scroll only the two chosen colors. Unchecked: use the full rainbow.',twinkle:'Two sparkle colors on black. Uncheck to use only Color 1.',color_scroll:'Blend the chosen colors. Uncheck to scroll Color 1 over black.',color_blocks:'Alternate the chosen colors. Uncheck to use Color 1 and black.'};
+ $('momentColor2Help').textContent=colorHelp[effect]||'This effect uses only the first color.';
+ $('momentEffectHelp').textContent=details[effect]||'';
+ if(two&&['chase','comet','bounce','pulse','wipe'].includes(effect))$('momentEffectHelp').textContent+=' Color 2 is the background / fade color.';
+ if(effect==='rainbow'&&two)$('momentEffectHelp').textContent='Two-color palette scroll; uncheck Use second color for the full rainbow.';
+}
+function conflicts(){
+ try{const [start,end]=bounds(),targets=$('momentAll').checked?['*']:Array.from($('momentTargets').querySelectorAll('input:checked')).map(x=>x.value),first=Number($('momentFirst').value),last=$('momentLast').value===''?Infinity:Number($('momentLast').value);
+ const overlap=cues.filter(c=>c.id!==selected&&c.start<end&&start<c.end&&first<=(c.last??Infinity)&&c.first<=last&&(targets.includes('*')||c.targets.includes('*')||c.targets.some(t=>targets.includes(t))));
+ $('momentConflictHelp').textContent=overlap.length?overlap.length+' other saved moment(s) overlap these LEDs and times. Later rows take priority; edit or remove the overlap to show only this effect.':'';
+ }catch(e){$('momentConflictHelp').textContent='';}
+}
+$('momentEffect').addEventListener('change',()=>{$('momentCycle').value=defaultPeriod($('momentEffect').value);$('momentUseColor2').checked=true;effectHelp();});
+$('momentUseColor2').addEventListener('change',effectHelp);
+$('momentColor2').addEventListener('input',()=>{$('momentUseColor2').checked=true;effectHelp();});
+$('momentColor2').addEventListener('change',()=>{$('momentUseColor2').checked=true;effectHelp();});
+$('momentReserve').addEventListener('change',()=>message('Reservation changes only the selected range. Click Save moment to apply; playback does not restart.'));
+for(const id of ['momentStart','momentEnd','momentFirst','momentLast','momentAll','momentTargets','momentRegion'])$(id).addEventListener('change',conflicts);
+effectHelp();
 $('momentNew').onclick=()=>{form(null);message('Drag a new time span, then choose its lights and effect.');};
-$('momentSave').onclick=async()=>{try{if(!loadedFile||loadedFile!==$('momentSong').value)throw Error('Load the selected song first');const [start,end]=bounds();$('momentSave').disabled=true;const targets=$('momentAll').checked?['*']:Array.from($('momentTargets').querySelectorAll('input:checked')).map(c=>c.value);const result=await request('POST',{id:selected,region:$('momentRegion').value||null,file:loadedFile,start,end,effect:$('momentEffect').value,color:$('momentColor').value,color2:$('momentColor2').value,speed:Number($('momentSpeed').value),brightness:Number($('momentBrightness').value),targets,first:Number($('momentFirst').value),last:$('momentLast').value===''?null:Number($('momentLast').value),reserve:$('momentReserve').checked});const index=cues.findIndex(c=>c.id===result.cue.id);if(index>=0)cues[index]=result.cue;else cues.push(result.cue);list();form(result.cue);message('Saved. This moment will run whenever this song plays.');}catch(e){message(e.message,true);}finally{$('momentSave').disabled=!loadedFile;}};
+$('momentSave').onclick=async()=>{try{if(!loadedFile||loadedFile!==$('momentSong').value)throw Error('Load the selected song first');const [start,end]=bounds();$('momentSave').disabled=true;const targets=$('momentAll').checked?['*']:Array.from($('momentTargets').querySelectorAll('input:checked')).map(c=>c.value);const result=await request('POST',{id:selected,region:$('momentRegion').value||null,file:loadedFile,start,end,effect:$('momentEffect').value,color:$('momentColor').value,color2:$('momentColor2').value,use_color2:$('momentUseColor2').checked,speed:Number($('momentSpeed').value),cycle_seconds:Number($('momentCycle').value),band_width:Number($('momentWidth').value),direction:$('momentDirection').value,brightness:Number($('momentBrightness').value),targets,first:Number($('momentFirst').value),last:$('momentLast').value===''?null:Number($('momentLast').value),reserve:$('momentReserve').checked});const index=cues.findIndex(c=>c.id===result.cue.id);if(index>=0)cues[index]=result.cue;else cues.push(result.cue);list();form(result.cue);message('Saved. This moment will run whenever this song plays.');}catch(e){message(e.message,true);}finally{$('momentSave').disabled=!loadedFile;}};
 $('momentDelete').onclick=async()=>{if(!selected||!confirm('Delete this saved light moment?'))return;try{await request('DELETE',{id:selected});cues=cues.filter(c=>c.id!==selected);list();form(null);message('Moment deleted.');}catch(e){message(e.message,true);}};
 
 const pixelCanvas=$('momentPixelMap'),pixelCtx=pixelCanvas.getContext('2d');let pixelAnchor=null;

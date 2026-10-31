@@ -219,7 +219,9 @@ class AudioProcessService:
 
     def _publish_playback(self, blackout):
         self._audio_queue.put_none_blocking({'_playback': {
-            'epoch': self._playback_epoch, 'blackout': blackout}})
+            'epoch': self._playback_epoch, 'blackout': blackout,
+            'file': getattr(self, '_music_file', None) if getattr(self, '_source_mode', None) == 'music' else None,
+            'position': getattr(self, '_music_position', 0.), 'paused': bool(getattr(self, '_music_paused', False))}})
 
     def _begin_song_gap(self, direction=1):
         current, had_samples = self._music_file, self._music_had_samples
@@ -457,7 +459,7 @@ class AudioProcessService:
         audio_datas = self._dsp.update(y)
         audio_datas["_playback"] = {"epoch": self._playback_epoch, "blackout": False,
             "file": getattr(self, '_music_file', None) if getattr(self, '_source_mode', None) == 'music' else None,
-            "position": getattr(self, '_music_position', 0.)}
+            "position": getattr(self, '_music_position', 0.), "paused": False}
         audio_datas["show"] = self._show_analyzer.update(
             audio_datas["show_raw"], len(y) / float(self._device_rate)
         )
@@ -469,6 +471,10 @@ class AudioProcessService:
 
     def _music_routine(self):
         if self._music_paused:
+            now = monotonic()
+            if now-getattr(self, '_last_pause_clock_at', 0.) >= .1:
+                self._last_pause_clock_at = now
+                self._publish_playback(self._music_gap_until is not None)
             sleep(0.02)
             return
 

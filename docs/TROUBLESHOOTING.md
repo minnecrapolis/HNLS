@@ -10,3 +10,5 @@
 - Analysis slow: background preparation competes for CPU on smaller Pis. Wait for cache progress and compare with preparation idle before diagnosing rendering performance.
 
 When reporting bugs, include OS/Python version, service names, counts/backends, reproduction steps and redacted logs. Never attach music, keys or full private configuration to a public issue.
+
+For the reservation/all-on freeze report, rc.4 removes two software hazards: realtime empty-then-blocking queue races and abandoned shared playback locks. It also prevents delayed cue clocks from exposing automatic effects. The reservation save route itself writes cue data without restarting services. These fixes require a real-Pi check; an all-on/cycling symptom alone does not establish whether the process crashed, the OS rebooted or LED power delivery failed. If it persists after updating, collect `sudo journalctl -u mlsc -n 150 --no-pager` and `vcgencmd get_throttled`, and note whether SSH remains responsive.

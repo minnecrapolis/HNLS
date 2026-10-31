@@ -14,15 +14,22 @@ class Device:
         self.__device_config = device_config
         self.__color_service_global = color_service_global
 
-        self.song_moment_off = Value("b", device_config.get("effects", {}).get("last_effect") == "effect_off")
-        self.song_moment_token = Value("Q", 0)
-        self.song_moment_position = Value("d", 0.)
-        self.song_moment_clock = Value("d", 0.)
-        self.playback_blackout = Value("b", False)
-        self.playback_epoch = Value("q", 0)
-        self.playback_ready_epoch = Value("q", 0)
+        self.reset_playback_state()
         self.create_queues()
         self.create_processes()
+
+    def reset_playback_state(self):
+        # Workers may be terminated while holding a shared lock. Never reuse those
+        # synchronization objects after a refresh. Only the clock needs a lock;
+        # related raw fields are protected by that one bounded snapshot lock.
+        self.song_moment_off = Value("b", self.__device_config.get("effects", {}).get("last_effect") == "effect_off", lock=False)
+        self.song_moment_token = Value("Q", 0, lock=False)
+        self.song_moment_position = Value("d", 0., lock=False)
+        self.song_moment_paused = Value("b", False, lock=False)
+        self.song_moment_clock = Value("d", 0.)
+        self.playback_blackout = Value("b", False, lock=False)
+        self.playback_epoch = Value("q", 0, lock=False)
+        self.playback_ready_epoch = Value("q", 0, lock=False)
 
     def start_device(self):
         logger.info(f'Starting device: {self.__device_config["device_name"]}')
@@ -71,6 +78,7 @@ class Device:
         self.__config = config
         self.__device_config = device_config
 
+        self.reset_playback_state()
         self.create_queues()
         self.create_processes()
 

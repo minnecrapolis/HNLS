@@ -1,0 +1,76 @@
+{
+  "server/libs/effect_service.py": {
+    "sha256": "9d02fed91da126fb9c48606b265c99590d6c225fbde1a6a4dc0f508f457b0271",
+    "supported": [
+      "c82447be5070395e42fc4187eb70963811702316dbe377ebbeaf8f56c56305bb",
+      "9d02fed91da126fb9c48606b265c99590d6c225fbde1a6a4dc0f508f457b0271"
+    ]
+  },
+  "server/libs/device.py": {
+    "sha256": "f73294dbbbf11c417d01105a7716c458d22a04bd7b94760bab38f669ae36a09c",
+    "supported": [
+      "cec69bc5411633f45dbe85574ebe2b526b5899803fd1b9b24b46e5b5d54cdf62",
+      "f73294dbbbf11c417d01105a7716c458d22a04bd7b94760bab38f669ae36a09c"
+    ]
+  },
+  "server/libs/audio_process_service.py": {
+    "sha256": "465f5e754930442487651650c5985edaad3552f1886a98e67423bf58ea87ebb6",
+    "supported": [
+      "be490f0653d8e5f6afb38c52e56bb84c6ceb1dcde8405b61d4b3eb0432e6952a",
+      "465f5e754930442487651650c5985edaad3552f1886a98e67423bf58ea87ebb6"
+    ]
+  },
+  "server/libs/app/static/assets/js/song_moments.js": {
+    "sha256": "8b236e0f9dfbdb1587862a588bad804973284960646f60e7e27f95bcb9aefbd7",
+    "supported": [
+      "cdf2e3dc1a413df8b86f8e5821b6f33a8c685228cbce682b5575309aed2c0dac",
+      "584b2e1ca432fc1ea37d1d55a727a3331bd79fd176b292f043fdb4cd0b9f3b55",
+      "f8ad25ab0f9b560fbd7fa9b3de885a8b1e2e997694fb63b23b3d8bfa23f6ef75"
+    ]
+  },
+  "server/libs/queue_wrapper.py": {
+    "sha256": "6fc11bee2f263f19d13410a7ea27703cb564b01628e9d63c2dce1bf9489599fc",
+    "supported": [
+      "0f1a9b0d486728996b7f92a82e558a8d74de0f9b4f90308a63aad99aa692485e",
+      "6fc11bee2f263f19d13410a7ea27703cb564b01628e9d63c2dce1bf9489599fc"
+    ]
+  },
+  "server/libs/output_service.py": {
+    "sha256": "76a4597300dc1c4d9cd7fb85dfbb0182a1d8a67a385667fdcd2c42703f7d5456",
+    "supported": [
+      "92d69c89ebd581c6af552fccce0e1b558056c4e0ec8b8e773c4e94b721a137a2",
+      "4fb983ef2c35350c9d4e215b1443aeea7f266c91095d39a386d60713d443a6d5",
+      "76a4597300dc1c4d9cd7fb85dfbb0182a1d8a67a385667fdcd2c42703f7d5456"
+    ]
+  },
+  "server/libs/device_manager.py": {
+    "sha256": "6849ffbe8611cb981dd3336cdd46473873c5f02a5861b3e1a5f473b2dc9b40f2",
+    "supported": [
+      "ca7e1ba9c08c0c26fbec4090c8118253a35056aab3e34824c3a33936e91ae5fd",
+      "6849ffbe8611cb981dd3336cdd46473873c5f02a5861b3e1a5f473b2dc9b40f2"
+    ]
+  },
+  "server/libs/app/templates/includes/song_moments.html": {
+    "sha256": "26f959f820c13cf3337b7bb2191a7e413125ea58ff9d17f65cf8279cd3ab7917",
+    "supported": [
+      "21c00f3ff9467738a0d0d22143c517b57770b7af0321efb65c1af2079840e4e8",
+      "1dd3efb8c67e0139435b0b9d71fbdb547fc53f566461495ba6136032135ef807",
+      "c37ac45c044ddb581c0368802533a2a69c1c0a2014ea6163cd37bda268c0e3b7"
+    ]
+  },
+  "server/libs/app/templates/home/song_designer.html": {
+    "sha256": "4ad607b09a4957b2f4b57f3ffe9e70386219eda0bc3ddbe9e869ef668f7106ae",
+    "supported": [
+      "baaac5d555f560308a023c1552fef7125129e7c890fc83cf73306a34665837bd",
+      "91d887cd81606b7fc15e4c05c5f0cc98a6d2f3eab3ec3dfa9583dba9dc083e07",
+      "890fba0eeee30e4e4a0d1bd24a61eb0c572ded054c82befaafcddf0d33cfbdff"
+    ]
+  },
+  "server/libs/song_moments.py": {
+    "sha256": "5a2311201a5c62a2e889c5a6db6ce19ddeb53c5ff0aa67f102f9757cf38009f0",
+    "supported": [
+      "6c40aa46a27453786a12b94131dc96b2c831fe40f298795c08d957750236b106",
+      "72582325d53dcda989f5f4882eaf203fdee5a051342f6c20979a3187c818a9ff"
+    ]
+  }
+}

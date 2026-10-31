@@ -19,6 +19,7 @@ jobs:
           node-version: '22'
       - run: node tests/test_music_ui.js
       - run: node tests/test_schedule_ui.js
+      - run: node tests/test_designer_ui.js
       - run: python tools/validate.py
       - run: python tools/check_defaults.py
       - run: python tools/build_release.py
