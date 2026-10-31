@@ -30,6 +30,7 @@ class OutputUDP(Output):
             self._sock.close()
 
     def show(self, output_array):
+        output_array = self.prepare_frame(output_array)
         if self._remote:
             self._remote.show(output_array)
             return

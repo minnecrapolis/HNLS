@@ -20,3 +20,4 @@ dist/
 show_schedule.json
 playlist_settings.json
 audio_output.json
+color_ranges.json

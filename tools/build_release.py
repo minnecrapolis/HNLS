@@ -15,7 +15,7 @@ def build():
             z.writestr(info,p.read_bytes())
     digest=hashlib.sha256(target.read_bytes()).hexdigest()
     sums=[digest+'  '+target.name]
-    for folder,name,top in [('show-hours','hnls-show-hours-update.zip','hnls-show-hours-update'),('designer-effects','hnls-designer-effects-update.zip','hnls-designer-effects-update'),('two-color','hnls-two-color-update.zip','hnls-two-color-update'),('moment-edit','hnls-moment-edit-update.zip','hnls-moment-edit-update')]:
+    for folder,name,top in [('show-hours','hnls-show-hours-update.zip','hnls-show-hours-update'),('designer-effects','hnls-designer-effects-update.zip','hnls-designer-effects-update'),('two-color','hnls-two-color-update.zip','hnls-two-color-update'),('moment-edit','hnls-moment-edit-update.zip','hnls-moment-edit-update'),('color-ranges','hnls-color-ranges-update.zip','hnls-color-ranges-update')]:
         update=dist/name
         with zipfile.ZipFile(update,'w',compression=zipfile.ZIP_DEFLATED) as z:
             source=ROOT/'updates'/folder

@@ -16,3 +16,9 @@ The proposed Powered by Pi / Injected Power UI and an aggregate current budget a
 ## Receiver network
 
 Pair using the receiver-generated private key through the web interface. The current protocol uses TCP8943 for pairing/status and UDP8944 for authenticated, chunked frames. Use a trusted LAN without client isolation; do not forward these ports from the internet. HMAC authenticates frames; it does not encrypt the network traffic. No fixed household IP is required by the product; enter the receiver's current LAN address.
+
+## Mixed RGB byte orders on a serial line
+
+Range overrides correct RGB wire order, not electrical/protocol differences. The driver retains its global order P; the output layer precompensates each configured range with P^-1 Q so its physical bytes match the actual order Q. Brightness is unchanged and logical renderer frames are not mutated. The remote sender applies compensation before transmission; the receiver retains its existing global order. Native alias resolution reads only constants and does not initialize GPIO.
+
+Two 300-LED strips followed by three 50-LED sets total 750 serial addresses. Seven 50-LED slave sets total 350. Four 300-LED serial strips total 1200. A parallel/mirrored branch repeats addresses instead. Normal configured outputs support these range corrections; the independent Advanced Studio bus does not inherit them. Different pixel protocols/RGBW are outside this RGB-range feature.

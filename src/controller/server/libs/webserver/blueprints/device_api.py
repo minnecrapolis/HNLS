@@ -177,3 +177,27 @@ def remote_pi_status():
         return jsonify(call(nodes[key]))
     except ValueError as exc:
         return jsonify(error=str(exc)),400
+
+
+@device_api.get('/api/system/color-ranges')
+@login_required
+def color_ranges_get():
+    from libs.color_ranges import view
+    try:
+        return jsonify(view(Executer.instance.device_executer._config))
+    except (ValueError, OSError, TypeError) as exc:
+        return jsonify(error=str(exc)), 400
+
+
+@device_api.post('/api/system/color-ranges')
+@login_required
+def color_ranges_save():
+    from libs.color_ranges import save
+    data=request.get_json(silent=True)
+    if not isinstance(data,dict) or set(data)!={'device','ranges'}:
+        return jsonify(error='Choose an output and its RGB color-order ranges'),400
+    try:
+        rows=save(data['device'],data['ranges'],Executer.instance.device_executer._config)
+        return jsonify(ok=True,ranges=rows)
+    except (ValueError, OSError, TypeError) as exc:
+        return jsonify(error=str(exc)),400

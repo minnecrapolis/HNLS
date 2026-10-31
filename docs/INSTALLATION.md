@@ -78,3 +78,9 @@ Use dist/hnls-two-color-update.zip on the existing main Pi. It checks four known
 ## Saved-moment Edit UI update
 
 Use dist/hnls-moment-edit-update.zip on a current rc.5 main Pi. It validates and backs up the JavaScript, designer page and included moment controls, then briefly restarts the service. Follow updates/moment-edit/README.txt. Refresh with Ctrl+F5 afterwards. No renderer, audio, worker, cue data or receiver changes are made. Older supported installations can use the refreshed full designer-effects update instead.
+
+## Per-range RGB order update
+
+On the current rc.6 main Pi use dist/hnls-color-ranges-update.zip, following updates/color-ranges/README.txt. The eight-file update validates/backups its payload and briefly restarts HNLS. It adds an output-stage preparation hook to the known corrected native driver; RGB packing, hardware initialization and brightness logic are preserved. Unknown driver versions are refused rather than overwritten. No receiver installation is needed. Later mapping saves are live and do not restart playback.
+
+Private mappings live in /share/.mlsc/color_ranges.json; include this in private settings backups. Code rollback retains that file but older output code ignores it and uses the global order. No actual LED counts, GPIO settings, cue data, schedules or pairing keys are rewritten by installation.

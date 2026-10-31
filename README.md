@@ -4,7 +4,7 @@
 
 A Raspberry Pi music and holiday-lighting system with a responsive web interface, automatic song analysis and visual, per-song LED cues.
 
-**0.1.0-rc.6 — reconciled source prerelease.** Controller and receiver code were reconciled with captures from the working installation on October 29, 2026. The new fresh-install script is automated and tested with simulated failures, but has not yet been installed on a clean physical Pi. See [release status](docs/RELEASE_STATUS.md) and [verification results](docs/VERIFICATION.md).
+**0.1.0-rc.7 — reconciled source prerelease.** Controller and receiver code were reconciled with captures from the working installation on October 29, 2026. The new fresh-install script is automated and tested with simulated failures, but has not yet been installed on a clean physical Pi. See [release status](docs/RELEASE_STATUS.md) and [verification results](docs/VERIFICATION.md).
 
 ## Features
 
@@ -16,6 +16,7 @@ A Raspberry Pi music and holiday-lighting system with a responsive web interface
 - Mark song intervals and apply 12 effects to inclusive LED ranges: solid, flash, smooth/bold scroll, chase, comet, bounce, pulse, twinkle, rainbow, wipe and blackout.
 - Set seconds per cycle, band/trail width and direction, with overlap warnings and song-specific pixel reservation.
 - Add local data outputs and pair a remote Pi through the web interface.
+- Assign different physical RGB/GRB/RBG/GBR/BRG/BGR orders to inclusive ranges on a normal configured data line, including the paired slave.
 - Use mobile navigation or a static second-monitor toolbar that controls the main window.
 - Turn lights off and reset show state between songs, with a two-second gap.
 
@@ -59,6 +60,10 @@ Use dist/hnls-two-color-update.zip to enable second-color choices for Bounce, Fl
 ## Saved-moment Edit update
 
 On the current rc.5 build use dist/hnls-moment-edit-update.zip. Edit now loads the chosen moment, opens Fine-tune, scrolls/focuses the editing controls and shows a selected-row/banner state. This changes only three UI files. See [instructions](updates/moment-edit/README.txt).
+
+## Mixed RGB/GRB ranges on one output
+
+On the current rc.6 main Pi, use dist/hnls-color-ranges-update.zip. Device Settings > Mixed RGB / GRB ranges lets you select the output, add an inclusive range and choose that segment's actual order. Unlisted LEDs inherit the output default. This supports serial data chains, not independently addressed parallel branches. See [instructions](updates/color-ranges/README.txt). No slave install is required; Advanced Studio has separate line settings.
 
 ## Documentation
 

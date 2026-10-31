@@ -66,3 +66,15 @@ A chosen background is part of the saved effect, not automatic lighting. Use bla
 ## Editing a saved moment
 
 In Moment sheet, click Edit on the desired row. HNLS fills the form, opens Fine-tune, scrolls the editor into view and focuses the effect control. An Editing banner names the time, effect and LEDs; the selected row is highlighted. Change the controls and click Update moment to save back to that cue ID. Edit itself does not play, pause or save. New selection leaves edit mode. Timeline blocks use the same explicit editing behavior. If the page shows an error opening a moment, reload with Ctrl+F5 and report the visible error if it persists.
+
+## Mixed color orders within one normal output
+
+Open Device Settings > Mixed RGB / GRB ranges. Choose the output and inspect its LED count/default order. Add a row with optional name, first/last LED (inclusive) and the actual physical order. Save color-order ranges. Add only exceptions; gaps inherit the output default. Multiple adjacent or separated nonoverlapping ranges are supported. Clear ranges + Save returns the entire output to its default order. Saving does not restart playback; mappings appear as outgoing frames refresh. Paused/held frames may wait until new frames are sent.
+
+Example: Second Strip has 750 LEDs, global/default GRB, but its first short set is physically RGB. Add 601–650, order RGB. Those 50 LEDs are corrected while all others retain GRB. The next short sets are 651–700 and 701–750. Total counts are edited in the existing Configuration panel, not the range editor.
+
+Native ws2812_strip aliases are resolved from the installed driver constants when available. Otherwise select a known explicit RGB/GRB/RBG/GBR/BRG/BGR type for the output, save it and reload outputs. RGBW/other wire protocols are not mixed by this feature.
+
+These settings apply after effects/moments on the normal Device Settings output paths, including the paired slave. They do not alter logical song colors, section sync groups, cue boundaries, brightness or counts. Advanced Studio uses its own output configuration and does not inherit normal-device ranges.
+
+Data addressing matters: a continuous data-out-to-data-in chain has unique pixel addresses. Parallel branches on the same data signal repeat addresses, so you cannot correct different-order branches independently at the same address. Configure those on separate data outputs if they need different byte orders.

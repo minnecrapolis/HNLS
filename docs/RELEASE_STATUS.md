@@ -1,4 +1,4 @@
-# Release status — 0.1.0-rc.6
+# Release status — 0.1.0-rc.7
 
 The source reconciliation is complete against the supplied working controller/receiver capture and original upstream archive. The complete source, static assets, clean defaults, direct dependencies, service generation, documentation and release workflows are assembled here.
 
@@ -27,3 +27,5 @@ rc.4 adds range-exclusive designer effects and worker hardening. Tests reproduce
 rc.5 extends second-color rendering and adds a four-file rc.4 updater. Local tests and UI simulations pass; physical playback of the new color combinations is pending a user check.
 
 rc.6 improves explicit saved-moment editing. The previous handler only populated a form above the table without opening or scrolling it into view. This can explain an apparently inactive Edit button; it is not a claim that all browser-side failures share that cause. Errors now appear on the page. Actual browser acceptance on the Pi is pending.
+
+rc.7 supports mixed physical RGB orders within normal configured outputs, with main-side compensation for the paired slave. All 36 default/range permutations and native/remote integration have offline coverage. Actual mixed-strip colors still require a physical test; Advanced Studio remains a separate output path and does not inherit these mappings.

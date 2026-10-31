@@ -39,6 +39,15 @@
 
                     {% include 'includes/devices.html' %}
 
+                    <section class="card" id="colorRangesPanel">
+                        <div class="card-header"><h5>Mixed RGB / GRB ranges</h5></div><div class="card-block">
+                        <p>Different physical strips can share one continuous data chain. Set the output’s default order normally, then override only the LED ranges wired in a different order. Counts and brightness are not changed here.</p>
+                        <label class="d-block">Output<select id="colorRangesOutput" class="form-control"></select></label><button id="colorRangesReload" type="button" class="btn btn-outline-secondary my-2">Reload outputs</button><p id="colorRangesSummary"></p>
+                        <form id="colorRangesForm"><div class="table-responsive"><table class="table"><thead><tr><th>Name (optional)</th><th>First LED</th><th>Last LED</th><th>Actual order</th><th></th></tr></thead><tbody id="colorRangesRows"></tbody></table></div>
+                        <div class="d-flex flex-wrap"><button id="colorRangesAdd" type="button" class="btn btn-outline-primary mr-2 mb-2" disabled>Add range</button><button id="colorRangesClear" type="button" class="btn btn-outline-secondary mr-2 mb-2" disabled>Clear ranges</button><button id="colorRangesSave" type="submit" class="btn btn-primary mb-2" disabled>Save color-order ranges</button></div></form>
+                        <p id="colorRangesStatus" role="status" aria-live="polite">Loading color-order ranges…</p><p class="small text-muted">Numbers start at 1 and include both ends. Example: 601–650 is a 50-LED range. Ranges cannot overlap; gaps inherit the default. Parallel data branches repeat the same addresses, so they cannot be mapped independently. This editor supports normal configured RGB outputs, including the paired slave; Advanced Studio has separate line settings.</p>
+                        </div></section>
+
                     <section class="card" id="gpioStringsPanel">
                         <div class="card-header"><h5>Add GPIO string</h5></div>
                         <div class="card-block">
@@ -322,6 +331,7 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+<script src="{{ url_for('static', filename='assets/js/color_ranges.js') }}?v=1"></script>
 <script src="{{ url_for('static', filename='assets/js/settings.device.js') }}?v=2" type="module"></script>
 <script src="{{ url_for('static', filename='assets/js/gpio_strings.js') }}?v=1"></script>
 <script src="{{ url_for('static', filename='assets/js/remote_pis.js') }}?v=1"></script>

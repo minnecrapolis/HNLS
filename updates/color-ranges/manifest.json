@@ -1,0 +1,50 @@
+{
+  "server/libs/webserver/blueprints/device_api.py": {
+    "sha256": "39955b166c0ca32eb26cb0a00ae3ea1ec75d731b12d74b5fecb25de96f5e90c8",
+    "supported": [
+      "dcaa2a0397a070fbfcb37ac8ee74f89298d1bbc7bc65034fb23b4bd242c6b73f"
+    ]
+  },
+  "server/libs/outputs/output_udp.py": {
+    "sha256": "07d17cdcc72d20f21a966c40857eaf057418171722b524b896bdfd3c4c79ad30",
+    "supported": [
+      "c777f576bde177cf6a5f54f4f0b261accf54547b921a897ab4f6de73eeb55030"
+    ]
+  },
+  "server/libs/color_ranges.py": {
+    "sha256": "ab7044129979371e09a9fc1d3b61faec67812069f988fe6a4c3e5ee950f5f501",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/outputs/output_raspi.py": {
+    "sha256": "01f0504f455753f017950dd3fd021fc495538dae915ab557f9158852eaced1d9",
+    "supported": [
+      "3a8121311461ffb7bc6fc25cdfa95d291b59d3a7a4898ac19ce699d9d44885d5"
+    ]
+  },
+  "server/libs/outputs/output.py": {
+    "sha256": "cde92bee299ecd8e0ccfc5a0211be0d53549da9b4422bac854fb27c7da5e83f4",
+    "supported": [
+      "7a6362ac6c163e77346ecd5f968df4cf219ebd96fed0ce6019e1fc5a55c65931"
+    ]
+  },
+  "server/libs/app/templates/home/settings/device_settings.html": {
+    "sha256": "1081d664cdf3c0b9fde8ef78b3f396b2428a4691fae6615e5a1799fac5f48808",
+    "supported": [
+      "82775bff8e5ce63b3cff1d09133e341f013baae5de8856cfea8e847a3d65180f"
+    ]
+  },
+  "server/libs/webserver/blueprints/device_executer.py": {
+    "sha256": "2677eaf4c5371231bd3eb4410a33a1b54b918d2f4880d7ba80c1fd9aed0fe9ca",
+    "supported": [
+      "c62a3226c404fee69f88cbf4e01ca878e7cd2288c292662832c4ffeee27dc4b7"
+    ]
+  },
+  "server/libs/app/static/assets/js/color_ranges.js": {
+    "sha256": "ff1fd812c8ea545ae9cd42f809cc5fc879140f199ee7a957d686778e84ce03fb",
+    "supported": [
+      null
+    ]
+  }
+}

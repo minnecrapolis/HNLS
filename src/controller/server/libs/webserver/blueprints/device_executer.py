@@ -88,6 +88,10 @@ class DeviceExecuter(ExecuterBase):
 
     def delete_device(self, device: str) -> dict[str, str] | DeviceNotFound:
         """Delete a device from the config."""
+        if device not in self._config["device_configs"]:
+            return DeviceNotFound
+        from libs.color_ranges import forget as forget_color_ranges
+        forget_color_ranges(device)
         if self._config["device_configs"].pop(device, DeviceNotFound) is DeviceNotFound:
             return DeviceNotFound
 

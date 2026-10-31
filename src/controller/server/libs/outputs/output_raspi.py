@@ -95,6 +95,7 @@ class OutputRaspi(Output):
             raise RuntimeError(error_msg)
 
     def show(self, output_array):
+        output_array = self.prepare_frame(output_array)
         try:
             import _rpi_ws281x as ws  # noqa: PLC0415
         except (ImportError, ModuleNotFoundError):

@@ -766,6 +766,12 @@
       "explicit saved-row Edit behavior, focus/scroll and selected state",
       "visible edit errors",
       "three-file UI update and regression checks"
+    ],
+    "0.1.0-rc.7": [
+      "normal-output per-range RGB correction and Device Settings editor",
+      "one preparation hook in known corrected native/UDP drivers",
+      "separate private mapping state, alias resolution and delete cleanup",
+      "eight-file updater and property/integration/UI tests"
     ]
   }
 }

@@ -1,11 +1,11 @@
-# Release verification — 0.1.0-rc.6
+# Release verification — 0.1.0-rc.7
 
 ## Passed locally
 
 - Captured application hashes and original archive revision/hash were verified during reconciliation. Source origins and subsequent release changes are recorded in reconciliation.json.
 - 105 automated Python tests passed: cue boundaries/ranges/reservations/restoration, 12 designer effects, grouping, shuffle/analysis, authenticated remote transport/watchdog, fresh-installer failure cleanup, both scoped-update installers, and simulated worker concurrency/clock failures.
-- 177 Python files parsed. Controller/tooling uses Python 3.11 grammar checks; receiver sources use Python 3.9 grammar checks. Parsing does not prove every runtime/backend works.
-- 301 application/dependency payload files passed the release-manifest hash check.
+- 187 Python files parsed. Controller/tooling uses Python 3.11 grammar checks; receiver sources use Python 3.9 grammar checks. Parsing does not prove every runtime/backend works.
+- 303 application/dependency payload files passed the release-manifest hash check.
 - Node Music, schedule and Song Designer UI simulations passed, including title playback, edit preservation, motion controls, the exact second-string 700–750 selection, reservation checkbox without playback restart, and overlap warnings.
 - A forked-process test terminated a clock lock holder, then verified nonblocking overlay output and recreated shared state. Queue tests cover competing consumers, bounded drains, and absence of blocking reads in realtime output/effect routines.
 - Real output-loop tests verified reserved darkness before/after a cue, range-exclusive frames during it, cached base restoration without a new automatic frame, and song blackout priority.
@@ -24,3 +24,5 @@ Installer correction: a hardcoded Music-template validation path in the designer
 Two-color checks cover both flash endpoints, moving/fading backgrounds, pulse color endpoints and midpoint, palette vs full rainbow, dark-background opt-out, brightness limits, legacy defaults, persisted options, UI enablement for the reported effects, and the four-file installer including its non-offline template validation path.
 
 Saved-moment Edit UI simulation: clicked the second saved row, verified both colors/effect/range and selected-row state, opened Fine-tune, scrolled/focused the editor, asserted no save/playback request on Edit, then saved changes to the selected cue ID without removing the other cue. A simulated display error was surfaced visibly. The three-file updater has install/rollback, version-refusal, partial-copy and non-offline template-validation tests. Real browser testing on the Pi remains pending.
+
+Mixed-order verification covers all 36 RGB permutations, exact inclusive 601–650 boundaries, unmodified source/unlisted pixels, unchanged brightness, driver constant alias lookup, native packing and paired-transport compensation, identity-vs-equal device lookup, overlap/bounds validation, private persistence, failed-write preservation, last-good cache, count shrink clipping/warnings and deleted-ID cleanup. The native-driver diff is verified to be exactly one prepare_frame call; existing packing code is preserved. The range UI simulation covers device selection, unsaved edits, errors and clearing. The eight-file updater has offline install/restore/refusal/failure and template-validation checks. No mixed-strip hardware test was performed here.

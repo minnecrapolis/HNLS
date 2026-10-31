@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-rc.7 — 2026-10-31
+
+- Added per-range physical RGB byte-order configuration for normal native and UDP/paired-slave outputs.
+- Added Device Settings range editor with inherited defaults, overlap/bounds checks and live saves.
+- Added P^-1 Q compensation while preserving the corrected native RGB packing and existing receiver protocol.
+- Resolved native strip aliases from installed constants where possible; rejected unresolved aliases/RGBW for mappings.
+- Added deletion cleanup, eight-file updater, 36-order-combination checks, native/remote/UI and rollback regression tests.
+
 ## 0.1.0-rc.6 — 2026-10-31
 
 - Made saved-row Edit open Fine-tune, scroll to the editor, focus the effect and identify/highlight the selected moment.
