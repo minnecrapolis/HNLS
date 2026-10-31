@@ -36,6 +36,8 @@ The public URL cannot work before the GitHub release exists. See [the exact minn
 
 ## Fresh controller installation
 
+Run this for an full install: curl -fsSL https://github.com/minnecrapolis/HNLS/releases/download/v0.1.0-rc.16/hnls-setup.sh | bash
+
 Use a spare **Pi 4 with 64-bit Raspberry Pi OS Bookworm / Python 3.11+**, internet access and appropriately powered LEDs. Download/extract the release, open the HNLS directory and run:
 
 ```sh
