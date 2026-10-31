@@ -1,5 +1,7 @@
 # Installation, startup and recovery
 
+For the MLSC-style one-command download/install path see [Quick installation](QUICK_INSTALL.md). It installs the complete current HNLS release, including all updates, and enables boot startup. A published release is required for its download URL to work.
+
 ## Fresh controller: prerelease hardware test
 
 Use a spare Pi 4 with 64-bit Raspberry Pi OS Bookworm, Python 3.11+ and internet access. Extract the release, change into HNLS and run:

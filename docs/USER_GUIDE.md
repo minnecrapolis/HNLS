@@ -1,5 +1,7 @@
 # User guide
 
+Start with [Find your way around HNLS](EASY_INTERFACE.md). Home contains everyday controls directly; Find a setting locates detailed tasks. See [HOME_CONTROLS.md](HOME_CONTROLS.md).
+
 ## Music and automatic shows
 
 Upload supported music through the Music page. Song preparation runs in the background and caches the analysis; the live fallback remains available before preparation finishes. The playlist loops; enable Shuffle for randomized passes without immediate repeat when another song exists. Preparation estimates sections, tempo, attacks and frequency-band energy; it does not isolate stems or guarantee musical beat accuracy.
@@ -8,25 +10,29 @@ Use playback controls to pause, resume, seek, skip and replay. Song completion b
 
 ## Colors and sections
 
-Choose Song Show for the desired output. Save bass, midrange, treble, beat and POWER colors. Select the physical strip's color order in Device Settings. An orange swatch with wrong LED colors requires pure red/green/blue testing before changing artistic palettes.
+Open Light Show, choose a light string, pick a holiday palette or customize the ten music color controls, and click Save & use this look. Select the physical strip's color order in My Lights. An orange swatch with wrong LED colors requires pure red/green/blue testing before changing artistic palettes.
 
 Set section size and grouping. Paired sections synchronize opposite sections; custom groups synchronize sections assigned the same group. LED counts belong to each output; there is no fixed 1,200-pixel layout. A maximum lit-LED count is an artistic density control, not an electrical current limiter; POWER beats and custom cues may light more pixels.
 
 ## Program a song moment
 
-Open the song designer from Music, choose a song, play or seek to the desired point and mark a time region. Select output(s), inclusive first/last LED numbers, effect, colors, speed and brightness. Save the moment. Example: LEDs 112–214 from 1:35 through 1:45, color scroll. Only those pixels receive that overlay while other pixels continue their automatic show.
+Open Song Editor from Music, choose a song, play or seek to the desired point and mark a time region. Select output(s), inclusive first/last LED numbers, effect, colors, speed and brightness. Save the moment. Example: LEDs 112–214 from 1:35 through 1:45, color scroll. Only those pixels receive that overlay while other pixels continue their automatic show.
 
 Cue start is inclusive and end exclusive. Later saved overlapping rows win on overlapping pixels. Reserve keeps a range dark outside its cue; turn it off if those pixels should resume automatic effects. Two conflicting rows on the same pixels can hide an earlier effect. Named regions help reuse tree or prop ranges. Cues are associated with the song filename; renaming music requires checking associations.
 
 ## Mobile and multiple monitors
 
-Use the mobile Menu for navigation. The multiple-monitor button opens a compact toolbar; move it to the second display. Dashboard and other navigation buttons target the original large window. Keep that main window open. Permit popups for the local HNLS address if the toolbar is blocked.
+Use the mobile Menu for navigation. The multiple-monitor button opens a compact toolbar; move it to the second display. Home and other navigation buttons target the original large window. Keep that main window open. Permit popups for the local HNLS address if the toolbar is blocked.
+
+## Play outside scheduled hours
+
+Click Play now on Home or Music to start uploaded-song shuffle and the saved Light Show on all strings. Stop show stops sound/lights without deleting the schedule. Outside hours, the next scheduled opening takes over; inside hours, the scheduled closing still stops it. See [PLAY_NOW.md](PLAY_NOW.md).
 
 ## Automatic show hours
 
-Open Music > Automatic Show Hours. Enable the schedule, choose the days, start/stop times and IANA time zone, then Save show hours. The default zone is America/Chicago; check the displayed show clock. The selected weekdays refer to the start day when a window crosses midnight. Equal start and stop times are rejected.
+Open Music > Show hours. Enable the schedule, choose the days, start/stop times and IANA time zone, then Save show hours. The default zone is America/Chicago; check the displayed show clock. The selected weekdays refer to the start day when a window crosses midnight. Equal start and stop times are rejected.
 
-At opening, HNLS selects a random first song, enables playlist shuffle and selects the main Song Show on every configured output. Saved song moments still overlay the show. At closing, all outputs switch Off and playback stops. Pis remain running for the next window. Schedule checks occur roughly every two seconds plus normal command-queue/OS latency.
+At opening, HNLS selects a random first song, enables playlist shuffle and selects the saved Light Show on every configured output. Saved song moments still overlay the show. At closing, all outputs switch Off and playback stops. Pis remain running for the next window. Schedule checks occur roughly every two seconds plus normal command-queue/OS latency.
 
 The main Pi owns the schedule; receivers follow its output and watchdog. No browser or cron job is needed. Settings persist across reboots. A restart during the window starts a show; a restart outside enabled hours forces outputs/music off once. Empty playlists are retried without blocking the UI.
 
@@ -69,12 +75,20 @@ In Moment sheet, click Edit on the desired row. HNLS fills the form, opens Fine-
 
 ## Mixed color orders within one normal output
 
-Open Device Settings > Mixed RGB / GRB ranges. Choose the output and inspect its LED count/default order. Add a row with optional name, first/last LED (inclusive) and the actual physical order. Save color-order ranges. Add only exceptions; gaps inherit the output default. Multiple adjacent or separated nonoverlapping ranges are supported. Clear ranges + Save returns the entire output to its default order. Saving does not restart playback; mappings appear as outgoing frames refresh. Paused/held frames may wait until new frames are sent.
+Open My Lights > Mixed RGB / GRB ranges. Choose the output and inspect its LED count/default order. Add a row with optional name, first/last LED (inclusive) and the actual physical order. Save color-order ranges. Add only exceptions; gaps inherit the output default. Multiple adjacent or separated nonoverlapping ranges are supported. Clear ranges + Save returns the entire output to its default order. Saving does not restart playback; mappings appear as outgoing frames refresh. Paused/held frames may wait until new frames are sent.
 
 Example: Second Strip has 750 LEDs, global/default GRB, but its first short set is physically RGB. Add 601–650, order RGB. Those 50 LEDs are corrected while all others retain GRB. The next short sets are 651–700 and 701–750. Total counts are edited in the existing Configuration panel, not the range editor.
 
 Native ws2812_strip aliases are resolved from the installed driver constants when available. Otherwise select a known explicit RGB/GRB/RBG/GBR/BRG/BGR type for the output, save it and reload outputs. RGBW/other wire protocols are not mixed by this feature.
 
-These settings apply after effects/moments on the normal Device Settings output paths, including the paired slave. They do not alter logical song colors, section sync groups, cue boundaries, brightness or counts. Advanced Studio uses its own output configuration and does not inherit normal-device ranges.
+These settings apply after effects/moments on the normal My Lights output paths, including the paired slave. They do not alter logical song colors, section sync groups, cue boundaries, brightness or counts. Advanced Studio uses its own output configuration and does not inherit normal-device ranges.
 
 Data addressing matters: a continuous data-out-to-data-in chain has unique pixel addresses. Parallel branches on the same data signal repeat addresses, so you cannot correct different-order branches independently at the same address. Configure those on separate data outputs if they need different byte orders.
+
+## Pandora / Spotify from a Windows PC
+
+Open Music → Windows PC audio. Download and extract the sender on Windows, select Receive Windows PC audio, and double-click Start-HNLS-Audio.cmd. Play either service on the default Windows playback device. See [PC_AUDIO.md](PC_AUDIO.md) for exact setup, source switching, privacy and limits.
+
+## Holiday colors and song-aware motion
+
+In Light Show choose a string and holiday palette, optionally edit the ten colors, select Let HNLS choose and click Save & use this look. Keep Classic for the existing choreography. See [PALETTES.md](PALETTES.md) for bands, behavior and live-stream fallback.

@@ -1,0 +1,12 @@
+<section class="card" aria-labelledby="pcStreamHeading"><div class="card-body">
+    <h2 id="pcStreamHeading" class="h4">Play Spotify or Pandora from Windows</h2>
+    <p>Play Spotify or Pandora on your Windows PC. HNLS receives the sound, plays it through the selected Pi audio output, and makes the lights react live.</p>
+    <div class="d-flex flex-wrap" style="gap:10px">
+        <a class="btn btn-outline-primary" href="/api/music/pc-stream/sender">Download the PC sender</a>
+        <button type="button" class="btn btn-primary" id="pcStreamStart">Use PC audio</button>
+        <button type="button" class="btn btn-outline-secondary" id="pcStreamStop">Stop PC audio</button>
+    </div>
+    <p class="mt-3 mb-2">Extract the ZIP on Windows and double-click <strong>Start-HNLS-Audio.cmd</strong>. Then play music. Both computers must be on the same reachable network.</p>
+    <p id="pcStreamStatus" role="status" aria-live="polite">Checking PC audio…</p>
+    <details><summary>Playback and privacy details</summary><p class="small mt-2">The sender captures all sound on the default Windows playback device, including alerts. Spotify/Pandora controls stay on your PC; uploaded-song timed moments do not run for live streams. The sender contains a private pairing key—keep it off GitHub. LAN audio is authenticated but not encrypted. Changing the Windows playback device requires restarting the sender. Schedule boundaries still control HNLS. Streaming is selected manually after a Pi reboot. Advanced Studio has a separate audio path.</p></details>
+</div></section>

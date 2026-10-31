@@ -4,7 +4,11 @@
 
 A Raspberry Pi music and holiday-lighting system with a responsive web interface, automatic song analysis and visual, per-song LED cues.
 
-**0.1.0-rc.7 — reconciled source prerelease.** Controller and receiver code were reconciled with captures from the working installation on October 29, 2026. The new fresh-install script is automated and tested with simulated failures, but has not yet been installed on a clean physical Pi. See [release status](docs/RELEASE_STATUS.md) and [verification results](docs/VERIFICATION.md).
+**0.1.0-rc.16 — reconciled source prerelease.** Controller and receiver code were reconciled with captures from the working installation on October 29, 2026. The new fresh-install script is automated and tested with simulated failures, but has not yet been installed on a clean physical Pi. See [release status](docs/RELEASE_STATUS.md) and [verification results](docs/VERIFICATION.md).
+
+## Start here
+
+Use Home for direct everyday controls: music, colors/effects, brightness, show hours, speakers and PC audio. Find a setting locates detailed controls. Everyday pages are Music, Light Show, Song Editor and My Lights; specialist tools remain under Advanced. See [Find your way around HNLS](docs/EASY_INTERFACE.md).
 
 ## Features
 
@@ -21,6 +25,14 @@ A Raspberry Pi music and holiday-lighting system with a responsive web interface
 - Turn lights off and reset show state between songs, with a two-second gap.
 
 No fixed 1,200-LED layout is assumed. Each output has real timing, backend and power constraints. An LED density setting is not an electrical current limiter.
+
+## One-command installation
+
+HNLS includes a complete download-and-install entry point, like the original MLSC setup command. It installs this full HNLS release: the redesigned interface, Home controls, source switching, PC audio, holiday palettes, song analysis, schedules, Song Designer, RGB/GRB ranges and remote receiver support. No original MLSC checkout or incremental update ZIPs are needed for a new Pi.
+
+Publish the repository and release assets first. GitHub Actions generates `hnls-setup.sh` with the real repository and exact version already included. Run the release’s displayed `curl … | bash` command on a fresh Pi, choose **Main Pi** or **Additional Pi**, then finish the light/audio setup in the web interface. Boot startup is enabled automatically.
+
+The public URL cannot work before the GitHub release exists. See [the exact minnecrapolis/HNLS publishing steps and commands](docs/GITHUB_INSTALL.md), or [the general installation guide](docs/QUICK_INSTALL.md).
 
 ## Fresh controller installation
 
@@ -96,3 +108,21 @@ Release ZIPs and SHA256SUMS.txt are written to `dist/`. CI runs the same checks;
 HNLS builds on Music LED Strip Control by TobKra96 and contributors. The original MIT license and copyright notice are retained unchanged in [LICENSE](LICENSE). Vendor assets retain their respective terms and embedded notices; see [THIRD_PARTY.md](THIRD_PARTY.md). Legacy service names and paths remain compatibility details.
 
 No music, personal show configuration, live PIN, pairing key or private ChatGPT bridge is included.
+
+## Windows PC audio
+
+Stream the default Windows playback device to HNLS for live lights and Pi audio playback, including Pandora or Spotify. Music provides the sender download and source controls. See [PC audio setup](docs/PC_AUDIO.md) for installation, privacy, schedule interactions and current testing limits.
+
+## Holiday palettes and automatic choreography
+
+Song Show now offers 14 editable holiday recipes, eight frequency colors plus beat/POWER accents, and analysis-directed motion choices. Existing shows remain in Classic mode. See [Palettes and choreography](docs/PALETTES.md).
+
+## Run outside scheduled hours
+
+Use Play now on Home or Music to start the shuffled Light Show without editing saved hours. Stop show turns off music/lights. The next scheduled opening or closing takes control again. See [Play now](docs/PLAY_NOW.md).
+
+## All-in-one Home controls
+
+See [Home controls](docs/HOME_CONTROLS.md). The single hnls-home-controls-update.zip catches up the working palette, Easy UI or Play now installation; those earlier incremental updates are not required first.
+
+Music source choice: see [AUDIO_SOURCE.md](docs/AUDIO_SOURCE.md). Existing rc.11–rc.14 systems can use the single cumulative `hnls-audio-source-update.zip` instead of earlier UI updates.

@@ -15,6 +15,7 @@ from libs.webserver.blueprints.general_api import general_api
 from libs.webserver.blueprints.general_settings_api import general_settings_api
 from libs.webserver.blueprints.microphone_settings_api import microphone_settings_api
 from libs.webserver.blueprints.music_library_api import music_library_api
+from libs.webserver.blueprints.pc_stream_api import pc_stream_api
 from libs.webserver.blueprints.system_info_api import system_info_api
 from libs.webserver.blueprints.studio_api import studio_api
 from libs.webserver.executer import Executer
@@ -44,7 +45,7 @@ class Webserver:
 
         api_blueprints = (
             authentication_api, device_api, device_settings_api, effect_api, effect_settings_api,
-            general_api, general_settings_api, system_info_api, microphone_settings_api, music_library_api, studio_api
+            general_api, general_settings_api, system_info_api, microphone_settings_api, music_library_api, studio_api, pc_stream_api
         )
 
         for blueprint in api_blueprints:

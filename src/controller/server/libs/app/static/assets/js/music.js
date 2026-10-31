@@ -32,6 +32,8 @@
         const texts = {playing: 'Playing: ', paused: 'Paused: ', between_songs: 'Lights off — two-second pause after: '};
         message(state === 'error' ? 'Playback error: ' + (status.error || 'unknown error') :
             texts[state] ? texts[state] + (status.file || 'music file') :
+            state === 'pc_stream' ? 'Audio source: Windows PC — live streaming' :
+            state === 'pc_stream_waiting' ? 'Windows PC audio selected — waiting for the sender' :
             state === 'stopped' ? 'Playlist stopped. All lights off.' : 'Audio source: Microphone', state === 'error');
         if (status.error && state !== 'error') message('Audio output error: ' + status.error, true);
         const active = ['playing', 'paused', 'between_songs'].includes(state) && !!status.file;

@@ -1,0 +1,337 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} My Lights {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <!-- tagin css theme -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/tagin/css/tagin.css') }}">
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+
+            {% include 'includes/toasts.html' %}
+
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h1>My Lights</h1><p>Choose a string below to change its name, LED count and brightness.</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+
+                    <nav class="hnls-guide-strip" aria-label="Light setup tasks"><a href="#string-settings" data-hnls-jump>Names, counts &amp; brightness</a><a href="#colorRangesPanel" data-hnls-jump>Fix RGB / GRB colors</a><a href="#gpioStringsPanel" data-hnls-jump>Add a string</a><a href="#remotePiPanel" data-hnls-jump>Add a Pi</a><a href="/effects/effect_song_show">Holiday colors &amp; effects →</a></nav>
+                    <h2 id="string-settings">Choose a light string</h2>
+                    {% include 'includes/devices.html' %}
+
+
+
+
+
+
+
+
+                    <input type="hidden" id="settingsIdentifier" value="device_settings">
+                    <div id="deviceFound" class="d-none">
+                        <form id="settingsForm" action method="post" novalidate autocomplete="off">
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Light string settings</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label>Device Name</label>
+                                                        <input name="device_name:name" id="device_name" class="form-control device_setting_input" type="text" name="text" required>
+                                                    </div>
+                                                    <details class="hnls-guide-disclosure"><summary>Advanced: animation refresh rate<small>Usually leave this unchanged.</small></summary><div class="form-group">
+                                                        <label class="row m-0 mb-2 p-0">
+                                                            Maximum FPS
+                                                            <div id="FPS_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                                <i class="feather icon-help-circle"></i>
+                                                            </div>
+                                                        </label>
+                                                        <input name="fps:number" id="fps" class="form-control device_setting_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="number"required>
+                                                    </div></details>
+                                                    <div class="form-group">
+                                                        <label class="row m-0 mb-2 p-0">
+                                                            Selected Output Type
+                                                            <div id="OUTPUT_TYPE_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                                <i class="feather icon-help-circle"></i>
+                                                            </div>
+                                                        </label>
+                                                        <select name="output_type:string" id="output_type" class="form-control output_type device_setting_input"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label class="row m-0 mb-2 p-0">
+                                                            Number of LEDs
+                                                            <div id="LED_Count_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                                <i class="feather icon-help-circle"></i>
+                                                            </div>
+                                                        </label>
+                                                        <input name="led_count:ledcount" id="led_count" class="form-control device_setting_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="number" required>
+                                                    </div>
+                                                    <details class="hnls-guide-disclosure"><summary>Advanced: strip midpoint<small>Usually leave this unchanged.</small></summary><div class="form-group">
+                                                        <label class="row m-0 mb-2 p-0">
+                                                            LED Strip Middle
+                                                            <div id="LED_Mid_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                                <i class="feather icon-help-circle"></i>
+                                                            </div>
+                                                        </label>
+                                                        <input name="led_mid:ledcount" id="led_mid" class="form-control device_setting_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="number" required>
+                                                    </div></details>
+                                                    <div class="form-group">
+                                                        <label class="row m-0 mb-2 p-0">
+                                                            LED Strip Type
+                                                            <div id="LED_Strip_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                                <i class="feather icon-help-circle"></i>
+                                                            </div>
+                                                        </label>
+                                                        <select name="led_strip:string" id="led_strip" class="form-control led_strips device_setting_input"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <label class="row m-0 mb-2 p-0">
+                                                            Add Device Group
+                                                            <div id="DEVICE_GROUP_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                                <i class="feather icon-help-circle"></i>
+                                                            </div>
+                                                        </label>
+                                                        <div class="input-group">
+                                                            <select id="device_group_dropdown" class="form-control">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div id="device_group_pills" class="form-group d-none">
+                                                        <label id="device_group_label" class="row m-0 mb-2 p-0">
+                                                            Device Groups
+                                                        </label>
+                                                        <input name="device_groups:tags" id="device_groups" type="option" class="form-control device_setting_input tagin" value="" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>LED Brightness <span for="led_brightness" class="mb-0 badge badge-secondary"></span></label>
+                                                        <input name="led_brightness:number" id="led_brightness" type="range" class="custom-range device_setting_input" min="0" max="100" step="1" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="raspberrypi" class="card">
+                                        <div class="card-header">
+                                            <h5>Output Raspberry Pi</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label class="row m-0 mb-2 p-0">
+                                                            LED GPIO Pin
+                                                            <div id="LED_Pin_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                                <i class="feather icon-help-circle"></i>
+                                                            </div>
+                                                        </label>
+                                                        <input name="led_pin:number" id="led_pin" class="form-control output_raspi" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="number" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="row m-0 mb-2 p-0">
+                                                            LED Signal Frequency in Hz
+                                                            <div id="LED_Freq_Hz_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                                <i class="feather icon-help-circle"></i>
+                                                            </div>
+                                                        </label>
+                                                        <input name="led_freq_hz:number" id="led_freq_hz" class="form-control output_raspi" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="number" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label class="row m-0 mb-2 p-0">
+                                                            LED Channel
+                                                            <div id="LED_Channel_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                                <i class="feather icon-help-circle"></i>
+                                                            </div>
+                                                        </label>
+                                                        <input name="led_channel:number" id="led_channel" class="form-control output_raspi" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="number" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="row m-0 mb-2 p-0">
+                                                            LED DMA
+                                                            <div id="LED_Dma_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                                <i class="feather icon-help-circle"></i>
+                                                            </div>
+                                                        </label>
+                                                        <input name="led_dma:number" id="led_dma" class="form-control output_raspi" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="number" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="custom-control custom-checkbox my-2">
+                                                        <input name="led_invert:boolean" type="checkbox" class="custom-control-input output_raspi" id="led_invert">
+                                                        <label class="custom-control-label row m-0 mb-2 p-0" for="led_invert">
+                                                            Invert LED
+                                                            <div id="LED_Invert_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                                <i class="feather icon-help-circle"></i>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="udp" class="card d-none">
+                                        <div class="card-header">
+                                            <h5>Output Network via UDP</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="form-group">
+                                                <label class="row m-0 mb-2 p-0">
+                                                    UDP Client IP Address
+                                                    <div id="UDP_Client_IP_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                        <i class="feather icon-help-circle"></i>
+                                                    </div>
+                                                </label>
+                                                <input name="udp_client_ip:string" id="udp_client_ip" class="form-control output_udp" type="text" name="text" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="row m-0 mb-2 p-0">
+                                                    UDP Client Port
+                                                    <div id="UDP_Client_Port_TOOLTIP" class="pl-1" data-toggle="tooltip" data-placement="top" data-html="true">
+                                                        <i class="feather icon-help-circle"></i>
+                                                    </div>
+                                                </label>
+                                                <input name="udp_client_port:number" id="udp_client_port" class="form-control output_udp" oninput="if (this.value > 65535) this.value = 65535;" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="number" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 m-0">
+                                    <div class="card">
+                                        <div class="card-block">
+                                            <div class="d-flex flex-md-row flex-column justify-content-md-end">
+                                                <button type="button" id="save_btn" class="btn btn-success m-0">Save string settings</button>
+                                                <button type="button" id="create1_btn" class="btn btn-primary m-0 my-3 my-md-0 mx-md-3">Add light string</button>
+                                                <button type="button" id="delete_btn" class="btn btn-danger m-0">Delete light string</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="noDeviceFound" class="d-none">
+                        <div class="alert alert-danger text-center" role="alert">
+                            <span class="font-weight-bold d-block">No devices were found.</span>
+                            <span class="d-block">To create one, please use the "Add light string" button.</span>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-12 m-0">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="d-flex flex-md-row flex-column justify-content-md-end">
+                                            <button type="button" id="create2_btn" class="btn btn-primary m-0">Add light string</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="modal_delete_device" tabindex="-1" role="dialog" aria-labelledby="modal_delete_device" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modal_delete_device_title">Confirmation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" class="feather icon-x"></span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete device "<span class="text-secondary font-weight-bold" id="modal_device_name"></span>"?</p>
+                                    <p>This action <span class="text-danger font-weight-bold">cannot</span> be undone.</p>
+                                </div>
+                                <div class="p-4 mt-4 d-flex flex-md-row flex-column justify-content-md-end">
+                                    <button type="button" class="btn btn-secondary m-0 mb-3 mb-md-0" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-danger m-0 ml-md-3" id="delete_btn_modal">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+<section aria-label="Additional setup"><h2>Additional setup</h2><details class="hnls-guide-disclosure"><summary>Fix colors on mixed RGB / GRB strips<small>Use this if one section shows the wrong colors.</small></summary>                    <section class="card" id="colorRangesPanel">
+                        <div class="card-header"><h5>Mixed RGB / GRB ranges</h5></div><div class="card-block">
+                        <p>Different physical strips can share one continuous data chain. Set the output’s default order normally, then override only the LED ranges wired in a different order. Counts and brightness are not changed here.</p>
+                        <label class="d-block">Output<select id="colorRangesOutput" class="form-control"></select></label><button id="colorRangesReload" type="button" class="btn btn-outline-secondary my-2">Reload outputs</button><p id="colorRangesSummary"></p>
+                        <form id="colorRangesForm"><div class="table-responsive"><table class="table"><thead><tr><th>Name (optional)</th><th>First LED</th><th>Last LED</th><th>Actual order</th><th></th></tr></thead><tbody id="colorRangesRows"></tbody></table></div>
+                        <div class="d-flex flex-wrap"><button id="colorRangesAdd" type="button" class="btn btn-outline-primary mr-2 mb-2" disabled>Add range</button><button id="colorRangesClear" type="button" class="btn btn-outline-secondary mr-2 mb-2" disabled>Clear ranges</button><button id="colorRangesSave" type="submit" class="btn btn-primary mb-2" disabled>Save color-order ranges</button></div></form>
+                        <p id="colorRangesStatus" role="status" aria-live="polite">Loading color-order ranges…</p><p class="small text-muted">Numbers start at 1 and include both ends. Example: 601–650 is a 50-LED range. Ranges cannot overlap; gaps inherit the default. Parallel data branches repeat the same addresses, so they cannot be mapped independently. This editor supports normal configured RGB outputs, including the paired slave; Advanced Studio has separate line settings.</p>
+                        </div></section></details><details class="hnls-guide-disclosure"><summary>Add another string on this Pi<small>Set up an additional GPIO data output.</small></summary>                    <section class="card" id="gpioStringsPanel">
+                        <div class="card-header"><h5>Add GPIO string</h5></div>
+                        <div class="card-block">
+                            <p>Keep your existing GPIO21 string and add a separate string on <strong>GPIO10 — physical pin 19</strong>. Both follow the same music, with separate LED counts and Light Show settings.</p>
+                            <p id="gpioStringsStatus" role="status" aria-live="polite">Checking SPI output…</p>
+                            <div class="d-flex flex-wrap mb-3"><button id="prepareGpioSpi" type="button" class="btn btn-outline-primary mr-2">Prepare GPIO10 SPI</button><button id="rebootGpioSpi" type="button" class="btn btn-outline-secondary">Reboot this Pi</button></div>
+                            <div class="row">
+                                <label class="col-md-6">Copy colors and settings from<select id="gpioStringSource" class="form-control"></select></label>
+                                <label class="col-md-6">New string name<input id="gpioStringName" class="form-control" value="Second string" maxlength="80"></label>
+                                <label class="col-md-4 mt-2">Number of LEDs<input id="gpioStringCount" type="number" min="7" max="10000" step="1" class="form-control" placeholder="Enter the second string's count"></label>
+                                <label class="col-md-4 mt-2">Physical color order<select id="gpioStringOrder" class="form-control"><option value="ws2811_strip_grb">GRB</option><option value="ws2811_strip_rgb">RGB</option><option value="ws2811_strip_rbg">RBG</option><option value="ws2811_strip_gbr">GBR</option><option value="ws2811_strip_brg">BRG</option><option value="ws2811_strip_bgr">BGR</option></select></label>
+                                <label class="col-md-4 mt-2">Starting brightness %<input id="gpioStringBrightness" type="number" min="0" max="100" value="10" class="form-control"></label>
+                            </div>
+                            <button id="addGpioString" type="button" class="btn btn-success mt-3" disabled>Add string on GPIO10</button>
+                            <p class="text-muted mt-3 mb-0">Prepare SPI and reboot before adding the string. SPI0 must be dedicated to the LEDs. Use external LED power, a shared ground and suitable data-level shifting. After adding, choose the new device in Light Show to adjust its colors and grouping.</p>
+                        </div>
+                    </section></details><details class="hnls-guide-disclosure"><summary>Add or manage another Pi<small>Pair a remote Pi and its light string.</small></summary>                    <section class="card" id="remotePiPanel">
+                        <div class="card-header"><h5>Add remote Pi</h5></div>
+                        <div class="card-block">
+                            <p>LED03 generates the show; the remote Pi drives its own RGB string on <strong>GPIO21 — physical pin 40</strong>. Audio stays on LED03.</p>
+                            <p class="text-muted">Install the receiver on the other Pi first. Connect both Pis to the same LAN. Wi-Fi timing can vary; lost connections turn the remote string off after one second.</p>
+                            <div class="row">
+                                <label class="col-md-6">Remote Pi address<input id="remotePiHost" class="form-control" value="192.168.1.34" placeholder="192.168.1.34"></label>
+                                <label class="col-md-6">Pairing key<input id="remotePiKey" class="form-control" type="password" autocomplete="new-password" maxlength="64" placeholder="Paste the key printed by the receiver installer"></label>
+                                <label class="col-md-6 mt-2">String name<input id="remotePiName" class="form-control" value="LED-SLAVE" maxlength="80"></label>
+                                <label class="col-md-6 mt-2">Copy Light Show colors and grouping from<select id="remotePiSource" class="form-control"></select></label>
+                                <label class="col-md-4 mt-2">Number of LEDs<input id="remotePiCount" class="form-control" type="number" min="7" max="2500" placeholder="Enter this string’s actual count"></label>
+                                <label class="col-md-4 mt-2">Physical color order<select id="remotePiOrder" class="form-control"><option>GRB</option><option>RGB</option><option>RBG</option><option>GBR</option><option>BRG</option><option>BGR</option></select></label>
+                                <label class="col-md-4 mt-2">Starting brightness %<input id="remotePiBrightness" class="form-control" type="number" min="0" max="100" value="10"></label>
+                            </div>
+                            <button type="button" id="addRemotePi" class="btn btn-success mt-3" disabled>Pair Pi and add string</button>
+                            <p id="remotePiStatus" class="text-muted mt-3" role="status" aria-live="polite">Loading remote Pis…</p>
+                            <div id="remotePiList"></div>
+                            <p class="text-muted mb-0">After adding, select its device to change LED count, physical color order and brightness in My Lights, or colors and section grouping in Light Show. Each Pi needs its own LED power and a ground shared with its local LEDs.</p>
+                        </div>
+                    </section></details></section>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="{{ url_for('static', filename='assets/js/color_ranges.js') }}?v=1"></script>
+<script src="{{ url_for('static', filename='assets/js/settings.device.js') }}?v=2" type="module"></script>
+<script src="{{ url_for('static', filename='assets/js/gpio_strings.js') }}?v=1"></script>
+<script src="{{ url_for('static', filename='assets/js/remote_pis.js') }}?v=1"></script>
+{% endblock javascripts %}

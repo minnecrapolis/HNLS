@@ -1,0 +1,15 @@
+<section class="card" aria-labelledby="pcStreamHeading"><div class="card-body">
+<h2 id="pcStreamHeading">Where is the music coming from?</h2>
+<p>Both choices play through your selected Pi speaker and drive the lights.</p>
+<div class="d-flex flex-wrap" role="group" aria-label="Music source">
+<button type="button" class="btn btn-outline-primary mr-2 mb-2" id="pcLocalStart">Play songs on the Pi</button>
+<button type="button" class="btn btn-primary mr-2 mb-2" id="pcStreamStart">Stream from PC</button>
+<button type="button" class="btn btn-outline-secondary mb-2" id="pcStreamStop">Stop PC sound &amp; lights</button>
+</div>
+<p id="pcStreamStatus" role="status" aria-live="polite">Checking music source…</p>
+<p class="small">Pi songs: use the playlist controls below. PC stream: choose songs, pause and skip in Spotify or Pandora on Windows. Stopping reception here does not stop Spotify on your PC. Scheduled show boundaries still apply.</p>
+<details><summary>Connect the Windows PC / download sender</summary>
+<p><a class="btn btn-outline-primary" href="/api/music/pc-stream/sender">Download the PC sender</a></p>
+<p>Extract the ZIP on Windows and double-click <strong>Start-HNLS-Audio.cmd</strong>. Leave it open, click <strong>Stream from PC</strong>, then play Spotify or Pandora. Keep Windows volume above zero.</p>
+<p>The stream plays live; it is not saved as a recording. The sender captures all sound on the default Windows playback device, including alerts. Both computers must be on the same reachable network. Keep the sender ZIP private: it contains your pairing key. Audio is authenticated but not encrypted. Restart the sender if you change the Windows playback device. Select streaming again after a Pi reboot.</p>
+</details></div></section>

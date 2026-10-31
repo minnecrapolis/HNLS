@@ -96,3 +96,10 @@ def set_effect_settings():
         return jsonify(data_out)
 
     return UnprocessableEntity.as_response()
+
+
+@effect_settings_api.get('/api/music/show-palettes')
+@login_required
+def show_palettes():
+    from libs.show_palettes import PALETTES
+    return jsonify(palettes=PALETTES)

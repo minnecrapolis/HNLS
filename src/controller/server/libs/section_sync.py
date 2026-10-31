@@ -2,9 +2,11 @@
 import zlib
 import re
 import numpy as np
+from libs.show_palettes import COLOR_KEYS, EXTRA_COLORS, SHOW_MODES, PALETTE_IDS
 
 DEFAULT_SYNC = {
     "section_size": 50, "sync_mode": "paired", "sync_groups": [],
+    **EXTRA_COLORS, "expanded_bands": False, "show_mode": "classic", "palette_preset": "custom",
     "max_lit_leds": 0, "bass_color": "#ff2106", "mid_color": "#05adff",
     "treble_color": "#991fff", "beat_color": "#ff8500", "power_color": "#ff3300",
 }
@@ -31,7 +33,13 @@ def validate_sync_settings(led_count, settings):
     if type(maximum) is not int or not 0 <= maximum <= 5000:
         raise ValueError("Maximum lit LEDs must be 0 (automatic) or between 1 and 5000")
     result = {**DEFAULT_SYNC, **settings, "sync_groups": list(groups)}
-    for key in ("bass_color", "mid_color", "treble_color", "beat_color", "power_color"):
+    if type(result["expanded_bands"]) is not bool:
+        raise ValueError("Choose expanded bands on or off")
+    if result["show_mode"] not in SHOW_MODES:
+        raise ValueError("Choose a supported Song Show mode")
+    if result["palette_preset"] not in PALETTE_IDS:
+        raise ValueError("Choose a known holiday palette or Custom")
+    for key in COLOR_KEYS:
         value = result[key]
         if not isinstance(value, str) or re.fullmatch(r"#[0-9a-fA-F]{6}", value) is None:
             raise ValueError("Colors must be six-digit hex colors")

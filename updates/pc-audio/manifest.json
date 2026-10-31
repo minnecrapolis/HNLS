@@ -1,0 +1,74 @@
+{
+  "server/libs/pc_stream.py": {
+    "sha256": "c6a04b1a6617eacfd5fef9de2711440f4921ceb3d88bf102863804cecd913452",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/pc_stream_runtime.py": {
+    "sha256": "6ec64bca23f31a7c4c549c647b3c53ec8c92f1df4bb16b327540c676e5d858e8",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/webserver/blueprints/pc_stream_api.py": {
+    "sha256": "724adaee6a67df4c77239f49ec4dc61f26393940a01c2c8aaea4f7412e32e7eb",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/webserver/webserver.py": {
+    "sha256": "8bb0b4a92be4104ee0600f1787d581b51679ead908572646739b43b6e3c06b21",
+    "supported": [
+      "8a60c33e9150b3eaa65e16be51dd78b9b7bcabfe55797762503f90400bc6ae9c"
+    ]
+  },
+  "server/libs/audio_process_service.py": {
+    "sha256": "08259b1c97da190013087565d3bfa0208b59f1f56cb7e4999054d45d242baa81",
+    "supported": [
+      "465f5e754930442487651650c5985edaad3552f1886a98e67423bf58ea87ebb6"
+    ]
+  },
+  "server/libs/app/templates/home/music.html": {
+    "sha256": "ec9ce71b661988e9cc1491c15f6a89bdfa34c8cb217ca9abc494b3641f4125c7",
+    "supported": [
+      "d0df86234034111a0f985e640f1518f493d4cc9359ff2f12c2700eb4ade149da"
+    ]
+  },
+  "server/libs/app/static/assets/js/music.js": {
+    "sha256": "347463a2948de493b102775fab22a4e9be3436bb433974bb1ee9d4d7529cfb5a",
+    "supported": [
+      "389bbf2045c7128292afa008b98013dce57d2d3fee63c4817c72764bd0d19b2a"
+    ]
+  },
+  "server/libs/app/static/assets/js/pc_stream.js": {
+    "sha256": "4f6987363c74d23f838265ddd75a0ed667ffe74d1be4b6a1449b9854d3db6a52",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/windows_pc_audio/Start-HNLS-Audio.cmd": {
+    "sha256": "25a38706f2cab56d90e2a7ecd974c02a2842242abf157b7a6af5ddb8a797e4bb",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/windows_pc_audio/Send-HNLS-Audio.ps1": {
+    "sha256": "00f9b1c315baf80c81ba18d7dd4d2b45c3791db0f45a2f2582d563824448a89f",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/windows_pc_audio/LoopbackSender.cs": {
+    "sha256": "066fbf34be330ff416a03a5d21970d5010f8a170d87924f8b12bc22c19587d50",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/windows_pc_audio/README.txt": {
+    "sha256": "62ede5a33584db9946d6afcb5041aff0be8ae4edc6ac74db088a90c5e90511ae",
+    "supported": [
+      null
+    ]
+  }
+}

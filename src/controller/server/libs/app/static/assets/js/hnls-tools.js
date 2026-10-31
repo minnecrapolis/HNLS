@@ -2,9 +2,9 @@
 (() => {
   'use strict';
   const destinations = [
-    ['Dashboard', '/'], ['Music & playback', '/music'],
-    ['Song Designer', '/song-designer'], ['My lights', '/settings/device_settings'],
-    ['Automatic show', '/effects/effect_song_show'], ['Advanced Users', '/advanced']
+    ['Home', '/'], ['Music', '/music'],
+    ['Light Show', '/effects/effect_song_show'], ['Song Editor', '/song-designer'],
+    ['My Lights', '/settings/device_settings'], ['Advanced', '/advanced']
   ];
   const allowed = new Set(destinations.map(item => item[1]));
   const isTools = new URLSearchParams(window.location.search).get('hnls_tools') === '1';
@@ -27,7 +27,7 @@
       event.preventDefault();
       if(window.opener&&!window.opener.closed)window.opener.postMessage({type:'hnls:navigate',path:url.pathname},window.location.origin);
     });
-    workspace.innerHTML = '<section class="hnls-fixed-tools"><p class="hnls-kicker">YOUR SECOND-SCREEN TOOLBAR</p><h1>Tools stay here.<br>The show stays there.</h1><p class="text-muted">Choose a page to open it in your main window.</p><div id="hnls-tool-pages" class="hnls-tool-pages"></div><p id="hnls-main-page" role="status"></p><section class="hnls-toolbar-transport"><p class="hnls-kicker">LIVE PLAYBACK</p><p id="hnls-tools-playback">Connecting…</p><div id="hnls-toolbar-buttons" class="hnls-toolbar-buttons"></div><p id="hnls-tool-feedback" role="status" aria-live="polite"></p></section></section>';
+    workspace.innerHTML = '<section class="hnls-fixed-tools"><p class="hnls-kicker">YOUR SECOND-SCREEN TOOLBAR</p><h1>Control your main window</h1><p class="text-muted">Choose a page to open it in your main window.</p><div id="hnls-tool-pages" class="hnls-tool-pages"></div><p id="hnls-main-page" role="status"></p><section class="hnls-toolbar-transport"><p class="hnls-kicker">LIVE PLAYBACK</p><p id="hnls-tools-playback">Connecting…</p><div id="hnls-toolbar-buttons" class="hnls-toolbar-buttons"></div><p id="hnls-tool-feedback" role="status" aria-live="polite"></p></section></section>';
     const pages = document.getElementById('hnls-tool-pages');
     destinations.forEach(([name,path]) => {
       const button = document.createElement('button');
@@ -76,7 +76,8 @@
       const response=await fetch('/api/music/song-moments/playhead',{credentials:'same-origin'});
       if(!response.ok)throw Error('Playback status unavailable');
       const state=await response.json();
-      const text=(state.state||'microphone')+' · '+(state.file||'Microphone input')+(state.file?' · '+clock(state.position)+' / '+clock(state.duration):'');
+      const descriptions={playing:'Playing',paused:'Paused',between_songs:'Next song starts in a moment',pc_stream:'Windows PC audio',pc_stream_waiting:'Waiting for Windows audio',stopped:'Stopped',microphone:'Microphone input',error:'Playback needs attention'};
+      const text=(descriptions[state.state]||'Audio status')+(state.file?' · '+state.file+' · '+clock(state.position)+' / '+clock(state.duration):'');
       for(const id of ['hnls-live-state','hnls-tools-playback']){const node=document.getElementById(id);if(node)node.textContent=text;}
     }catch(error){for(const id of ['hnls-live-state','hnls-tools-playback']){const node=document.getElementById(id);if(node)node.textContent='Connection unavailable — retrying…';}}
     finally{busy=false;}

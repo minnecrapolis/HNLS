@@ -1,6 +1,6 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
 const base=__dirname+'/../src/controller/server/libs/app/';
-const html=fs.readFileSync(base+'templates/home/music.html','utf8');
+const html=fs.readFileSync(base+'templates/home/music.html','utf8')+fs.readFileSync(base+'templates/includes/show_hours.html','utf8');
 class Element{constructor(){this.children=[];this.checked=false;this.disabled=false;this.value='';this.handlers={};}append(x){this.children.push(x)}replaceChildren(){this.children=[]}setAttribute(){}addEventListener(k,f){this.handlers[k]=f}}
 (async()=>{
  const nodes={};for(const x of html.matchAll(/id="([^"]+)"/g))nodes[x[1]]=new Element();

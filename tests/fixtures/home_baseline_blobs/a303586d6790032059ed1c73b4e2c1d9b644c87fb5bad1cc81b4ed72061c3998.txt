@@ -1,0 +1,78 @@
+{% extends "layouts/base.html" %}{% block title %}Music{% endblock %}{% block content %}<header class="hnls-guide-heading"><p class="hnls-guide-kicker">Music</p><h1>Choose what to play</h1><p>Click a song title to play it. To change the lights, open Light Show.</p></header>
+<nav class="hnls-guide-strip" aria-label="Music tasks"><a href="#playlist" data-hnls-jump>Play a song</a><a href="#upload-music" data-hnls-jump>Add songs</a><a href="#pc-audio" data-hnls-jump>Spotify / Pandora from PC</a><a href="#show-hours" data-hnls-jump>Show hours</a><a href="#speakers" data-hnls-jump>Speakers</a><a href="#song-analysis" data-hnls-jump>Shuffle &amp; analysis</a><a href="/effects/effect_song_show">Colors & effects →</a></nav>
+
+<div class="hnls-music-workspace"><section class="hnls-library" id="playlist"><div class="hnls-section-title"><h2>Your playlist</h2><a href="/song-designer">Edit this song’s lights →</a></div>                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead><tr><th>Song</th><th>Size</th><th></th></tr></thead>
+                                        <tbody id="musicList"><tr><td colspan="3">Loading...</td></tr></tbody>
+                                    </table>
+                                </div>
+                                <small class="text-muted">Deleted songs leave the playlist and are moved to a recoverable trash folder. Stopping playback returns HourNerd LightShow to the configured microphone.</small></section><aside class="hnls-transport"><p class="hnls-kicker">PLAYBACK / LIVE</p><h2>Now playing</h2>                                <div class="alert alert-secondary" id="musicStatus">Loading music status...</div>
+
+                                <div class="d-flex flex-wrap mb-3">
+                                    <button class="btn btn-outline-primary mr-2 mb-2" id="previousBtn">Previous song</button>
+                                    <button class="btn btn-outline-primary mr-2 mb-2" id="rewindBtn">Back 10 seconds</button>
+                                    <button class="btn btn-outline-primary mr-2 mb-2" id="replayBtn">Replay song</button>
+                                    <button class="btn btn-outline-primary mr-2 mb-2" id="forwardBtn">Forward 10 seconds</button>
+                                    <button class="btn btn-primary mr-2 mb-2" id="nextBtn">Next song</button>
+                                    <button class="btn btn-warning mr-2 mb-2" id="pauseBtn"><i class="feather icon-pause"></i> Pause</button>
+                                    <button class="btn btn-success mr-2 mb-2" id="resumeBtn"><i class="feather icon-play"></i> Resume</button>
+                                    <button class="btn btn-danger mb-2" id="stopBtn"><i class="feather icon-square"></i> Stop / Use Microphone</button>
+                                </div>
+
+                                <label for="musicSeek" class="d-block">Song position <span id="musicTime">0:00 / --:--</span></label>
+                                <input id="musicSeek" type="range" min="0" max="1" step="0.1" value="0" class="w-100 mb-3" disabled aria-label="Seek within the current song">
+                                <p class="text-muted small">Next/previous use the two-second lights-off transition. Replay starts the current song over. Seeking resets the lighting analysis at the new position.</p>
+<details class="hnls-fold" id="speakers"><summary>Choose speakers / Bluetooth</summary><div>                                <section class="hn-audio-settings" aria-label="Audio output">
+                                    
+                                    <label for="audioOutputMode">Send music to</label>
+                                    <select id="audioOutputMode" class="form-control mb-2"><option value="headphones">3.5 mm headphone jack</option><option value="bluetooth">Bluetooth speaker / headphones</option></select>
+                                    <label for="bluetoothDevice">Bluetooth device</label>
+                                    <select id="bluetoothDevice" class="form-control mb-2"><option value="">Select a device after scanning</option></select>
+                                    <div class="d-flex flex-wrap">
+                                        <button id="enableBluetooth" class="btn btn-outline-secondary mr-2 mb-2">Enable Bluetooth support</button>
+                                        <button id="scanBluetooth" class="btn btn-outline-primary mr-2 mb-2">Scan for speakers</button>
+                                        <button id="pairBluetooth" class="btn btn-outline-primary mr-2 mb-2">Pair &amp; connect</button>
+                                        <button id="connectBluetooth" class="btn btn-outline-primary mr-2 mb-2">Connect</button>
+                                        <button id="disconnectBluetooth" class="btn btn-outline-secondary mr-2 mb-2">Disconnect</button>
+                                        <button id="saveAudioOutput" class="btn btn-success mb-2">Use selected output</button>
+                                    </div>
+                                    <p id="bluetoothStatus" class="small mt-2" role="status" aria-live="polite">Loading audio outputs…</p>
+                                    <p class="text-muted small mb-0">Put the speaker in pairing mode before scanning. Switching outputs restarts playback at approximately the current song position. Bluetooth can add audible delay relative to the lights. For the lowest latency, use the 3.5 mm jack.</p>
+                                </section></div></details><details class="hnls-fold" id="upload-music"><summary>Add songs to the playlist</summary><div>                                <div class="music-drop mb-4">
+                                    <p class="mb-2"><strong>Add music</strong></p>
+                                    <p class="text-muted mb-3">MP3, WAV, FLAC, OGG, M4A, AAC and Opus are supported.</p>
+                                    <input type="file" id="musicFile" accept="audio/*" class="form-control-file mb-3">
+                                    <button class="btn btn-primary" id="uploadBtn"><i class="feather icon-upload"></i> Upload</button>
+                                    <div class="progress mt-3 d-none" id="uploadProgress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%">Uploading...</div></div>
+                                </div>
+
+</div></details></aside></div>
+<details id="pc-audio" class="hnls-guide-disclosure"><summary>Play Spotify / Pandora from a Windows PC<small>Download the sender, select PC audio, then play music on Windows.</small></summary><section class="card" aria-labelledby="pcStreamHeading"><div class="card-body">
+    <h2 id="pcStreamHeading" class="h4">Play Spotify or Pandora from Windows</h2>
+    <p>Play Spotify or Pandora on your Windows PC. HNLS receives the sound, plays it through the selected Pi audio output, and makes the lights react live.</p>
+    <div class="d-flex flex-wrap" style="gap:10px">
+        <a class="btn btn-outline-primary" href="/api/music/pc-stream/sender">Download the PC sender</a>
+        <button type="button" class="btn btn-primary" id="pcStreamStart">Use PC audio</button>
+        <button type="button" class="btn btn-outline-secondary" id="pcStreamStop">Stop PC audio</button>
+    </div>
+    <p class="mt-3 mb-2">Extract the ZIP on Windows and double-click <strong>Start-HNLS-Audio.cmd</strong>. Then play music. Both computers must be on the same reachable network.</p>
+    <p id="pcStreamStatus" role="status" aria-live="polite">Checking PC audio…</p>
+    <details><summary>Playback and privacy details</summary><p class="small mt-2">The sender captures all sound on the default Windows playback device, including alerts. Spotify/Pandora controls stay on your PC; uploaded-song timed moments do not run for live streams. The sender contains a private pairing key—keep it off GitHub. LAN audio is authenticated but not encrypted. Changing the Windows playback device requires restarting the sender. Schedule boundaries still control HNLS. Streaming is selected manually after a Pi reboot. Advanced Studio has a separate audio path.</p></details>
+</div></section>
+
+</details><details id="show-hours" class="hnls-guide-disclosure"><summary>Set automatic show hours<small>Choose days, start time and stop time.</small></summary><div><section class="hnls-schedule" aria-labelledby="hnlsScheduleTitle">
+<p class="hnls-kicker">AUTOMATIC SHOW HOURS</p><h2 id="hnlsScheduleTitle">When should the show run?</h2>
+<form id="hnlsScheduleForm">
+<label class="hnls-schedule-toggle"><input type="checkbox" id="hnlsScheduleEnabled"> Enable automatic show schedule</label>
+<fieldset class="hnls-schedule-days"><legend>Days the show starts</legend><label><input type="checkbox" id="hnlsScheduleDay0"> Mon</label><label><input type="checkbox" id="hnlsScheduleDay1"> Tue</label><label><input type="checkbox" id="hnlsScheduleDay2"> Wed</label><label><input type="checkbox" id="hnlsScheduleDay3"> Thu</label><label><input type="checkbox" id="hnlsScheduleDay4"> Fri</label><label><input type="checkbox" id="hnlsScheduleDay5"> Sat</label><label><input type="checkbox" id="hnlsScheduleDay6"> Sun</label></fieldset><div class="hnls-schedule-times"><label>Start time<input type="time" id="hnlsScheduleStart" required></label><label>Stop time<input type="time" id="hnlsScheduleEnd" required></label><label>Time zone<input id="hnlsScheduleTimezone" list="hnlsTimezones" placeholder="America/Chicago" required><datalist id="hnlsTimezones"><option value="America/Chicago"><option value="America/New_York"><option value="America/Denver"><option value="America/Los_Angeles"><option value="UTC"></datalist></label></div>
+<p class="small text-muted">At the start: shuffled playlist and the saved Light Show on all configured outputs. At the stop: music stops and lights turn off. The Pis stay on for the next show. For overnight hours, days refer to the start day.</p>
+<p class="small text-muted">Saved schedules run with the browser closed. Enabling during show hours starts immediately. Disabling stops a scheduled show. Manual controls remain available; the next schedule boundary takes control again.</p>
+<button type="submit" id="hnlsScheduleSave" class="btn btn-primary" disabled>Save show hours</button><p id="hnlsScheduleClock" class="small"></p><p id="hnlsScheduleStatus" role="status" aria-live="polite">Loading show hours…</p></form></section>
+</div></details><details id="song-analysis" class="hnls-guide-disclosure"><summary>Shuffle & song analysis<small>Randomize the playlist and prepare songs for HNLS-selected effects.</small></summary><div><!-- HNLS SONG INTELLIGENCE START --><section class="hnls-preparation" aria-labelledby="hnls-preparation-title">
+<div><p class="hnls-kicker">SONG INTELLIGENCE</p><h2 id="hnls-preparation-title">Prepare songs for the Light Show</h2><p class="text-muted">Background analysis maps each song’s dynamics, attacks and estimated tempo. Saved moments still take priority.</p></div>
+<div class="hnls-playlist-options"><label><input type="checkbox" id="hnlsShuffle"> Shuffle playlist</label><p class="small text-muted">Play every available song before reshuffling. Previous retraces playback history. Your current song keeps playing.</p><p id="hnlsShuffleStatus" role="status" aria-live="polite"></p><button type="button" id="hnlsPrepare" class="btn btn-outline-primary">Analyze playlist</button></div>
+<div class="hnls-analysis-progress"><p id="hnlsPreparationStatus" role="status" aria-live="polite">Checking song analysis…</p><details><summary>Song analysis details</summary><div class="table-responsive"><table class="table"><thead><tr><th>Song</th><th>Analysis</th><th>Tempo estimate</th></tr></thead><tbody id="hnlsAnalysisList"></tbody></table></div></details></div>
+</section>
+<style>.hnls-preparation{display:grid;grid-template-columns:1.3fr 1fr;gap:20px 35px;border-block:1px solid var(--hnls-line,#343d47);padding:28px 0;margin-bottom:30px}.hnls-playlist-options label{font-size:17px;font-weight:600;display:flex;gap:12px;align-items:center}.hnls-playlist-options input{width:22px;height:22px}.hnls-analysis-progress{grid-column:1/-1}.hnls-analysis-progress summary{cursor:pointer}.hnls-analysis-progress td{overflow-wrap:anywhere}@media(max-width:800px){.hnls-preparation{grid-template-columns:1fr}.hnls-playlist-options{padding-top:15px;border-top:1px solid var(--hnls-line,#343d47)}}</style>
+<!-- HNLS SONG INTELLIGENCE END --></div></details>{% endblock %}{% block javascripts %}<script src="{{ url_for('static',filename='assets/js/pc_stream.js') }}?v=1"></script><script src="{{ url_for('static',filename='assets/js/show_schedule.js') }}?v=1"></script><script src="{{ url_for('static',filename='assets/js/hnls_playlist.js') }}?v=2"></script><script src="{{ url_for('static',filename='assets/js/music.js') }}?v=4"></script>{% endblock %}

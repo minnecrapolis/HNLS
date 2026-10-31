@@ -1,0 +1,11 @@
+<section class="hnls-guide-heading hnls-guide-home-intro"><div><p class="hnls-guide-kicker">HourNerd LightShow</p><h1>What would you like to do?</h1><p>Choose a task below. You can always come back here.</p></div><button type="button" class="hnls-find-button" data-hnls-find>Help me find a setting</button></section>
+{% if not devices %}<div class="hnls-guide-note"><strong>First time here?</strong> Start with <a href="/settings/device_settings">My Lights</a> to add a light string. Then add music and choose a look.</div>{% endif %}
+<nav class="hnls-task-grid" aria-label="Choose a task">
+<a href="/music"><small>MUSIC</small><strong>Play some music →</strong><span>Choose a song, upload files, or stream Spotify / Pandora from your PC.</span></a>
+<a href="/effects/effect_song_show"><small>LIGHT SHOW</small><strong>Change the look →</strong><span>Holiday palettes, music colors and effects chosen by HNLS.</span></a>
+<a href="/song-designer"><small>SONG EDITOR</small><strong>Edit part of a song →</strong><span>Make selected lights do something special at a specific time.</span></a>
+<a href="/settings/device_settings"><small>MY LIGHTS</small><strong>Set up my lights →</strong><span>String names, LED counts, brightness, RGB / GRB and additional Pis.</span></a>
+<a href="/music#show-hours"><small>SCHEDULE</small><strong>Set show hours →</strong><span>Choose the days and times to start and stop automatically.</span></a>
+<a href="/music#speakers"><small>SOUND</small><strong>Choose my speakers →</strong><span>Use the Pi headphone jack or a Bluetooth speaker.</span></a>
+</nav>
+<div class="hnls-guide-steps"><strong>A simple first show</strong><ol><li><a href="/settings/device_settings">My Lights:</a> add or check your light strings.</li><li><a href="/music">Music:</a> choose and play a song.</li><li><a href="/effects/effect_song_show">Light Show:</a> pick a palette and save your look.</li></ol></div>

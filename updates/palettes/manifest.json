@@ -1,0 +1,75 @@
+{
+  "server/libs/show_palettes.py": {
+    "sha256": "5e49a0b7fbe2275affa7eace4aff23bc4406ca3513c11e0011f5a23ad1397a93",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/show_director.py": {
+    "sha256": "3524cd6a376e99f6ebd11d82c2a2d7b586372987e2fdca613ac7533109d0ff94",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/section_sync.py": {
+    "sha256": "78c7985bf2d8bc32c7feb7f745716c82a0c1f1b1509b046d2d202a329c7d25ed",
+    "supported": [
+      "597634c8e60d25ad8583a9800f8d9c04d282695b413c1b330d08c966a7998837"
+    ]
+  },
+  "server/libs/webserver/schemas/config_validator_service.py": {
+    "sha256": "d74a20c94f9718a0d0b5240447390a15ab59fffe4b758d9816d73eebdb3ac7bb",
+    "supported": [
+      "3e07bb4c23a1e45e4e32db32763c5e6b9cf65cb3f056f381a6335cfec338d3c5",
+      "42f487a3a6591a942525f821b8d1de68c778d4104a49318eb08a35af98d8300f"
+    ]
+  },
+  "server/libs/webserver/blueprints/effect_settings_api.py": {
+    "sha256": "528dd2bc470ce416dc6c26b3474ff2e35a3f32dc6d72f7e9044ec55c76763397",
+    "supported": [
+      "ef509e0d0d228773de1ee436816c7ad7aabf60e36028f9e056120e38c374420d"
+    ]
+  },
+  "server/libs/webserver/blueprints/effect_settings_executer.py": {
+    "sha256": "3f9ea8e6eae0ace2c347979e11d7ce78e77acd1de2932cb44cf9bc4bfdca7dc3",
+    "supported": [
+      "10e9c20527d4b7b1b23095394edb60beae36853bcf2cfd8349f77a905c86de15"
+    ]
+  },
+  "server/libs/song_analysis.py": {
+    "sha256": "62e7ea42b6903449e38c51fdd5bf5a41033248e97f7512baab2d48d28cdeed36",
+    "supported": [
+      "6836fabda970903a96575b6441ede203d067cc7822b8dd47a50ee4629afa1245"
+    ]
+  },
+  "server/libs/dsp.py": {
+    "sha256": "4f7629353170d1686c42a0a83ad42929e12a0c51a1c85ee88726c495ca98fc8f",
+    "supported": [
+      "d03f659b339da31c1345b65d0bef91be59569d89e60f85ee9df03be7cdfd3960"
+    ]
+  },
+  "server/libs/audio_process_service.py": {
+    "sha256": "f471bd69a53028f1ce1b7fc296500786042ba884243ac5b6d8a8f4be75f7309b",
+    "supported": [
+      "08259b1c97da190013087565d3bfa0208b59f1f56cb7e4999054d45d242baa81"
+    ]
+  },
+  "server/libs/effects/effect_song_show.py": {
+    "sha256": "f63498170f854fee861b89ecf136c59428a5a318e3100eddd61c40d390f0600d",
+    "supported": [
+      "bbd954aa208eba97ef794bfa7e846fe48d0fbbbcb36c54b2c66d1a970fd0eedc"
+    ]
+  },
+  "server/libs/app/templates/home/effects/effect_song_show.html": {
+    "sha256": "c9d31ca9ea4fe5d9bc46f760bc91730212dc8e2e565f216d992b4509713ba63e",
+    "supported": [
+      "0369babdee23e9e662f791bad24c6e3048928c3b7eb61aef47c653257d57acb7"
+    ]
+  },
+  "server/libs/app/static/assets/js/song_show.js": {
+    "sha256": "f8fd2bdee25dc586cd643ef662bffbc45222d2504e8627625a12ee687f271f3d",
+    "supported": [
+      "215754794a75b884be555ffea8b2c238f00dcee545051a3de36837f190c85faa"
+    ]
+  }
+}

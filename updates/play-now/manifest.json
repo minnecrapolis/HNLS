@@ -1,0 +1,56 @@
+{
+  "server/libs/show_schedule.py": {
+    "sha256": "8da29fd449ba953d6b86498c92d804e44dcfbeb0fd321c0c8b81d7b252153f06",
+    "supported": [
+      "d5c099507468bb77142fd6699b0d6b5ed8de73ea8d7d93d74b8c158b3b17da48"
+    ]
+  },
+  "server/libs/webserver/blueprints/music_library_api.py": {
+    "sha256": "1642c19a98350393e2a08d872fa48a9159d8cbb345594af04e3bdf485b21d96d",
+    "supported": [
+      "2447228c709b6af89cd0010f082ba5a4fb1d415d228c67366d83f1c234f8d9d7"
+    ]
+  },
+  "server/libs/app/templates/includes/play_now.html": {
+    "sha256": "086f7f68e9813170bc8d719156a335cbea36a1ad5bfc02a8ccab4c8f9710a829",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/app/static/assets/js/play_now.js": {
+    "sha256": "7a0ca3e2fee0829c2d4985397d3ae2f6b8b43199f5570d308ee578e8ec1ab26d",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/app/static/assets/css/hnls-guide.css": {
+    "sha256": "1a550b9e8f5b82c779d8c23ae23f7a4704f068e124be3667ba409b90126d7324",
+    "supported": [
+      "3339e63e66a5eaa1fafb251a13e809f7e8fd56f3e3c5b7096cbad843651fb261"
+    ]
+  },
+  "server/libs/app/static/assets/js/hnls-guide.js": {
+    "sha256": "bf4bbd1e696ee1a5cfe295ab06647e0941fa4538259fc8145fccaaff42e9c379",
+    "supported": [
+      "2d86e977a7e6597e12047f7f76c6d14414e75d0d4999b595059a5c4ac147b692"
+    ]
+  },
+  "server/libs/app/templates/includes/hournerd_start.html": {
+    "sha256": "30c2f4f12569b96d965d10574378020b9de94fbb29d7112170ae60e93b07cde2",
+    "supported": [
+      "9c0b58b9132b4c3029a3b6a673d38c380b53885a9bbbfdf16573c6ed7c813b80"
+    ]
+  },
+  "server/libs/app/templates/home/music.html": {
+    "sha256": "e61ce6c8af627c9e613cfe118c30f8a13dda1fd763dd7c9acf9245ce200e37ab",
+    "supported": [
+      "a303586d6790032059ed1c73b4e2c1d9b644c87fb5bad1cc81b4ed72061c3998"
+    ]
+  },
+  "server/libs/app/templates/layouts/base.html": {
+    "sha256": "5302a02c88340fcdfa44c277935f6340840f638a4e3ceb29620316b711d2bb05",
+    "supported": [
+      "ed3bc3a76c1ded87f1e09d6beb23723721e1ba46b66d1a641ee35155bf3b1180"
+    ]
+  }
+}

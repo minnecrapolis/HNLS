@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from libs.show_palettes import EXTRA_COLORS, SHOW_MODES, PALETTE_IDS
+
 from jsonschema import Draft202012Validator, validate  # noqa: F401
 from libs.webserver.schemas.custom_types import valid_device_id, valid_group_id, valid_name_type
 from loguru import logger
@@ -102,7 +104,7 @@ effect_schema = {
     "required": [*effect_enum, "last_effect"],
     "properties": {
         "effect_song_show": {
-            "type": "object", "additionalProperties": False, "maxProperties": 9,
+            "type": "object", "additionalProperties": False, "maxProperties": 17,
             "required": ["section_size", "sync_mode", "sync_groups", "max_lit_leds",
                          "bass_color", "mid_color", "treble_color", "beat_color", "power_color"],
             "properties": {
@@ -116,6 +118,10 @@ effect_schema = {
                 "treble_color": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
                 "beat_color": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
                 "power_color": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+                **{k: {"type":"string", "pattern":"^#[0-9a-fA-F]{6}$"} for k in EXTRA_COLORS},
+                "expanded_bands": {"type":"boolean"},
+                "show_mode": {"enum":list(SHOW_MODES)},
+                "palette_preset": {"enum":list(PALETTE_IDS)},
             }
         },
         "effect_advanced_scroll": {

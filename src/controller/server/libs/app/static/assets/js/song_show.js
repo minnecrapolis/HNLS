@@ -1,10 +1,12 @@
 /* Song Show controls; uses the existing authenticated settings and effect APIs. */
 (function () {
     'use strict';
-    const colorKeys = ['bass_color', 'mid_color', 'treble_color', 'beat_color', 'power_color'];
+    const colorKeys = ['subbass_color','bass_color','lowmid_color','mid_color','uppermid_color','presence_color','treble_color','brilliance_color','beat_color','power_color'];
     const defaults = {section_size: 50, sync_mode: 'paired', sync_groups: [], max_lit_leds: 0,
         bass_color: '#ff2106', mid_color: '#05adff', treble_color: '#991fff',
-        beat_color: '#ff8500', power_color: '#ff3300'};
+        beat_color: '#ff8500', power_color: '#ff3300', subbass_color:'#ff2106', lowmid_color:'#05adff',
+        uppermid_color:'#05adff', presence_color:'#991fff', brilliance_color:'#991fff',
+        expanded_bands:false, show_mode:'classic', palette_preset:'custom'};
 
     function presetGroups(mode, count) {
         return Array.from({length: count}, (_, i) => mode === 'paired' ? Math.min(i, count-1-i)+1 :
@@ -21,6 +23,8 @@
         if (!['paired','independent','all','custom','auto'].includes(settings.sync_mode)) throw Error('Choose a sync mode.');
         if (!Number.isInteger(settings.max_lit_leds) || settings.max_lit_leds < 0 || settings.max_lit_leds > ledCount)
             throw Error(`The LED limit must be between 1 and ${ledCount}, or use automatic coverage.`);
+        if (!['classic','auto','comets','waves','ribbons','chase','sparkle','pulse','bounce'].includes(settings.show_mode || 'classic')) throw Error('Choose a show mode.');
+        if (settings.expanded_bands !== undefined && typeof settings.expanded_bands !== 'boolean') throw Error('Choose expanded bands on or off.');
         const count = Math.ceil(ledCount/settings.section_size);
         if (settings.sync_mode === 'custom' && (settings.sync_groups.length !== count ||
             settings.sync_groups.some(g => !Number.isInteger(g) || g < 1 || g > 5000)))
@@ -28,7 +32,13 @@
         colorKeys.forEach(k => {if (!/^#[0-9a-f]{6}$/i.test(settings[k])) throw Error('Choose a valid color for every band.');});
         return settings;
     }
-    const pure = {presetGroups, compactGroups, validate};
+    function applyPalette(settings, preset) {
+        const result = {...settings};
+        colorKeys.forEach(k => {if (!/^#[0-9a-f]{6}$/i.test(preset.colors[k])) throw Error('Invalid preset colors.'); result[k] = preset.colors[k];});
+        result.palette_preset = preset.id; result.expanded_bands = true;
+        return result;
+    }
+    const pure = {presetGroups, compactGroups, validate, applyPalette, defaults, colorKeys};
     if (typeof module !== 'undefined' && module.exports) module.exports = pure;
     if (typeof document === 'undefined') return;
 
@@ -36,7 +46,7 @@
         const el = id => document.getElementById(id);
         if (!el('syncDevice')) return;
         let ledCount = 0, customGroups = [], loaded = false, loadToken = 0;
-        let requestBusy = false;
+        let requestBusy = false, palettes = [];
         const device = el('syncDevice');
         const descriptions = {
             paired: 'The first section matches the last, the second matches the second-last, and so on.',
@@ -64,9 +74,20 @@
             if (!automatic && (!Number.isInteger(Number(el('maxLit').value)) || Number(el('maxLit').value) < 1))
                 throw Error('Choose at least 1 LED, or turn on automatic coverage.');
             const settings = {section_size:Number(el('sectionSize').value), sync_mode:el('syncMode').value,
-                sync_groups:[...customGroups], max_lit_leds:automatic ? 0 : Number(el('maxLit').value)};
+                sync_groups:[...customGroups], max_lit_leds:automatic ? 0 : Number(el('maxLit').value),
+                expanded_bands:el('expandedBands').checked, show_mode:el('showMode').value, palette_preset:el('holidayPalette').value};
             colorKeys.forEach(k => settings[k] = el(k).value);
             return validate(settings, ledCount);
+        }
+        function showColors(settings) {
+            colorKeys.forEach(k => {el(k).value=settings[k];document.querySelector(`[data-color-label="${k}"]`).textContent=settings[k].toUpperCase();});
+            el('holidayPalette').value=settings.palette_preset || 'custom';
+            el('expandedBands').checked=!!settings.expanded_bands;
+        }
+        function modeHelp() {
+            el('showModeHelp').textContent=el('showMode').value==='auto' ?
+                'Analysis-directed: chooses comets, waves, ribbons, chases, twinkles, pulses and bounces from tempo and quiet/loud passages. Changes are phrase-paced, at least 8 seconds apart. Your colors, grouping, LED limit and saved moments stay in control.' :
+                'Classic keeps the existing choreography. A named motion holds that movement while it reacts to the music. Prepared song analysis is used when available; streaming uses live analysis.';
         }
         function groupColor(group) {return `hsl(${(group*137.508)%360} 65% 55%)`;}
         function updateDensity() {
@@ -144,7 +165,7 @@
                 customGroups=settings.sync_groups.length===count ? compactGroups(settings.sync_groups) : presetGroups('paired',count);
                 el('maxLit').max=ledCount;el('maxLit').value=Math.min(ledCount,settings.max_lit_leds||Math.max(1,Math.floor(ledCount*.4)));
                 el('automaticDensity').checked=settings.max_lit_leds===0;
-                colorKeys.forEach(k=>{el(k).value=settings[k];document.querySelector(`[data-color-label="${k}"]`).textContent=settings[k].toUpperCase();});
+                showColors(settings);el('showMode').value=settings.show_mode;modeHelp();
                 localStorage.setItem('lastDevice',device.value);
                 loaded=true;el('songShowControls').disabled=false;status('');renderGroups();
             } catch(error) {if(token===loadToken)status(error.message,true);}
@@ -157,7 +178,18 @@
         el('sectionSize').addEventListener('change',renderGroups);
         el('automaticDensity').addEventListener('change',updateDensity);
         el('maxLit').addEventListener('input',updateDensity);
-        colorKeys.forEach(k=>el(k).addEventListener('input',()=>document.querySelector(`[data-color-label="${k}"]`).textContent=el(k).value.toUpperCase()));
+        colorKeys.forEach(k=>el(k).addEventListener('input',()=>{
+            document.querySelector(`[data-color-label="${k}"]`).textContent=el(k).value.toUpperCase();
+            el('holidayPalette').value='custom';
+            if (['subbass_color','lowmid_color','uppermid_color','presence_color','brilliance_color'].includes(k)) el('expandedBands').checked=true;
+        }));
+        el('showMode').addEventListener('change',modeHelp);
+        el('holidayPalette').addEventListener('change',()=>{
+            const preset=palettes.find(p=>p.id===el('holidayPalette').value);
+            if (!preset) return;
+            showColors(applyPalette(defaults,preset));
+            status('Holiday colors selected. You can adjust any color; click Save & use this look to apply them. Grouping, coverage and show mode are unchanged.');
+        });
         document.querySelectorAll('[data-preset]').forEach(button=>button.addEventListener('click',()=>{
             const preset=button.dataset.preset;
             customGroups=presetGroups(preset,sectionCount());
@@ -169,15 +201,22 @@
             try {
                 const settings=readSettings();requestBusy=true;device.disabled=true;el('songShowControls').disabled=true;
                 await send('/api/settings/effect',{device:device.value,effect:'effect_song_show',settings});
-                status('Settings saved. The lights are updating; music keeps playing.');
+                try {
+                    await send('/api/effect/active',{device:device.value,effect:'effect_song_show'});
+                    status('Saved and applied to this light string. Music keeps playing.');
+                } catch(error) {status('Your settings were saved, but the Light Show could not be turned on. Try Use last saved look. '+error.message,true);}
             } catch(error){status(error.message,true);}
             finally {requestBusy=false;device.disabled=false;el('songShowControls').disabled=false;updateDensity();}
         });
         el('activateSongShow').addEventListener('click',async()=>{
             if(requestBusy||!loaded)return;
-            try{await send('/api/effect/active',{device:device.value,effect:'effect_song_show'});status('Song Show is active. Use Save settings to apply any unsaved edits.');}
+            try{await send('/api/effect/active',{device:device.value,effect:'effect_song_show'});status('Your last saved Light Show is active. Use Save & use this look to apply unsaved changes.');}
             catch(error){status(error.message,true);}
         });
+        try {
+            const catalog=await api('/api/music/show-palettes');palettes=catalog.palettes;
+            palettes.forEach(p=>{const option=document.createElement('option');option.value=p.id;option.textContent=p.name;el('holidayPalette').append(option);});
+        } catch(error) {status('Could not load holiday palettes: '+error.message,true);return;}
         await load();
     });
 })();

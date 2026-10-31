@@ -19,6 +19,11 @@ jobs:
       - run: node tests/test_schedule_ui.js
       - run: node tests/test_designer_ui.js
       - run: node tests/test_color_ranges_ui.js
+      - run: node tests/test_pc_stream_ui.js
+      - run: node tests/test_show_palettes_ui.js
+      - run: node tests/test_guide_ui.js
+      - run: node tests/test_play_now_ui.js
+      - run: node tests/test_home_controls_ui.js
       - run: python tools/validate.py
       - run: python tools/check_defaults.py
-      - run: python tools/build_release.py
+      - run: python tools/build_release.py --repository "${{ github.repository }}"

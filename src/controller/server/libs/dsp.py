@@ -2,7 +2,7 @@ from math import log
 
 import numpy as np
 from scipy.ndimage import gaussian_filter1d
-from libs.song_analysis import spectrum_levels
+from libs.song_analysis import spectrum_levels, BANDS, MUSICAL_BANDS
 
 
 class DSP:
@@ -77,7 +77,7 @@ class DSP:
         # Reuse the existing FFT; no second transform in the playback path.
         band_rms = spectrum_levels(
             YS, self._config["general_settings"]["default_sample_rate"],
-            len(y_padded), float(np.sum(self.fft_window ** 2)),
+            len(y_padded), float(np.sum(self.fft_window ** 2)), bands=BANDS+MUSICAL_BANDS,
         )
         # Construct a Mel filterbank from the FFT data.
         mel = np.atleast_2d(YS).T * self.mel_y.T
@@ -95,7 +95,8 @@ class DSP:
         audio_data["vol"] = vol
         audio_data["x"] = x
         audio_data["y"] = y
-        audio_data["show_raw"] = np.concatenate(([rms], band_rms))
+        audio_data["show_raw"] = np.concatenate(([rms], band_rms[:3]))
+        audio_data["show_bands"] = band_rms[3:]
         return audio_data
 
     def rfft(self, data, window=None):

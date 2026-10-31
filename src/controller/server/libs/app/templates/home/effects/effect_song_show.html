@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% block title %}Song Show{% endblock %}
+{% block title %}Light Show{% endblock %}
 {% block stylesheets %}
 <style>
 .sync-layout {display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
@@ -19,10 +19,11 @@
 {% endblock stylesheets %}
 {% block content %}
 <div class="pcoded-content"><div class="pcoded-inner-content song-show-panel">
-    <div class="page-header"><h5>Song Show</h5><p>Choose what moves together, how much lights up, and the colors of your music.</p></div>
+    <header class="hnls-guide-heading"><p class="hnls-guide-kicker">Light Show</p><h1>Make the lights your own</h1><p>Pick a string, choose your colors, and let HNLS do the rest.</p></header>
+    <nav class="hnls-guide-strip" aria-label="Light Show tasks"><a href="#holiday-settings" data-hnls-jump>Holiday colors</a><a href="#show-motion" data-hnls-jump>Automatic effects</a><a href="#band-colors" data-hnls-jump>Individual colors</a><a href="#section-groups" data-hnls-jump>Match sections</a><a href="#light-limit" data-hnls-jump>LED limit</a><a href="/song-designer">Edit one song moment →</a></nav>
     <div class="card"><div class="card-block">
         <div class="song-show-toolbar">
-            <div><label for="syncDevice">LED device</label><select id="syncDevice" class="form-control">
+            <div><label for="syncDevice"><span class="hnls-guide-step">1</span>Which light string?</label><select id="syncDevice" class="form-control">
                 {% for device in devices %}<option value="{{ device.id }}">{{ device.name }}</option>{% endfor %}
             </select></div>
             <span id="syncSummary" class="text-muted">Loading settings…</span>
@@ -30,7 +31,39 @@
         <div id="syncStatus" class="alert mt-3" role="status" aria-live="polite"></div>
     </div></div>
     <fieldset id="songShowControls" disabled style="border:0;padding:0;min-width:0">
-    <div class="card"><div class="card-header"><h5>Section synchronization</h5></div><div class="card-block">
+    <div class="card" id="holiday-settings"><div class="card-header"><h5><span class="hnls-guide-step">2</span>Choose your colors</h5></div><div class="card-block">
+        <label for="holidayPalette">Holiday palette</label>
+        <select id="holidayPalette" class="form-control mb-3"><option value="custom">Custom — my colors</option></select>
+        <p class="text-muted">Pick a holiday as a starting point, then customize any color. Black means that musical layer is dark. Presets do not change LED brightness or coverage.</p>
+        <label class="mb-3"><input type="checkbox" id="expandedBands"> Use all eight frequency bands</label>
+
+        <details id="band-colors" class="hnls-guide-disclosure"><summary>Customize individual music colors<small>Eight frequency bands, beat accents and POWER beats.</small></summary><div class="song-colors">
+            <label class="song-color" for="subbass_color">Sub-bass · 20–60 Hz<input type="color" id="subbass_color" value="#ff2106"><small data-color-label="subbass_color"></small></label>
+            <label class="song-color" for="bass_color">Bass · 60–250 Hz<input type="color" id="bass_color" value="#ff2106"><small data-color-label="bass_color"></small></label>
+            <label class="song-color" for="lowmid_color">Low mids · 250–500 Hz<input type="color" id="lowmid_color" value="#05adff"><small data-color-label="lowmid_color"></small></label>
+            <label class="song-color" for="mid_color">Mids / vocals · 500–2,000 Hz<input type="color" id="mid_color" value="#05adff"><small data-color-label="mid_color"></small></label>
+            <label class="song-color" for="uppermid_color">Upper mids · 2–4 kHz<input type="color" id="uppermid_color" value="#05adff"><small data-color-label="uppermid_color"></small></label>
+            <label class="song-color" for="presence_color">Presence · 4–6 kHz<input type="color" id="presence_color" value="#991fff"><small data-color-label="presence_color"></small></label>
+            <label class="song-color" for="treble_color">Treble · 6–10 kHz<input type="color" id="treble_color" value="#991fff"><small data-color-label="treble_color"></small></label>
+            <label class="song-color" for="brilliance_color">Brilliance · 10–16 kHz<input type="color" id="brilliance_color" value="#991fff"><small data-color-label="brilliance_color"></small></label>
+            <label class="song-color" for="beat_color">Beat accents<input type="color" id="beat_color" value="#ff8500"><small data-color-label="beat_color"></small></label>
+            <label class="song-color" for="power_color">POWER beats<input type="color" id="power_color" value="#ff3300"><small data-color-label="power_color"></small></label>
+        </div>
+        </details>
+        <p class="text-muted mt-3 mb-0">Frequency labels apply when eight-band mode is enabled; Classic uses the original broad bass/mid/treble bands. Beat accents follow detected bass onsets. Vocals and instruments overlap in frequency: these are musical frequency layers, not isolated instruments. POWER beats remain the only automatic full-strip exception.</p>
+    </div></div>
+    <div class="card" id="show-motion"><div class="card-header"><h5><span class="hnls-guide-step">3</span>Choose how the lights move</h5></div><div class="card-block">
+        <label for="showMode">How should the show work?</label>
+        <select id="showMode" class="form-control">
+            <option value="classic">Classic — the familiar automatic show</option>
+            <option value="auto">Let HNLS choose — recommended</option>
+            <optgroup label="Or choose one movement yourself"><option value="comets">Comets</option><option value="waves">Waves</option>
+            <option value="ribbons">Ribbons</option><option value="chase">Chase</option>
+            <option value="sparkle">Twinkles</option><option value="pulse">Gentle pulse</option><option value="bounce">Bounce</option></optgroup>
+        </select>
+        <p id="showModeHelp" class="text-muted mt-3 mb-0"></p>
+    </div></div>
+<details id="section-groups" class="hnls-guide-disclosure"><summary>More options: match sections of lights<small>Mirror the ends, repeat a pattern, or make groups.</small></summary>    <div class="card"><div class="card-header"><h5>Section synchronization</h5></div><div class="card-block">
         <div class="row">
             <div class="col-md-7"><label for="syncMode">How should sections move together?</label>
                 <select id="syncMode" class="form-control">
@@ -57,7 +90,8 @@
         <canvas id="syncPreview" width="1200" height="90" aria-label="Section synchronization preview"></canvas>
         <div id="sectionGrid" class="sync-layout"></div>
     </div></div>
-    <div class="card"><div class="card-header"><h5>How many LEDs can light up?</h5></div><div class="card-block">
+</details>
+<details id="light-limit" class="hnls-guide-disclosure"><summary>More options: limit how many LEDs light up<small>Control ordinary coverage and the POWER beat exception.</small></summary>    <div class="card"><div class="card-header"><h5>How many LEDs can light up?</h5></div><div class="card-block">
         <label><input type="checkbox" id="automaticDensity" checked> Automatically vary coverage with the music</label>
         <div class="row mt-2"><div class="col-md-6"><label for="maxLit">Maximum LEDs lit at once</label>
             <input id="maxLit" class="form-control" type="number" min="1" step="1" value="480" disabled>
@@ -66,24 +100,15 @@
         <p><strong>POWER beats are the exception:</strong> strong bass impacts may briefly illuminate the entire strip.</p>
         <p id="groupLimitWarning" class="text-warning" role="status"></p>
     </div></div>
-    <div class="card"><div class="card-header"><h5>Colors of the music</h5></div><div class="card-block">
-        <div class="song-colors">
-            <label class="song-color" for="bass_color">Bass<input type="color" id="bass_color" value="#ff2106"><small data-color-label="bass_color"></small></label>
-            <label class="song-color" for="mid_color">Midrange / vocals<input type="color" id="mid_color" value="#05adff"><small data-color-label="mid_color"></small></label>
-            <label class="song-color" for="treble_color">Treble<input type="color" id="treble_color" value="#991fff"><small data-color-label="treble_color"></small></label>
-            <label class="song-color" for="beat_color">Drumbeat accents<input type="color" id="beat_color" value="#ff8500"><small data-color-label="beat_color"></small></label>
-            <label class="song-color" for="power_color">POWER beats<input type="color" id="power_color" value="#ff3300"><small data-color-label="power_color"></small></label>
-        </div>
-        <p class="text-muted mt-3 mb-0">Beat accents follow detected bass onsets; vocals and instruments overlap in frequency. These controls color the analysis rather than separating individual instruments.</p>
-    </div></div>
-    <div class="card"><div class="card-block song-show-toolbar">
-        <div><button id="saveSongShow" type="button" class="btn btn-success">Save settings</button>
-             <button id="activateSongShow" type="button" class="btn btn-outline-primary">Use Song Show</button></div>
-        <span class="text-muted">Save applies to this device. Music keeps playing.</span>
+</details>
+    <div class="card hnls-guide-save"><div class="card-block song-show-toolbar">
+        <div><button id="saveSongShow" type="button" class="btn btn-success">Save &amp; use this look</button>
+             <button id="activateSongShow" type="button" class="btn btn-outline-primary">Use last saved look</button></div>
+        <span class="text-muted">Applies to the selected string. Music keeps playing. Use last saved look ignores unsaved edits.</span>
     </div></div>
     </fieldset>
 </div></div>
 {% endblock content %}
 {% block javascripts %}
-<script src="{{ url_for('static', filename='assets/js/song_show.js') }}?v=1"></script>
+<script src="{{ url_for('static', filename='assets/js/song_show.js') }}?v=3"></script>
 {% endblock javascripts %}

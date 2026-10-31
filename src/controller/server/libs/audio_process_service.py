@@ -20,7 +20,10 @@ from libs.queue_wrapper import QueueWrapper
 from libs.song_analysis import SongShowAnalyzer
 
 
-class AudioProcessService:
+from libs.pc_stream_runtime import PCStreamMixin
+
+
+class AudioProcessService(PCStreamMixin):
     def start(self, config_lock, notification_queue_in, notification_queue_out, audio_queue, py_audio):
         self._config_lock = config_lock
         self._notification_queue_in = QueueWrapper(notification_queue_in)
@@ -189,6 +192,7 @@ class AudioProcessService:
             self.stream = None
 
     def _cleanup_music(self):
+        self._close_pc_stream()
         self._music_gap_until = None
         self._music_gap_paused_at = None
         if self._music_process is not None:
@@ -264,11 +268,12 @@ class AudioProcessService:
             if not path.is_file():
                 raise FileNotFoundError(filename)
 
-            if self._source_mode == "music":
+            if self._source_mode in ("music", "pc_stream"):
                 self._cleanup_music()
             else:
                 self._close_microphone_stream()
 
+            self._device_rate = self._config["general_settings"]["default_sample_rate"]
             self._music_duration = self._probe_music_duration(path)
             self._music_position = max(0.0, float(start_seconds))
             # Decode to signed 16-bit stereo PCM. The same frames are sent to the
@@ -409,12 +414,26 @@ class AudioProcessService:
                         self._music_gap_paused_at = None
                     self._write_music_status("between_songs" if self._music_gap_until is not None else "playing")
             elif notification is NotificationEnum.music_stop:
-                self._restore_microphone()
+                if self._source_mode == "pc_stream":
+                    self._stop_pc_stream()
+                else:
+                    self._restore_microphone()
 
     def _handle_music_command(self, payload):
         try:
             action = payload.get('action')
+            if action == 'pc_stream_start':
+                self._start_pc_stream()
+                return
+            if action == 'pc_stream_stop':
+                if self._source_mode == 'pc_stream':
+                    self._stop_pc_stream()
+                return
             if action == 'output_changed':
+                if self._source_mode == 'pc_stream':
+                    self._stop_pc_stream()
+                    self._start_pc_stream()
+                    return
                 if self._source_mode == 'music' and self._music_file and self._music_gap_until is None:
                     filename, position, paused = self._music_file, self._music_position, self._music_paused
                     self._playback_epoch += 1
@@ -461,7 +480,7 @@ class AudioProcessService:
             "file": getattr(self, '_music_file', None) if getattr(self, '_source_mode', None) == 'music' else None,
             "position": getattr(self, '_music_position', 0.), "paused": False}
         audio_datas["show"] = self._show_analyzer.update(
-            audio_datas["show_raw"], len(y) / float(self._device_rate)
+            audio_datas["show_raw"], len(y) / float(self._device_rate), bands=audio_datas.get("show_bands")
         )
 
         if audio_datas["vol"] < self._config["general_settings"]["min_volume_threshold"]:
@@ -547,6 +566,10 @@ class AudioProcessService:
             self._handle_notifications()
 
             if self._skip_routine:
+                return
+
+            if self._source_mode == "pc_stream":
+                self._pc_stream_routine()
                 return
 
             if self._source_mode == "playlist_idle":

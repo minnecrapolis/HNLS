@@ -236,3 +236,46 @@ def show_schedule_save():
         return jsonify(Executer.instance.show_schedule.save(request.get_json(silent=True)))
     except (ValueError, OSError) as exc:
         return jsonify(error=str(exc)), 400
+
+
+@music_library_api.post('/api/music/show-now')
+@login_required
+def show_now():
+    try:
+        data=request.get_json(silent=True)
+        if (not isinstance(data,dict) or 'action' not in data or set(data)-{'action','file'}
+                or data['action'] not in ('play','stop') or ('file' in data and data['action']!='play')):
+            raise ValueError('Choose Play now or Stop show.')
+        schedule=Executer.instance.show_schedule
+        if 'file' in data:
+            filename=data['file']
+            if not isinstance(filename,str) or not safe_music_path(filename).is_file():
+                raise ValueError('Choose an uploaded song that still exists.')
+            return jsonify(schedule.play_now(filename=filename))
+        return jsonify(schedule.play_now() if data['action']=='play' else schedule.stop_now())
+    except (ValueError,OSError,TypeError) as exc:
+        return jsonify(error=str(exc)),400
+
+
+@music_library_api.get('/api/music/playlist-settings')
+@login_required
+def playlist_settings_get():
+    from libs.hnls_playlist import settings
+    return jsonify(settings())
+
+
+@music_library_api.get('/api/music/home-look')
+@login_required
+def home_look_get():
+    from libs.home_look import view
+    return jsonify(view(Executer.instance.effect_settings_executer._config))
+
+
+@music_library_api.post('/api/music/home-look')
+@login_required
+def home_look_save():
+    from libs.home_look import apply
+    try:
+        return jsonify(apply(request.get_json(silent=True),Executer.instance))
+    except (ValueError,TypeError,OSError,KeyError) as exc:
+        return jsonify(error=str(exc)),400

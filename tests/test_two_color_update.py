@@ -35,11 +35,15 @@ class UpdateTests(unittest.TestCase):
     return replace(p,target)
    with patch.object(m,'PACKAGE',package),patch.object(Path,'replace',fail),self.assertRaises(OSError):m.install(root,True)
    self.assertEqual(before,{str(p.relative_to(root)):p.read_bytes() for p in root.rglob('*') if p.is_file()})
- def test_published_update_matches_current_source_files(self):
+ def test_published_update_payload_and_current_release_lineage(self):
   meta=json.loads((ROOT/'updates/two-color/manifest.json').read_text())
   self.assertEqual(set(meta),m.FILES)
   for name,item in meta.items():
-   self.assertEqual(hashlib.sha256((ROOT/'src/controller'/name).read_bytes()).hexdigest(),item['sha256'])
+   payload=ROOT/'updates'/'two-color'/'files'/name
+   self.assertEqual(hashlib.sha256(payload.read_bytes()).hexdigest(),item['sha256'])
+   current=hashlib.sha256((ROOT/'src/controller'/name).read_bytes()).hexdigest()
+   from update_lineage import assert_lineage
+   assert_lineage(self,ROOT,name,item['sha256'])
  def test_live_validation_checks_only_included_templates_then_restarts(self):
   import sys
   from types import SimpleNamespace

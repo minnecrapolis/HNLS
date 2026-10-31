@@ -16,15 +16,16 @@ import numpy as np
 
 VERSION = 2
 BANDS = ((30, 250), (250, 2000), (2000, 8000))
+MUSICAL_BANDS = ((20,60),(60,250),(250,500),(500,2000),(2000,4000),(4000,6000),(6000,10000),(10000,16000))
 
 
-def spectrum_levels(magnitude, sample_rate, n_samples, window_power):
+def spectrum_levels(magnitude, sample_rate, n_samples, window_power, bands=BANDS):
     frequencies = np.fft.rfftfreq(n_samples, 1.0 / sample_rate)
     power = np.square(magnitude)
     denominator = max(n_samples * window_power, 1e-12)
     return np.array([
         np.sqrt(2 * np.sum(power[(frequencies >= lo) & (frequencies < hi)]) / denominator)
-        for lo, hi in BANDS
+        for lo, hi in bands
     ])
 
 
@@ -133,6 +134,7 @@ class SongShowAnalyzer:
         self.song_id = f"{self.path.name if self.path else 'microphone'}:{time.monotonic_ns()}"
         self.history = deque(maxlen=48)
         self.peaks = np.array([0.08, 0.04, 0.04, 0.02], dtype=float)
+        self.band_peaks = np.full(8, .04, dtype=float)
         self.previous_bass = 0.0
         self.last_beat = -10.0
         self.last_heavy = -10.0
@@ -175,7 +177,7 @@ class SongShowAnalyzer:
         except OSError:
             self.worker = None
 
-    def update(self, raw, elapsed):
+    def update(self, raw, elapsed, bands=None):
         self._poll_profile()
         dt = max(0.0001, float(elapsed))
         self.position += dt
@@ -222,9 +224,16 @@ class SongShowAnalyzer:
             self.last_heavy = self.position
         self.previous_bass = float(raw[1])
         self.history.append(float(raw[1]))
+        band_levels = None
+        if bands is not None:
+            band_raw = np.nan_to_num(np.asarray(bands,dtype=float),nan=0,posinf=0,neginf=0)
+            if band_raw.shape == (8,):
+                band_raw = np.maximum(0,band_raw)
+                self.band_peaks = np.maximum(band_raw,self.band_peaks*np.exp(-dt/35.))
+                band_levels = np.where((band_raw>.0005)&audible,np.clip(band_raw/np.maximum(self.band_peaks,.003),0,1.3),0).tolist()
         self.energy += (min(1, levels[0]) - self.energy) * (1 - np.exp(-dt / 1.8))
         return {
-            "song_id": self.song_id, "position": self.position,
+            "song_id": self.song_id, "position": self.position, "bands": band_levels,
             "bass": float(levels[1]) if audible else 0.0,
             "mid": float(levels[2]) if audible else 0.0,
             "treble": float(levels[3]) if audible else 0.0,

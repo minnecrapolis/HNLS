@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Match release tag to VERSION
+        run: test "$GITHUB_REF_NAME" = "v$(cat VERSION)"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -21,9 +23,14 @@ jobs:
       - run: node tests/test_schedule_ui.js
       - run: node tests/test_designer_ui.js
       - run: node tests/test_color_ranges_ui.js
+      - run: node tests/test_pc_stream_ui.js
+      - run: node tests/test_show_palettes_ui.js
+      - run: node tests/test_guide_ui.js
+      - run: node tests/test_play_now_ui.js
+      - run: node tests/test_home_controls_ui.js
       - run: python tools/validate.py
       - run: python tools/check_defaults.py
-      - run: python tools/build_release.py
+      - run: python tools/build_release.py --repository "${{ github.repository }}"
       - uses: actions/upload-artifact@v4
         with:
           name: hnls-release-assets

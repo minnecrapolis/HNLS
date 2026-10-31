@@ -4,6 +4,7 @@ import zlib
 
 import numpy as np
 from libs.section_sync import SectionSynchronizer
+from libs.show_director import ShowDirector
 
 
 class SongShowRenderer:
@@ -24,6 +25,8 @@ class SongShowRenderer:
         self.scene = 0
         self.last_scene = 0.0
         self.rng = np.random.default_rng(42)
+        self.director = ShowDirector()
+        self.motion = "classic"
         self.colors = {
             key: np.array([int(value[i:i+2], 16) / 255 for i in (1, 3, 5)])[:, None]
             for key, value in self.sync.settings.items() if key.endswith("_color")
@@ -88,6 +91,13 @@ class SongShowRenderer:
         mid = min(1.0, f["mid"])
         treble = min(1.0, f["treble"])
         energy = min(1.0, f["energy"])
+        mode = self.sync.settings['show_mode']
+        self.motion = self.director.choose(f) if mode == 'auto' else mode
+        band_values = f.get('bands')
+        expanded = self.sync.settings['expanded_bands'] and band_values is not None and len(band_values)==8
+        if expanded:
+            band_values = np.clip(np.nan_to_num(np.asarray(band_values,dtype=float)),0,1)
+            bass, mid, treble = [float(band_values[i]) for i in (1,3,6)]
         new_beat = f["beat_count"] != self.beat
         if new_beat:
             self.beat = f["beat_count"]
@@ -106,7 +116,7 @@ class SongShowRenderer:
         tempo = float(f.get('tempo') or 120)
         speed *= float(np.clip(tempo/120, .7, 1.4))
         kind = f.get('section_kind', 'live')
-        if kind != 'live' and kind != getattr(self, '_section_kind', None):
+        if mode == "classic" and kind != 'live' and kind != getattr(self, '_section_kind', None):
             self.scene = {'quiet':0, 'steady':1, 'intense':2}.get(kind,self.scene)
             self._section_kind = kind
         phase = position * speed
@@ -114,22 +124,58 @@ class SongShowRenderer:
             2 * np.pi * (self.x * 2 - phase))) / (0.08 + bass * 0.15)) ** 2
         fresh += warm * bass_shape * (15 + 80 * bass) * bass
 
-        if self.scene == 0:
+        scene = self.scene if self.motion == 'classic' else {'comets':0,'waves':1,'ribbons':2,'chase':3,'sparkle':4,'pulse':5,'bounce':6}[self.motion]
+        if scene == 0:
             # Three short comets sweep the full strip with different velocities.
             for offset, velocity in ((0.0, 1.0), (0.37, -0.73), (0.73, 0.57)):
                 distance = (self.x - (phase * velocity + offset)) % 1.0
                 shape = np.maximum(0.0, 1.0 - distance / (0.025 + mid * 0.055)) ** 2
                 fresh += cool * shape * (30 + 110 * mid) * mid
-        elif self.scene == 1:
+        elif scene == 1:
             # Moving islands expand with vocals and midrange energy.
             wave = 0.5 + 0.5 * np.cos(2 * np.pi * (self.x * 5 - phase * 3))
             shape = np.maximum(0.0, (wave - 0.90 + mid * 0.10) / 0.20) ** 2
             fresh += cool * shape * (25 + 95 * mid) * mid
-        else:
+        elif scene == 2:
             # Alternating ribbons, separated by dark space.
             wave = np.sin(2 * np.pi * (self.x * 4 + phase * 2))
             shape = np.maximum(0.0, 1.0 - np.abs(wave) / (0.12 + mid * 0.16))
             fresh += cool * shape * (30 + 100 * mid) * mid
+
+        elif scene == 3:
+            # Short beat-paced chases leave dark gaps between moving blocks.
+            width = .025+.045*mid
+            shape = (((self.x*3-phase*5)%1)<width*3).astype(float)
+            fresh += cool*shape*(35+110*mid)*mid
+        elif scene == 4:
+            # Deterministic twinkle islands; never a whole-strip strobe.
+            wave = np.sin(self.x*173+np.floor(position*max(1,tempo/30))*2.399)
+            shape = np.maximum(0,(wave-.93)/.07)**2
+            fresh += cool*shape*(40+100*mid)*mid
+        elif scene == 5:
+            # Soft breathing islands for quiet passages.
+            pulse = .25+.75*(.5+.5*np.sin(position*2*np.pi*tempo/240))
+            shape = np.maximum(0,np.cos(2*np.pi*(self.x*3-phase))-.82)/.18
+            fresh += cool*shape*pulse*(30+90*mid)*mid
+        elif scene == 6:
+            # Two reflected heads bounce across the full logical line.
+            head = 1-abs((phase*4)%2-1)
+            shape = np.maximum(0,1-np.minimum(abs(self.x-head),abs(self.x-(1-head)))/(.015+.035*mid))**2
+            fresh += cool*shape*(35+110*mid)*mid
+
+        if expanded:
+            # Each additional band owns a separate spatial layer and color.
+            # Broad legacy bands remain available for beat/POWER detection only.
+            for index, key, repeats, velocity, width in (
+                    (0,'subbass_color',2,-.6,.055),
+                    (2,'lowmid_color',3,.7,.045),
+                    (4,'uppermid_color',5,-1.1,.030),
+                    (5,'presence_color',7,1.4,.020),
+                    (7,'brilliance_color',11,-1.8,.012)):
+                level = float(band_values[index])
+                distance = (self.x*repeats-phase*velocity-index*.137)%1
+                shape = np.maximum(0,1-distance/(width*repeats))**2
+                fresh += self.colors[key]*shape*(35+110*level)*level
 
         alive = []
         for origin, start, strength in self.pulses:

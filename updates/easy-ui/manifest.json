@@ -1,0 +1,80 @@
+{
+  "server/libs/app/static/assets/css/hnls-guide.css": {
+    "sha256": "3339e63e66a5eaa1fafb251a13e809f7e8fd56f3e3c5b7096cbad843651fb261",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/app/static/assets/js/hnls-guide.js": {
+    "sha256": "2d86e977a7e6597e12047f7f76c6d14414e75d0d4999b595059a5c4ac147b692",
+    "supported": [
+      null
+    ]
+  },
+  "server/libs/app/static/assets/js/hnls-tools.js": {
+    "sha256": "d424dea6130678f4e2cae65993b42100f5de6f41b3dac9637bfb8f9e7e42f2a3",
+    "supported": [
+      "63f85905417d9f540ac8b615f6f1e00e7f5efe6fbd283398ad1ae82aae1a9d35"
+    ]
+  },
+  "server/libs/app/static/assets/js/song_show.js": {
+    "sha256": "0ed9f97644e21967ed8c61f1464f144ff75becc6e0b2c107d8ad334316fc8a54",
+    "supported": [
+      "f8fd2bdee25dc586cd643ef662bffbc45222d2504e8627625a12ee687f271f3d"
+    ]
+  },
+  "server/libs/app/templates/includes/sidebar.html": {
+    "sha256": "458b4b84165b32bb0cfe7123007e59cca04323fdadd61e2dac86fd21a77b2158",
+    "supported": [
+      "8728eeb27b2c260083306918602a3eadb862112260589d9343eeee12b90b5bd1"
+    ]
+  },
+  "server/libs/app/templates/includes/hournerd_start.html": {
+    "sha256": "9c0b58b9132b4c3029a3b6a673d38c380b53885a9bbbfdf16573c6ed7c813b80",
+    "supported": [
+      "ed8c2797b5eefb984b78cef18b7ca1a7dc025205a0de40697e422642aefbd361"
+    ]
+  },
+  "server/libs/app/templates/includes/song_moments.html": {
+    "sha256": "89f14cc0543a6477a77e8166b32507c4c39f1835e70eff91b4bdbdf84f6587e0",
+    "supported": [
+      "26f959f820c13cf3337b7bb2191a7e413125ea58ff9d17f65cf8279cd3ab7917"
+    ]
+  },
+  "server/libs/app/templates/home/dashboard.html": {
+    "sha256": "9b390b9335b3a19531ab475224b40163383c4483469e4c6e1004bbfbb2f61c42",
+    "supported": [
+      "3ff34c4495289d6cc1e42456da2d0fc24d7a51bf4e0b4036b67100bb2ae2a4e0"
+    ]
+  },
+  "server/libs/app/templates/home/music.html": {
+    "sha256": "a303586d6790032059ed1c73b4e2c1d9b644c87fb5bad1cc81b4ed72061c3998",
+    "supported": [
+      "ec9ce71b661988e9cc1491c15f6a89bdfa34c8cb217ca9abc494b3641f4125c7"
+    ]
+  },
+  "server/libs/app/templates/home/song_designer.html": {
+    "sha256": "21fca8ee4be80e2394e9454aec832f0f9d0cc70d12864e785cb3f1871d369808",
+    "supported": [
+      "4ad607b09a4957b2f4b57f3ffe9e70386219eda0bc3ddbe9e869ef668f7106ae"
+    ]
+  },
+  "server/libs/app/templates/home/settings/device_settings.html": {
+    "sha256": "2f282c280ca87a1e7571387d5fc07a34ebda9f79b4456acfaf45767fefb041cf",
+    "supported": [
+      "1081d664cdf3c0b9fde8ef78b3f396b2428a4691fae6615e5a1799fac5f48808"
+    ]
+  },
+  "server/libs/app/templates/home/effects/effect_song_show.html": {
+    "sha256": "c94352bf817844f66bf270f36e11e478f03eb4eb9c4a639721effebca9ae5030",
+    "supported": [
+      "c9d31ca9ea4fe5d9bc46f760bc91730212dc8e2e565f216d992b4509713ba63e"
+    ]
+  },
+  "server/libs/app/templates/layouts/base.html": {
+    "sha256": "ed3bc3a76c1ded87f1e09d6beb23723721e1ba46b66d1a641ee35155bf3b1180",
+    "supported": [
+      "2e78edab56f8f26966af6b474c05cee07becbeb27f59bdd8cd91da2940f3a33d"
+    ]
+  }
+}

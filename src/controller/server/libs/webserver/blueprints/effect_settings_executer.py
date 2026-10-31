@@ -68,6 +68,9 @@ class EffectSettingsExecuter(ExecuterBase):
             except (ValueError, TypeError):
                 return BadRequest
 
+        if effect == "effect_song_show":
+            self._config["device_configs"][device]["effects"][effect] = dict(settings)
+
         for setting_key, setting_value in settings.items():
             if setting_key not in self._config["device_configs"][device]["effects"][effect]:
                 return NotFound
@@ -99,6 +102,8 @@ class EffectSettingsExecuter(ExecuterBase):
                 return BadRequest
 
         for device in self._config["device_configs"]:
+            if effect == "effect_song_show":
+                self._config["device_configs"][device]["effects"][effect] = dict(prepared[device])
             for setting_key, setting_value in prepared.get(device, settings).items():
                 if setting_key not in self._config["device_configs"][device]["effects"][effect]:
                     return NotFound

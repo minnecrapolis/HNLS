@@ -380,7 +380,15 @@
         "mid_color": "#008000",
         "treble_color": "#8000ff",
         "beat_color": "#ff4000",
-        "power_color": "#ffffff"
+        "power_color": "#ffffff",
+        "subbass_color": "#ff2106",
+        "lowmid_color": "#05adff",
+        "uppermid_color": "#05adff",
+        "presence_color": "#991fff",
+        "brilliance_color": "#991fff",
+        "expanded_bands": false,
+        "show_mode": "classic",
+        "palette_preset": "custom"
       }
     },
     "output": {
